@@ -37,7 +37,7 @@ default: build $(EXE)
 	@echo "In default rule."
 
 # Build the main executables
-$(EXE): $(OBJDIR)/$(EXE).o $(OBJFILES)
+$(EXE): $(OBJDIR)/main.o $(OBJFILES)
 	@echo ""
 	@echo "Linking $@ from $^"
 	$(CXX) $(OBJFILES) -o $(BINDIR)/$@ $(LDFLAGS)
