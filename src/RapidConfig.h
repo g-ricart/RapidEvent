@@ -20,11 +20,12 @@ class RapidConfig {
         //! Destructor.
         ~RapidConfig();
 
-        //! Load the config file.
-        int Load(const TString file_name);
+        //! Load the event config file.
+        int LoadEvent(const TString file_name);
 
     private:
-        TString file_name_; //! The name of the config file.
+        TString  file_name_; //! The name of the config file.
+        TString  file_path_; //! Path to the config file.
 };
 
 #endif // RAPIDEVENT_RAPIDCONFIG_H_
