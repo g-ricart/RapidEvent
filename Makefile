@@ -1,9 +1,9 @@
 SRCDIR		= src
 OBJDIR		= obj
 BINDIR		= bin
-EXE 			= RapidEvent
-SRCFILES	= $(wildcard $(SRCDIR)/*.cxx)
-OBJFILES	= $(subst $(SRCDIR),$(OBJDIR),$(SRCFILES:.cxx=.o))
+EXE 		= RapidEvent
+SRCFILES	= $(wildcard $(SRCDIR)/*.cc)
+OBJFILES	= $(subst $(SRCDIR),$(OBJDIR),$(SRCFILES:.cc=.o))
 
 # ROOT
 ROOTCFLAGS 	= $(shell root-config --cflags)
@@ -43,7 +43,7 @@ $(EXE): $(OBJDIR)/main.o $(OBJFILES)
 	$(CXX) $(OBJFILES) -o $(BINDIR)/$@ $(LDFLAGS)
 
 # Build the objects from the source files.
-$(OBJDIR)/%.o: $(SRCDIR)/%.cxx
+$(OBJDIR)/%.o: $(SRCDIR)/%.cc
 	@echo ""
 	@echo "Compiling $< to $@"
 	@$(CXX) $(CXXFLAGS) -c $< -o $@
