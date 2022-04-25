@@ -9,3 +9,6 @@
 # Build
 bin/
 obj/
+
+# Setup
+events/
