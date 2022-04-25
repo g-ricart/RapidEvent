@@ -1,30 +1,30 @@
 #include <iostream>
 
-#include ""
+#include "RapidConfig.h"
 
 using namespace std;
 
-int rapidEvent(const int kNEvtToGen) {
+int rapidEvent(const int kNEvtToGen, const TString kEvtFile) {
 
-    // Check environment variables
-    if(!getenv("RAPIDEVENT_ROOT")) {
-		std::cout << "ERROR in rapidEvent : environment variable RAPIDEVENT_ROOT is not set" << std::endl
-			  << "                    Terminating" << std::endl;
-		return 1;
-
-	}
+    RapidConfig conf;
+    if (conf.Load(kEvtFile)) {
+        return 1;
+    }
+    return 0;
 }
 
 int main(int argc, char const *argv[]) {
 
-    if (argc != 2) {
-		cout << "Usage: " << argv[0] << " numberToGenerate" << endl;
+    if (argc != 3) {
+		cout << "Usage: " << argv[0] << " event_file "
+             << "number_of_events" << endl;
 		return 1;
 	}
 
-    const int kNEvtToGen = static_cast<int>(atof(argv[1]));
+    const int kNEvtToGen = static_cast<int>(atof(argv[2]));
+    const TString kEvtFile = argv[1];
 
-    int status = rapidEvent(kNEvtToGen);
+    int status = rapidEvent(kNEvtToGen, kEvtFile);
 
     return status;
 }
