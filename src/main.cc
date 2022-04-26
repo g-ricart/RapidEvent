@@ -16,9 +16,16 @@ int rapidEvent(const int kNEvtToGen, const TString kEvtFileName) {
 
 int main(int argc, char const *argv[]) {
 
-    if (argc != 3) {
+    if (argc != 3) { // Check usage
 		cout << "Usage: " << argv[0] << " event_file_name "
              << "number_of_events" << endl;
+		return 1;
+	}
+
+    if(!getenv("RAPIDEVENT_ROOT")) {
+		cout << "ERROR in main : environment variable "
+             << "'RAPIDEVENT_ROOT' is not set" << endl
+			 << "                    Terminating" << endl;
 		return 1;
 	}
 
