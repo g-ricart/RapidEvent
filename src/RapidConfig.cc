@@ -19,6 +19,11 @@ RapidConfig::~RapidConfig()
 {
 }
 
+vector<TString> GetParticles()
+{
+    return particles_in_event_;
+}
+
 int RapidConfig::LoadEvent(const TString file_name)
 {
     file_name_ = file_name;
