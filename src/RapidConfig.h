@@ -3,12 +3,13 @@
 
 #include <iostream>
 #include <fstream>
+#include <vector>
 
 #include "TString.h"
 
 /*!
  * \class RapidConfig
- * Call used to configure the generation of the events.
+ * Class used to read the events configuration file.
 */
 
 class RapidConfig {
@@ -24,8 +25,10 @@ class RapidConfig {
         int LoadEvent(const TString file_name);
 
     private:
+        int ParseEvent(const TString event_str);
         TString  file_name_; //! The name of the config file.
         TString  file_path_; //! Path to the config file.
+        std::vector<TString> particles_in_event_; //! Particles to be included in the event
 };
 
 #endif // RAPIDEVENT_RAPIDCONFIG_H_
