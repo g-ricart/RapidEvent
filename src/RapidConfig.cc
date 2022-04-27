@@ -56,6 +56,37 @@ int RapidConfig::LoadEvent(const TString file_name)
 
 //______________________________________________________________________________
 //______________________________________________________________________________
+TString RapidConfig::SanitizeName(TString name)
+{
+    name = name.ReplaceAll("+","p");
+	name = name.ReplaceAll("-","m");
+	name = name.ReplaceAll("*","st");
+	name = name.ReplaceAll("(","_");
+	name = name.ReplaceAll(")","_");
+	name = name.ReplaceAll("[","_");
+	name = name.ReplaceAll("]","_");
+	name = name.ReplaceAll("<","_");
+	name = name.ReplaceAll(">","_");
+	name = name.ReplaceAll("{","_");
+	name = name.ReplaceAll("}","_");
+	name = name.ReplaceAll(" ","_");
+	name = name.ReplaceAll("$","");
+	name = name.ReplaceAll("%","");
+	name = name.ReplaceAll("&","");
+	name = name.ReplaceAll("/","");
+	name = name.ReplaceAll(":","");
+	name = name.ReplaceAll(";","");
+	name = name.ReplaceAll("=","");
+	name = name.ReplaceAll("\\","");
+	name = name.ReplaceAll("^","");
+	name = name.ReplaceAll("|","");
+	name = name.ReplaceAll(",","");
+	name = name.ReplaceAll(".","");
+	name.Remove(TString::kBoth,'_');
+
+    return name;
+}
+
 //______________________________________________________________________________
 int RapidConfig::ParseEvent(const TString event_str)
 {
@@ -63,7 +94,7 @@ int RapidConfig::ParseEvent(const TString event_str)
     Ssiz_t from = 0;
 
     while (event_str.Tokenize(token, from, " ")) {
-        particles_in_event_.push_back(token);
+        particles_in_event_.push_back(SanitizeName(token));
     }
 
     return 0;

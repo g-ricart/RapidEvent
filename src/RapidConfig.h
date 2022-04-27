@@ -27,6 +27,7 @@ class RapidConfig {
         std::vector<TString> GetParticles();
 
     private:
+        TString SanitizeName(TString name);
         int ParseEvent(const TString event_str);
         TString  file_name_; //! The name of the config file.
         TString  file_path_; //! Path to the config file.
