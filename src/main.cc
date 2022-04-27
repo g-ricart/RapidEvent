@@ -29,6 +29,13 @@ int main(int argc, char const *argv[]) {
 		return 1;
 	}
 
+    if(!getenv("RAPIDEVENT_DATA")) {
+        setenv("RAPIDEVENT_DATA", "$RAPIDEVENT_ROOT/data", 1);
+        cout << "INFO in main : environment variable "
+             << "'RAPIDEVENT_DATA' was set to '" << getenv("RAPIDEVENT_DATA")
+             << "'" << endl;
+    }
+
     const int kNEvtToGen = static_cast<int>(atof(argv[2]));
     const TString kEvtFileName = argv[1];
 
