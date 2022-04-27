@@ -8,6 +8,7 @@
 
 using namespace std;
 
+//______________________________________________________________________________
 RapidConfig::RapidConfig()
 {
     file_name_ = "";
@@ -15,15 +16,12 @@ RapidConfig::RapidConfig()
     particles_in_event_.clear();
 }
 
+//______________________________________________________________________________
 RapidConfig::~RapidConfig()
 {
 }
 
-vector<TString> GetParticles()
-{
-    return particles_in_event_;
-}
-
+//______________________________________________________________________________
 int RapidConfig::LoadEvent(const TString file_name)
 {
     file_name_ = file_name;
@@ -56,6 +54,9 @@ int RapidConfig::LoadEvent(const TString file_name)
     return 0;
 }
 
+//______________________________________________________________________________
+//______________________________________________________________________________
+//______________________________________________________________________________
 int RapidConfig::ParseEvent(const TString event_str)
 {
     TString token;
@@ -67,3 +68,4 @@ int RapidConfig::ParseEvent(const TString event_str)
 
     return 0;
 }
+//______________________________________________________________________________
