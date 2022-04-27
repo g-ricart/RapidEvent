@@ -55,6 +55,11 @@ int RapidConfig::LoadEvent(const TString file_name)
 }
 
 //______________________________________________________________________________
+vector<TString> RapidConfig::GetParticles()
+{
+    return particles_in_event_;
+}
+
 //______________________________________________________________________________
 TString RapidConfig::SanitizeName(TString name)
 {
