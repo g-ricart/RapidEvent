@@ -12,7 +12,9 @@ int rapidEvent(const int kNEvtToGen, const TString kEvtFileName) {
     // Load configuration.
     RapidConfig conf;
     if (conf.LoadEvent(kEvtFileName)) {
-        cout << "An error has occured!             Terminating" << endl;
+        cout << "Failed to load configuration file!"
+             << "             Terminating" << endl;
+        return 1;
     }
 
     vector<TString> particles = conf.GetParticles();
