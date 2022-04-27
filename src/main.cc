@@ -1,4 +1,7 @@
 #include <iostream>
+#include <vector>
+
+#include "TString.h"
 
 #include "RapidConfig.h"
 
@@ -11,6 +14,14 @@ int rapidEvent(const int kNEvtToGen, const TString kEvtFileName) {
     if (conf.LoadEvent(kEvtFileName)) {
         cout << "An error has occured!             Terminating" << endl;
     }
+
+    vector<TString> particles = conf.GetParticles();
+
+    for(auto i: particles) {
+        cout << i << "  ";
+    }
+    cout << endl;
+
     return 0;
 }
 
