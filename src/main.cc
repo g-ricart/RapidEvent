@@ -12,7 +12,7 @@ int rapidEvent(const int kNEvtToGen, const TString kEvtFileName) {
     // Load configuration.
     RapidConfig conf;
     if (conf.LoadEvent(kEvtFileName)) {
-        cout << "Failed to load configuration file!"
+        cout << "Configuration failed!"
              << "             Terminating" << endl;
         return 1;
     }
