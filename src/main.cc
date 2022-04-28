@@ -51,6 +51,15 @@ int main(int argc, char const *argv[]) {
              << "'" << endl;
     }
 
+    if(!getenv("RAPIDEVENT_NORM")) {
+        TString rapid_norm_path = getenv("RAPIDEVENT_ROOT");
+        rapid_norm_path += "/norm";
+        setenv("RAPIDEVENT_NORM", rapid_norm_path, 1);
+        cout << "INFO in main : environment variable "
+             << "'RAPIDEVENT_NORM' was set to '" << getenv("RAPIDEVENT_NORM")
+             << "'" << endl;
+    }
+
     const int kNEvtToGen = static_cast<int>(atof(argv[2]));
     const TString kEvtFileName = argv[1];
 
