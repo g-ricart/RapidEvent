@@ -13,8 +13,8 @@ using namespace std;
 //______________________________________________________________________________
 RapidConfig::RapidConfig()
 {
-    file_name_ = "";
-    file_path_ = "";
+    config_file_name_ = "";
+    config_file_path_ = "";
     particles_in_event_.clear();
 }
 
@@ -35,7 +35,7 @@ int RapidConfig::LoadEvent(const TString file_name)
 
     TString event_str;
     ifstream fin;
-    fin.open(file_path_);
+    fin.open(config_file_path_);
 
     if(!fin.good()) {
 		cout << "ERROR in RapidConfig::Load : file " << config_file_path_
@@ -53,11 +53,7 @@ int RapidConfig::LoadEvent(const TString file_name)
         return 1;
     }
 
-    TString missing_file;
-
-    if (MissingFile(&missing_file)) {
-        cout << "ERROR in RapidConfig::Load : missing data file : "
-             << getenv("RAPIDEVENT_DATA") << "/" << missing_file << endl;
+    if (MissingFile()) {
         return 1;
     }
 
@@ -116,17 +112,28 @@ int RapidConfig::ParseEvent(const TString event_str)
 }
 
 //______________________________________________________________________________
-int RapidConfig::MissingFile(TString* missing_file_name)
+int RapidConfig::MissingFile()
 {
     for(auto part: particles_in_event_) {
 
-        TString file_path = getenv("RAPIDEVENT_DATA");
-        TString file_name = part + "_tree.root";
-        file_path += "/";
-        file_path += file_name;
+        TString data_file_path = getenv("RAPIDEVENT_DATA");
+        TString data_file_name = part + "_tree.root";
+        data_file_path += "/";
+        data_file_path += data_file_name;
 
-        if(access(file_path, R_OK) == -1) { // Check the file can be read.
-            *missing_file_name = file_name;
+        TString norm_file_path = getenv("RAPIDEVENT_NORM");
+        TString norm_file_name = part + "_norm.root";
+        norm_file_path += "/";
+        norm_file_path += norm_file_name;
+
+        if(access(data_file_path, R_OK) == -1) { // Check the file can be read.
+            cout << "ERROR in RapidConfig::MissingFile : "
+                 << "missing data file : " << data_file_path << endl;
+            return 1;
+        }
+        if(access(norm_file_path, R_OK) == -1) {
+            cout << "ERROR in RapidConfig::MissingFile : "
+                 << "missing normalisation file : " << norm_file_path << endl;
             return 1;
         }
     }
