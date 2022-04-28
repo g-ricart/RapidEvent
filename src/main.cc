@@ -19,10 +19,10 @@ int rapidEvent(const int kNEvtToGen, const TString kEvtFileName) {
 
     vector<TString> particles = conf.GetParticles();
 
-    for(auto i: particles) {
-        cout << i << "  ";
-    }
-    cout << endl;
+    // for(auto i: particles) {
+    //     cout << i << "  ";
+    // }
+    // cout << endl;
 
     return 0;
 }
@@ -43,7 +43,9 @@ int main(int argc, char const *argv[]) {
 	}
 
     if(!getenv("RAPIDEVENT_DATA")) {
-        setenv("RAPIDEVENT_DATA", "$RAPIDEVENT_ROOT/data", 1);
+        TString rapid_data_path = getenv("RAPIDEVENT_ROOT");
+        rapid_data_path += "/data";
+        setenv("RAPIDEVENT_DATA", rapid_data_path, 1);
         cout << "INFO in main : environment variable "
              << "'RAPIDEVENT_DATA' was set to '" << getenv("RAPIDEVENT_DATA")
              << "'" << endl;
