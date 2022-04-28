@@ -32,8 +32,8 @@ class RapidConfig {
         TString SanitizeName(TString name);
         int ParseEvent(const TString event_str);
         int MissingFile(TString* missing_file_name);
-        TString  file_name_; //! The name of the config file.
-        TString  file_path_; //! Path to the config file.
+        TString  config_file_name_;
+        TString  config_file_path_;
         std::vector<TString> particles_in_event_; //! Particles to be included in the event.
 };
 

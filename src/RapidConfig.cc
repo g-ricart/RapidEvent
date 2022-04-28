@@ -26,19 +26,19 @@ RapidConfig::~RapidConfig()
 //______________________________________________________________________________
 int RapidConfig::LoadEvent(const TString file_name)
 {
-    file_name_ = file_name;
-    file_path_ = "/events/" + file_name + ".event";
-    file_path_ = getenv("RAPIDEVENT_ROOT") + file_path_;
+    config_file_name_ = file_name;
+    config_file_path_ = "/events/" + file_name + ".event";
+    config_file_path_ = getenv("RAPIDEVENT_ROOT") + config_file_path_;
 
     cout << "INFO in RapidConfig::Load : "
-         << "loading event descriptor from file: " << file_path_ << endl;
+         << "loading event descriptor from file: " << config_file_path_ << endl;
 
     TString event_str;
     ifstream fin;
     fin.open(file_path_);
 
     if(!fin.good()) {
-		cout << "ERROR in RapidConfig::Load : file " << file_path_
+		cout << "ERROR in RapidConfig::Load : file " << config_file_path_
              << " not found." << endl;
 		return 1;
 	}
