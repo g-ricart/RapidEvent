@@ -26,9 +26,9 @@ RapidConfig::~RapidConfig()
 //______________________________________________________________________________
 int RapidConfig::LoadEvent(const TString file_name)
 {
-    config_file_name_ = file_name;
-    config_file_path_ = "/events/" + file_name + ".event";
-    config_file_path_ = getenv("RAPIDEVENT_ROOT") + config_file_path_;
+    config_file_name_ = file_name + ".event";
+    config_file_path_ = "/" + config_file_name_;
+    config_file_path_ = getenv("RAPIDEVENT_EVTS") + config_file_path_;
 
     cout << "INFO in RapidConfig::Load : "
          << "loading event descriptor from file: " << config_file_path_ << endl;

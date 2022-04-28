@@ -42,6 +42,15 @@ int main(int argc, char const *argv[]) {
 		return 1;
 	}
 
+    if(!getenv("RAPIDEVENT_EVTS")) {
+        TString rapid_evts_path = getenv("RAPIDEVENT_ROOT");
+        rapid_evts_path += "/events";
+        setenv("RAPIDEVENT_EVTS", rapid_evts_path, 1);
+        cout << "INFO in main : environment variable "
+             << "'RAPIDEVENT_EVTS' was set to '" << getenv("RAPIDEVENT_EVTS")
+             << "'" << endl;
+    }
+
     if(!getenv("RAPIDEVENT_DATA")) {
         TString rapid_data_path = getenv("RAPIDEVENT_ROOT");
         rapid_data_path += "/data";
