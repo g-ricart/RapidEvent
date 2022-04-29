@@ -17,13 +17,6 @@ int rapidEvent(const int kNEvtToGen, const TString kEvtFileName) {
         return 1;
     }
 
-    vector<TString> particles = conf.GetParticles();
-
-    // for(auto i: particles) {
-    //     cout << i << "  ";
-    // }
-    // cout << endl;
-
     return 0;
 }
 
