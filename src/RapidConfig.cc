@@ -19,7 +19,7 @@ RapidConfig::RapidConfig()
 }
 
 //______________________________________________________________________________
-RapidConfig::~RapidConfig()
+virtual RapidConfig::~RapidConfig()
 {
 }
 

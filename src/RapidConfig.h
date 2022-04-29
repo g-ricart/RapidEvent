@@ -21,7 +21,7 @@ class RapidConfig {
         RapidConfig();
 
         //! Destructor.
-        ~RapidConfig();
+        virtual ~RapidConfig();
 
         //! Load the event config file.
         int LoadEvent(const TString file_name);
