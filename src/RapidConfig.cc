@@ -66,6 +66,12 @@ vector<TString> RapidConfig::GetParticles()
     return particles_in_event_;
 }
 
+Double_t* RapidConfig::GetAcceptance()
+{
+    static Double_t acceptance[2] = {2, 5};
+    return acceptance;
+}
+
 //______________________________________________________________________________
 TString RapidConfig::SanitizeName(TString name)
 {
