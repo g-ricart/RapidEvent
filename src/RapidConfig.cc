@@ -86,7 +86,7 @@ vector<TString> RapidConfig::GetNormFiles()
 }
 
 //______________________________________________________________________________
-TString RapidConfig::GetNormFile(TString part_name)
+TString RapidConfig::GetNormFile(const TString part_name)
 {
     TString norm_file_path = getenv("RAPIDEVENT_NORM");
     TString norm_file_name = part_name + "_norm.root";

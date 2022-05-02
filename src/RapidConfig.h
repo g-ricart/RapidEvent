@@ -33,7 +33,7 @@ class RapidConfig {
         //! Return the file paths corresponding to the normalisation files.
         std::vector<TString> GetNormFiles();
         //! Return the normalisation file corresponding to the given particle.
-        TString GetNormFile(TString part_name);
+        TString GetNormFile(const TString part_name);
 
     private:
         TString SanitizeName(TString name);
