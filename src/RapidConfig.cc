@@ -79,15 +79,21 @@ vector<TString> RapidConfig::GetNormFiles()
 
     for(auto part_name: particles_in_event_) {
 
-        TString norm_file_path = getenv("RAPIDEVENT_NORM");
-        TString norm_file_name = part_name + "_norm.root";
-        norm_file_path += "/";
-        norm_file_path += norm_file_name;
-
-        norm_files.push_back(norm_file_path);
+        norm_files.push_back(GetNormFile(part_name));
     }
 
     return norm_files;
+}
+
+//______________________________________________________________________________
+TString RapidConfig::GetNormFile(TString part_name)
+{
+    TString norm_file_path = getenv("RAPIDEVENT_NORM");
+    TString norm_file_name = part_name + "_norm.root";
+    norm_file_path += "/";
+    norm_file_path += norm_file_name;
+
+    return norm_file_path;
 }
 
 //______________________________________________________________________________
