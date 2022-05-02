@@ -73,6 +73,24 @@ Double_t* RapidConfig::GetAcceptance()
 }
 
 //______________________________________________________________________________
+vector<TString> RapidConfig::GetNormFiles()
+{
+    vector<TString> norm_files;
+
+    for(auto part_name: particles_in_event_) {
+
+        TString norm_file_path = getenv("RAPIDEVENT_NORM");
+        TString norm_file_name = part_name + "_norm.root";
+        norm_file_path += "/";
+        norm_file_path += norm_file_name;
+
+        norm_files.push_back(norm_file_path);
+    }
+
+    return norm_files;
+}
+
+//______________________________________________________________________________
 TString RapidConfig::SanitizeName(TString name)
 {
     name = name.ReplaceAll("+","p");

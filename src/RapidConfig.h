@@ -30,6 +30,8 @@ class RapidConfig {
         //! For now fixed to LHCb acceptance: 2 < eta < 5
         //! \todo{Read the event config file and get acceptance from there.}
         Double_t* GetAcceptance();
+        //! Return the file paths corresponding to the normalisation files.
+        std::vector<TString> GetNormFiles();
 
     private:
         TString SanitizeName(TString name);
