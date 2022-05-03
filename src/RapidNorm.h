@@ -35,4 +35,4 @@ class RapidNorm {
         PartNorm     norm_map_;
 };
 
-#endif
+#endif // RAPIDEVENT_RAPIDNORM_H_

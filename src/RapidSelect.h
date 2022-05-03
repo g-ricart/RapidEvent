@@ -17,4 +17,4 @@ class RapidSelect {
         RapidNorm*   norm_;
 };
 
-#endif
+#endif // RAPIDEVENT_RAPIDSELECT_H_
