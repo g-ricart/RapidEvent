@@ -1,5 +1,8 @@
 #include "RapidSelect.h"
 
+#include "RapidConfig.h"
+#include "RapidNorm.h"
+
 using namespace std;
 
 //______________________________________________________________________________
