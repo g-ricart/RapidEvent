@@ -16,6 +16,7 @@ RapidConfig::RapidConfig()
     config_file_name_ = "";
     config_file_path_ = "";
     particles_in_event_.clear();
+    variables_.clear();
 }
 
 //______________________________________________________________________________
@@ -94,6 +95,12 @@ TString RapidConfig::GetNormFile(const TString part_name)
     norm_file_path += norm_file_name;
 
     return norm_file_path;
+}
+
+//______________________________________________________________________________
+vector<TString> RapidConfig::GetVariables()
+{
+    return variables_;
 }
 
 //______________________________________________________________________________
