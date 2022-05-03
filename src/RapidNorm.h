@@ -17,6 +17,8 @@ class RapidNorm {
     public:
 
         //! Default constructor.
+        RapidNorm();
+        //! Standard constructor.
         RapidNorm(RapidConfig* config);
         //! Destructor
         ~RapidNorm();

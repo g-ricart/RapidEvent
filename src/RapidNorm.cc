@@ -15,6 +15,13 @@
 using namespace std;
 
 //______________________________________________________________________________
+RapidNorm::Rapidnorm()
+{
+    config_ = nullptr;
+    norm_map_.clear();
+}
+
+//______________________________________________________________________________
 RapidNorm::RapidNorm(RapidConfig* config) {
 
     config_ = config;

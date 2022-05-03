@@ -7,7 +7,9 @@
 class RapidSelect {
 
     public:
-        //! Constructor.
+        //! Default constructor.
+        RapidSelect();
+        //! Standard constructor.
         RapidSelect(RapidConfig* config, RapidNorm* norm);
         //! Destructor.
         ~RapidSelect();
