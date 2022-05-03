@@ -15,7 +15,7 @@
 using namespace std;
 
 //______________________________________________________________________________
-RapidNorm::Rapidnorm()
+RapidNorm::RapidNorm()
 {
     config_ = nullptr;
     norm_map_.clear();
