@@ -4,6 +4,7 @@
 #include <vector>
 #include <map>
 #include <fstream>
+#include <iostream>
 
 #include "TString.h"
 #include "TFile.h"
@@ -14,8 +15,6 @@
 class RapidNorm {
 
     public:
-
-        typedef std::map<TString, Double_t> PartNorm;
 
         //! Default constructor.
         RapidNorm(RapidConfig* config);
@@ -28,10 +27,12 @@ class RapidNorm {
 
     private:
 
+        typedef std::map<TString, Double_t> PartNorm;
+
         Int_t ComputeNorm();
 
         RapidConfig* config_;
-        PartNorm norm_map_;
+        PartNorm     norm_map_;
 };
 
 #endif

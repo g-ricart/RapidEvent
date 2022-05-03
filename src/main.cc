@@ -4,18 +4,27 @@
 #include "TString.h"
 
 #include "RapidConfig.h"
+#include "RapidNorm.h"
 
 using namespace std;
 
 int rapidEvent(const int kNEvtToGen, const TString kEvtFileName) {
 
     // Load configuration.
-    RapidConfig conf;
-    if (conf.LoadEvent(kEvtFileName)) {
+    RapidConfig* conf = new RapidConfig();
+    if (conf->LoadEvent(kEvtFileName)) {
         cout << "Configuration failed!"
              << "             Terminating" << endl;
         return 1;
     }
+
+    RapidNorm* norm = new RapidNorm(conf);
+    cout << norm->GetMeanNumber("pip") << endl;
+    cout << norm->GetMeanNumber("pim") << endl;
+    cout << norm->GetMeanNumber("Kp")  << endl;
+    cout << norm->GetMeanNumber("Km")  << endl;
+    cout << norm->GetMeanNumber("pp")  << endl;
+    cout << norm->GetMeanNumber("pm")  << endl;
 
     return 0;
 }
