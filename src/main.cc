@@ -76,5 +76,17 @@ int main(int argc, char const *argv[]) {
 
     int status = rapidEvent(kNEvtToGen, kEvtFileName);
 
+    switch (status) {
+        case 0:
+            cout << "Status : Success" << endl;
+            break;
+        case 1:
+            cout << "Status : Failed" << endl;
+            break;
+        default:
+            cout << "Status : Unknown" << endl;
+            break;
+    }
+
     return status;
 }
