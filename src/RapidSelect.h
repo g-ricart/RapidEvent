@@ -4,6 +4,11 @@
 #include "RapidConfig.h"
 #include "RapidNorm.h"
 
+/*!
+ * \class RapidSelect
+ * Class used to select the tracks to add in an event.
+*/
+
 class RapidSelect {
 
     public:

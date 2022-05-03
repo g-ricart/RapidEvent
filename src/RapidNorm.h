@@ -12,6 +12,11 @@
 
 #include "RapidConfig.h"
 
+/*!
+ * \class RapidNorm
+ * Class used to get the number of particles to put in an event.
+*/
+
 class RapidNorm {
 
     public:
