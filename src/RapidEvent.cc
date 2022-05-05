@@ -1,6 +1,8 @@
 #include "RapidEvent.h"
 
 #include "RapidConfig.h"
+#include "RapidNorm.h"
+#include "RapidTrack.h"
 
 using namespace std;
 
@@ -11,4 +13,9 @@ RapidEvent::RapidEvent() {}
 RapidEvent::~RapidEvent()
 {
     delete config_;
+
+    while(!tracks_.empty()) {
+		delete tracks_[tracks_.size()-1];
+		tracks_.pop_back();
+	}
 }
