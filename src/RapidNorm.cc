@@ -22,8 +22,8 @@ RapidNorm::RapidNorm()
 }
 
 //______________________________________________________________________________
-RapidNorm::RapidNorm(RapidConfig* config) {
-
+RapidNorm::RapidNorm(RapidConfig* config)
+{
     config_ = config;
     norm_map_.clear();
 
@@ -31,8 +31,8 @@ RapidNorm::RapidNorm(RapidConfig* config) {
 }
 
 //______________________________________________________________________________
-RapidNorm::~RapidNorm() {
-
+RapidNorm::~RapidNorm()
+{
     delete config_;
 }
 
