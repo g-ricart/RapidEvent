@@ -49,7 +49,7 @@ int RapidConfig::Load(const TString file_name)
         buffer.ReadLine(fin);
 
         // ignore empty lines or comments
-        if (buffer.Length() == 0 || buffer[0] == ' ' || buffer[0] == '#') {
+        if (buffer.Length() == 0 || buffer[0] == '#') {
             continue;
         }
 
