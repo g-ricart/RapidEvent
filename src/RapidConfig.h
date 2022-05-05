@@ -30,12 +30,16 @@ class RapidConfig {
         //! For now fixed to LHCb acceptance: 2 < eta < 5
         //! \todo{Read the event config file and get acceptance from there.}
         Double_t* GetAcceptance();
-        //! Return the file paths corresponding to the normalisation files.
-        std::vector<TString> GetNormFiles();
         //! Return the normalisation file corresponding to the given particle.
         TString GetNormFile(const TString part_name);
-        //! Return all the parameters found in the event config file as an
-        //! array of TString.
+        //! Return the file paths corresponding to the normalisation files.
+        std::vector<TString> GetNormFiles();
+        //! Return the data file corresponding to the given particle.
+        TString GetDataFile(const TString part_name);
+        //! Return the file paths corresponding to the data files.
+        std::vector<TString> GetDataFiles();
+        //! Return all the parameters found in the event config file as a
+        //! vector of TString.
         std::vector<TString> GetParams();
 
 

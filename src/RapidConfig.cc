@@ -93,6 +93,17 @@ Double_t* RapidConfig::GetAcceptance()
 }
 
 //______________________________________________________________________________
+TString RapidConfig::GetNormFile(const TString part_name)
+{
+    TString norm_file_path = getenv("RAPIDEVENT_NORM");
+    TString norm_file_name = part_name + "_norm.root";
+    norm_file_path += "/";
+    norm_file_path += norm_file_name;
+
+    return norm_file_path;
+}
+
+//______________________________________________________________________________
 vector<TString> RapidConfig::GetNormFiles()
 {
     vector<TString> norm_files;
@@ -106,14 +117,27 @@ vector<TString> RapidConfig::GetNormFiles()
 }
 
 //______________________________________________________________________________
-TString RapidConfig::GetNormFile(const TString part_name)
+TString RapidConfig::GetDataFile(const TString part_name)
 {
-    TString norm_file_path = getenv("RAPIDEVENT_NORM");
-    TString norm_file_name = part_name + "_norm.root";
-    norm_file_path += "/";
-    norm_file_path += norm_file_name;
+    TString data_file_path = getenv("RAPIDEVENT_DATA");
+    TString data_file_name = part_name + "_tree.root";
+    data_file_path += "/";
+    data_file_path += data_file_name;
 
-    return norm_file_path;
+    return data_file_path;
+}
+
+//______________________________________________________________________________
+vector<TString> RapidConfig::GetDataFiles()
+{
+    vector<TString> data_files;
+
+    for(auto part_name: particles_in_event_) {
+
+        data_files.push_back(GetNormFile(part_name));
+    }
+
+    return data_files;
 }
 
 //______________________________________________________________________________
@@ -184,15 +208,9 @@ int RapidConfig::MissingFile()
 {
     for(auto part: particles_in_event_) {
 
-        TString data_file_path = getenv("RAPIDEVENT_DATA");
-        TString data_file_name = part + "_tree.root";
-        data_file_path += "/";
-        data_file_path += data_file_name;
+        TString data_file_path = GetDataFile(part);
 
-        TString norm_file_path = getenv("RAPIDEVENT_NORM");
-        TString norm_file_name = part + "_norm.root";
-        norm_file_path += "/";
-        norm_file_path += norm_file_name;
+        TString norm_file_path = GetNormFile(part);
 
         if(access(data_file_path, R_OK) == -1) { // Check the file can be read.
             cout << "ERROR in RapidConfig::MissingFile : "
