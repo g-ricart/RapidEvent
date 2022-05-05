@@ -16,7 +16,7 @@ RapidConfig::RapidConfig()
     config_file_name_ = "";
     config_file_path_ = "";
     particles_in_event_.clear();
-    variables_.clear();
+    params_.clear();
 }
 
 //______________________________________________________________________________
@@ -25,7 +25,7 @@ RapidConfig::~RapidConfig()
 }
 
 //______________________________________________________________________________
-int RapidConfig::LoadEvent(const TString file_name)
+int RapidConfig::Load(const TString file_name)
 {
     config_file_name_ = file_name + ".event";
     config_file_path_ = "/" + config_file_name_;
@@ -34,7 +34,6 @@ int RapidConfig::LoadEvent(const TString file_name)
     cout << "INFO in RapidConfig::Load : "
          << "loading event descriptor from file: " << config_file_path_ << endl;
 
-    TString event_str;
     ifstream fin;
     fin.open(config_file_path_);
 
@@ -44,15 +43,35 @@ int RapidConfig::LoadEvent(const TString file_name)
 		return 1;
 	}
 
-    event_str.ReadLine(fin);
-    fin.close();
+    TString buffer;
+    while (fin.good()) {
 
-    cout << "INFO in RapidConfig::Load : event descriptor is: "
-         << event_str << endl;
+        buffer.ReadLine(fin);
 
-    if (ParseEvent(event_str)) {
-        return 1;
+        // ignore empty lines or comments
+        if (buffer.Length() == 0 || buffer[0] == ' ' || buffer[0] == '#') {
+            continue;
+        }
+
+        int colon = buffer.Index(":"); // Get position of the colon in the TString
+        // Get the string before the colon and strip it
+		TString command = buffer(0,colon);
+		command = command.Strip(TString::kBoth);
+        // Get the string after the colon and strip it
+		TString value = buffer(colon+1, buffer.Length()-colon-1);
+		value = value.Strip(TString::kBoth);
+
+        if (command == "stable") {
+            ParseParticles(value);
+        } else if (command == "params") {
+            ParseParams(value);
+        } else {
+            cout << "ERROR in RapidConfig::Load : Unknown setting '"
+                 << command << "' in " << config_file_path_ << endl;
+            return 1;
+        }
     }
+    fin.close();
 
     if (MissingFile()) {
         return 1;
@@ -136,13 +155,25 @@ TString RapidConfig::SanitizeName(TString name)
 }
 
 //______________________________________________________________________________
-int RapidConfig::ParseEvent(const TString event_str)
+int RapidConfig::ParseParticles(const TString event_str)
 {
     TString token;
-    Ssiz_t from = 0;
+    Ssiz_t  from = 0;
 
     while (event_str.Tokenize(token, from, " ")) {
         particles_in_event_.push_back(SanitizeName(token));
+    }
+
+    return 0;
+}
+
+int RapidConfig::ParseParams(const TString params_str)
+{
+    TString token;
+    Ssiz_t  from = 0;
+
+    while (params_str.Tokenize(token, from, " ")) {
+        params_.push_back(token);
     }
 
     return 0;

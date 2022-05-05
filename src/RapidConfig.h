@@ -23,7 +23,7 @@ class RapidConfig {
         ~RapidConfig();
 
         //! Load the event config file.
-        int LoadEvent(const TString file_name);
+        int Load(const TString file_name);
         //! Get the particles to be included in the event.
         std::vector<TString> GetParticles();
         //! Return the acceptance.
@@ -41,7 +41,8 @@ class RapidConfig {
 
     private:
         TString SanitizeName(TString name);
-        int     ParseEvent(const TString event_str);
+        int     ParseParticles(const TString event_str);
+        int     ParseParams(const TString params_str);
         int     MissingFile();
 
         TString              config_file_name_;

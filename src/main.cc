@@ -12,12 +12,29 @@ int rapidEvent(const int kNEvtToGen, const TString kEvtFileName) {
 
     // Load configuration.
     RapidConfig* conf = new RapidConfig();
-    if (conf->LoadEvent(kEvtFileName)) {
+    if (conf->Load(kEvtFileName)) {
         cout << "Configuration failed!"
              << "             Terminating" << endl;
         return 1;
     }
 
+    // Check configuration
+    auto particles = conf->GetParticles();
+    auto params    = conf->GetParams();
+
+    cout << "particles : ";
+    for(auto part: particles) {
+        cout << part << " ";
+    }
+    cout << endl;
+
+    cout << "parameters : ";
+    for(auto param: params) {
+        cout << param << " ";
+    }
+    cout << endl;
+
+    // Check normalisation
     RapidNorm* norm = new RapidNorm(conf);
     cout << norm->GetMeanNumber("pip") << endl;
     cout << norm->GetMeanNumber("pim") << endl;
