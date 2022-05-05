@@ -98,9 +98,9 @@ TString RapidConfig::GetNormFile(const TString part_name)
 }
 
 //______________________________________________________________________________
-vector<TString> RapidConfig::GetVariables()
+vector<TString> RapidConfig::GetParams()
 {
-    return variables_;
+    return params_;
 }
 
 //______________________________________________________________________________

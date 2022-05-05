@@ -34,9 +34,9 @@ class RapidConfig {
         std::vector<TString> GetNormFiles();
         //! Return the normalisation file corresponding to the given particle.
         TString GetNormFile(const TString part_name);
-        //! Return all the variables found in the event config file as an
+        //! Return all the parameters found in the event config file as an
         //! array of TString.
-        std::vector<TString> GetVariables();
+        std::vector<TString> GetParams();
 
 
     private:
@@ -47,7 +47,7 @@ class RapidConfig {
         TString              config_file_name_;
         TString              config_file_path_;
         std::vector<TString> particles_in_event_;
-        std::vector<TString> variables_;
+        std::vector<TString> params_;
 };
 
 #endif // RAPIDEVENT_RAPIDCONFIG_H_
