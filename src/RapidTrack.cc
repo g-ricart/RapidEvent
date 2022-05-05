@@ -1,23 +1,41 @@
 #include "RapidTrack.h"
 
-#include "RapidConfig.h"
+#include <map>
+
+#include "TString.h"
 
 using namespace std;
 
 //______________________________________________________________________________
 RapidTrack::RapidTrack()
 {
-    config_ = nullptr;
 }
 
 //______________________________________________________________________________
-RapidTrack::RapidTrack(RapidConfig* config)
+RapidTrack::RapidTrack(TString track_name)
 {
-    config_ = config;
+    name_ = track_name;
 }
 
 //______________________________________________________________________________
 RapidTrack::~RapidTrack()
 {
-    delete config_;
+}
+
+//______________________________________________________________________________
+void RapidTrack::SetParam(TString param_name, Double_t value)
+{
+    params_map_[param_name] = value;
+}
+
+//______________________________________________________________________________
+Double_t RapidTrack::GetParam(TString param_name)
+{
+    return params_map_.at(param_name);
+}
+
+//______________________________________________________________________________
+TString RapidTrack::GetName()
+{
+    return name_;
 }

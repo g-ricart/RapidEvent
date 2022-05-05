@@ -1,7 +1,9 @@
 #ifndef RAPIDEVENT_RAPIDTRACK_H_
 #define RAPIDEVENT_RAPIDTRACK_H_
 
-#include "RapidConfig.h"
+#include <map>
+
+#include "TString.h"
 
 class RapidTrack {
 
@@ -9,12 +11,19 @@ class RapidTrack {
         //! Default constructor.
         RapidTrack();
         //! Standard constructor.
-        RapidTrack(RapidConfig* config);
+        RapidTrack(TString track_name);
         //! Destructor.
         ~RapidTrack();
 
+        void SetParam(TString param_name, Double_t value);
+
+        Double_t GetParam(TString param_name);
+        TString  GetName();
+
     private:
-        RapidConfig* config_;
+        std::map<TString, Double_t> params_map_;
+        TString name_;
+
 };
 
 #endif //RAPIDEVENT_RAPIDTRACK_H_
