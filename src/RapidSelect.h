@@ -1,7 +1,10 @@
 #ifndef RAPIDEVENT_RAPIDSELECT_H_
 #define RAPIDEVENT_RAPIDSELECT_H_
 
+#include "TString.h"
+
 #include "RapidConfig.h"
+#include "RapidTrack.h"
 
 /*!
  * \class RapidSelect
@@ -17,6 +20,8 @@ class RapidSelect {
         RapidSelect(RapidConfig* config);
         //! Destructor.
         ~RapidSelect();
+
+        int SelectTrack(const TString part_name, RapidTrack* track);
 
     private:
         RapidConfig* config_;

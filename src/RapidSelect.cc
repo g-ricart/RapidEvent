@@ -1,6 +1,9 @@
 #include "RapidSelect.h"
 
+#include "TString.h"
+
 #include "RapidConfig.h"
+#include "RapidTrack.h"
 
 using namespace std;
 
@@ -20,4 +23,10 @@ RapidSelect::RapidSelect(RapidConfig* config)
 RapidSelect::~RapidSelect()
 {
     delete config_;
+}
+
+//______________________________________________________________________________
+int RapidSelect::SelectTrack(TString part_name, RapidTrack* track)
+{
+    return 0;
 }
