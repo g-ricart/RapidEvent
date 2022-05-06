@@ -1,7 +1,6 @@
 #include "RapidSelect.h"
 
 #include "RapidConfig.h"
-#include "RapidNorm.h"
 
 using namespace std;
 
@@ -9,19 +8,16 @@ using namespace std;
 RapidSelect::RapidSelect()
 {
     config_ = nullptr;
-    norm_   = nullptr;
 }
 
 //______________________________________________________________________________
-RapidSelect::RapidSelect(RapidConfig* config, RapidNorm* norm)
+RapidSelect::RapidSelect(RapidConfig* config)
 {
     config_ = config;
-    norm_   = norm;
 }
 
 //______________________________________________________________________________
 RapidSelect::~RapidSelect()
 {
     delete config_;
-    delete norm_;
 }
