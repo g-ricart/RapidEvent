@@ -10,14 +10,15 @@ class RapidTrack {
     public:
         //! Default constructor.
         RapidTrack();
-        //! Standard constructor.
-        RapidTrack(TString track_name);
+        //! Constructor specifying a name for the track.
+        RapidTrack(const TString track_name);
         //! Destructor.
         ~RapidTrack();
 
-        void SetParam(TString param_name, Double_t value);
+        void SetName(const TString track_name);
+        void SetParam(const TString param_name, const Double_t value);
 
-        Double_t GetParam(TString param_name);
+        Double_t GetParam(const TString param_name);
         TString  GetName();
 
     private:

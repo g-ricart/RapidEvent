@@ -12,7 +12,7 @@ RapidTrack::RapidTrack()
 }
 
 //______________________________________________________________________________
-RapidTrack::RapidTrack(TString track_name)
+RapidTrack::RapidTrack(const TString track_name)
 {
     name_ = track_name;
 }
@@ -23,13 +23,19 @@ RapidTrack::~RapidTrack()
 }
 
 //______________________________________________________________________________
-void RapidTrack::SetParam(TString param_name, Double_t value)
+void RapidTrack::SetName(const TString track_name)
+{
+    name_ = track_name;
+}
+
+//______________________________________________________________________________
+void RapidTrack::SetParam(const TString param_name, const Double_t value)
 {
     params_map_[param_name] = value;
 }
 
 //______________________________________________________________________________
-Double_t RapidTrack::GetParam(TString param_name)
+Double_t RapidTrack::GetParam(const TString param_name)
 {
     return params_map_.at(param_name);
 }
