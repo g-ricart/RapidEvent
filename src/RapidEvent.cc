@@ -1,5 +1,11 @@
 #include "RapidEvent.h"
 
+#include <fstream>
+
+#include "TFile.h"
+#include "TTree.h"
+#include "TString.h"
+
 #include "RapidConfig.h"
 #include "RapidNorm.h"
 #include "RapidTrack.h"
@@ -16,17 +22,17 @@ RapidEvent::RapidEvent()
 
     event_number_ = 0;
     n_tracks_     = 0;
-
 }
 
 //______________________________________________________________________________
-RapidEvent::RapidEvent(RapidConfig* config, RapidNorm* norm)
+RapidEvent::RapidEvent(RapidConfig* config, RapidNorm* norm,
+                       Ssiz_t event_number)
 {
     config_ = config;
     norm_   = norm;
     RapidSelect* select_ = new RapidSelect(config_);
 
-    event_number_ = 0;
+    event_number_ = event_number;
     n_tracks_     = 0;
 }
 
@@ -46,5 +52,18 @@ RapidEvent::~RapidEvent()
 //______________________________________________________________________________
 int RapidEvent::BuildEvent()
 {
+    vector<TString> particles = config_->GetParticles();
+
+    for(auto part: particles) {
+
+        // Open data file
+        TFile* data_file = TFile::Open(config_->GetDataFile(part), "READ");
+        TTree* data_tree = (TTree*)data_file->Get("DecayTree");
+
+        delete data_tree;
+        data_file->Close();
+        delete data_file;
+    }
+
     return 0;
 }
