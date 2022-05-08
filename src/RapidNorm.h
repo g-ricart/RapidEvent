@@ -11,6 +11,8 @@
 #include "TH1D.h"
 
 #include "RapidConfig.h"
+#include "TString.h"
+#include "TRandom3.h"
 
 /*!
  * \class RapidNorm
@@ -31,6 +33,9 @@ class RapidNorm {
         //! Return the mean number of the specified particle
         //! expected in an event.
         Double_t GetMeanNumber(const TString part_name);
+        //! Return a random number according to a Poisson law for the
+        //! specified particle.
+        Int_t GetPoisson(const TString part_name);
 
     private:
 
@@ -40,6 +45,7 @@ class RapidNorm {
 
         RapidConfig* config_;
         PartNorm     norm_map_;
+        TRandom3*    random_;
 };
 
 #endif // RAPIDEVENT_RAPIDNORM_H_

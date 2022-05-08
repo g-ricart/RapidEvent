@@ -9,6 +9,7 @@
 #include "TString.h"
 #include "TFile.h"
 #include "TH1D.h"
+#include "TRandom3.h"
 
 #include "RapidConfig.h"
 
@@ -18,6 +19,7 @@ using namespace std;
 RapidNorm::RapidNorm()
 {
     config_ = nullptr;
+    random_ = nullptr;
     norm_map_.clear();
 }
 
@@ -27,6 +29,8 @@ RapidNorm::RapidNorm(RapidConfig* config)
     config_ = config;
     norm_map_.clear();
 
+    random_ = new TRandom3();
+
     ComputeNorm();
 }
 
@@ -34,6 +38,7 @@ RapidNorm::RapidNorm(RapidConfig* config)
 RapidNorm::~RapidNorm()
 {
     delete config_;
+    delete random_;
 }
 
 //______________________________________________________________________________
@@ -41,6 +46,19 @@ Double_t RapidNorm::GetMeanNumber(const TString part_name)
 {
     if(norm_map_.count(part_name)) { // check if part_name is a key of the map
         return norm_map_.at(part_name);
+    } else {
+        cout << "ERROR in RapidNorm::GetMeanNumber : unknown key "
+             << part_name << " in normalisation map." << endl;
+        return -1;
+    }
+}
+
+//______________________________________________________________________________
+Int_t RapidNorm::GetPoisson(const TString part_name)
+{
+    if(norm_map_.count(part_name)) { // check if part_name is a key of the map
+        Double_t mean = norm_map_.at(part_name);
+        return random_->Poisson(mean);
     } else {
         cout << "ERROR in RapidNorm::GetMeanNumber : unknown key "
              << part_name << " in normalisation map." << endl;
