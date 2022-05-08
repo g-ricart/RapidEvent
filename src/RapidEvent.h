@@ -21,6 +21,7 @@ class RapidEvent {
         //! Destructor
         ~RapidEvent();
 
+        Ssiz_t GetNumberOfTracks();
         //! Build the event.
         int BuildEvent();
 
