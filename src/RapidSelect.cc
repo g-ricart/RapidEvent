@@ -1,6 +1,7 @@
 #include "RapidSelect.h"
 
 #include "TString.h"
+#include "TTree.h"
 
 #include "RapidConfig.h"
 #include "RapidTrack.h"
@@ -26,7 +27,7 @@ RapidSelect::~RapidSelect()
 }
 
 //______________________________________________________________________________
-int RapidSelect::SelectTrack(TString part_name, RapidTrack* track)
+int RapidSelect::SelectTrack(RapidTrack* track, TTree* tree)
 {
     return 0;
 }

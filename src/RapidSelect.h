@@ -2,6 +2,7 @@
 #define RAPIDEVENT_RAPIDSELECT_H_
 
 #include "TString.h"
+#include "TTree.h"
 
 #include "RapidConfig.h"
 #include "RapidTrack.h"
@@ -21,7 +22,7 @@ class RapidSelect {
         //! Destructor.
         ~RapidSelect();
 
-        int SelectTrack(const TString part_name, RapidTrack* track);
+        int SelectTrack(RapidTrack* track, TTree* tree);
 
     private:
         RapidConfig* config_;
