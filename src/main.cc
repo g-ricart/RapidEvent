@@ -5,6 +5,7 @@
 
 #include "RapidConfig.h"
 #include "RapidNorm.h"
+#include "RapidEvent.h"
 
 using namespace std;
 
@@ -42,6 +43,11 @@ int rapidEvent(const int kNEvtToGen, const TString kEvtFileName) {
     cout << norm->GetMeanNumber("Km")  << endl;
     cout << norm->GetMeanNumber("pp")  << endl;
     cout << norm->GetMeanNumber("pm")  << endl;
+
+    RapidEvent* event = new RapidEvent(conf, norm, 1);
+    event->BuildEvent();
+
+    cout << "Number of tracks : " << event->GetNumberOfTracks() << endl;
 
     return 0;
 }
