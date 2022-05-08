@@ -29,6 +29,12 @@ void RapidTrack::SetName(const TString track_name)
 }
 
 //______________________________________________________________________________
+void RapidTrack::SetEventNumber(const Ssiz_t event_number)
+{
+    event_number_ = event_number;
+}
+
+//______________________________________________________________________________
 void RapidTrack::SetParam(const TString param_name, const Double_t value)
 {
     params_map_[param_name] = value;
@@ -44,4 +50,9 @@ Double_t RapidTrack::GetParam(const TString param_name)
 TString RapidTrack::GetName()
 {
     return name_;
+}
+
+Ssiz_t RapidTrack::GetEventNumber()
+{
+    return event_number_;
 }

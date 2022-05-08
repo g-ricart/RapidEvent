@@ -16,13 +16,16 @@ class RapidTrack {
         ~RapidTrack();
 
         void SetName(const TString track_name);
+        void SetEventNumber(const Ssiz_t event_number);
         void SetParam(const TString param_name, const Double_t value);
 
         Double_t GetParam(const TString param_name);
         TString  GetName();
+        Ssiz_t   GetEventNumber();
 
     private:
         std::map<TString, Double_t> params_map_;
+        Ssiz_t event_number_;
         TString name_;
 
 };
