@@ -17,7 +17,8 @@ class RapidEvent {
         //! Default constructor.
         RapidEvent();
         //! Standard constructor.
-        RapidEvent(RapidConfig* config, RapidNorm* norm, Ssiz_t event_number);
+        RapidEvent(RapidConfig* config, RapidNorm* norm, RapidSelect* select,
+                                                         Ssiz_t event_number);
         //! Destructor
         ~RapidEvent();
 

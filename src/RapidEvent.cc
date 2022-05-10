@@ -26,11 +26,12 @@ RapidEvent::RapidEvent()
 
 //______________________________________________________________________________
 RapidEvent::RapidEvent(RapidConfig* config, RapidNorm* norm,
-                       Ssiz_t event_number)
+                                            RapidSelect* select,
+                                            Ssiz_t event_number)
 {
     config_ = config;
     norm_   = norm;
-    RapidSelect* select_ = new RapidSelect(config_);
+    select_ = select;
 
     event_number_ = event_number;
     n_tracks_     = 0;
@@ -60,36 +61,12 @@ int RapidEvent::BuildEvent()
 {
     vector<TString> particles = config_->GetParticles();
 
-    for(auto part: particles) {
+    for(auto particle: particles) {
 
-        Int_t n_parts = norm_->GetPoisson(part);
-        n_tracks_ += n_parts;
+        Int_t n_particles = norm_->GetPoisson(particle);
+        n_tracks_ += n_particles;
 
-        // Open data file
-        TFile* data_file = TFile::Open(config_->GetDataFile(part), "READ");
-        TTree* data_tree = (TTree*)data_file->Get("DecayTree");
-
-        TObjArray* branch_array = data_tree->GetListOfBranches();
-        branch_array->SetOwner(kTRUE); // Set the TObjArray as owner of its
-                                       // content, allowing proper delete
-
-        for (Int_t i = 0; i < n_parts; i++) {
-
-            // Setup the track
-            RapidTrack* track = new RapidTrack();
-            TString track_name = part + Form("_%d", i);
-            track->SetName(track_name);
-            track->SetEventNumber(event_number_);
-
-            select_->SelectTrack(track, data_tree);
-
-        }
-
-        // cleanup
-        branch_array->Delete();
-        delete data_tree;
-        data_file->Close();
-        delete data_file;
+        tracks_ = select_->SelectTracks(particle, n_particles, event_number_);
     }
 
     return 0;
