@@ -1,8 +1,13 @@
 #ifndef RAPIDEVENT_RAPIDSELECT_H_
 #define RAPIDEVENT_RAPIDSELECT_H_
 
+#include <vector>
+
+#include "TFile.h"
 #include "TString.h"
 #include "TTree.h"
+#include "TBranch.h"
+#include "TString.h"
 
 #include "RapidConfig.h"
 #include "RapidTrack.h"
@@ -22,10 +27,15 @@ class RapidSelect {
         //! Destructor.
         ~RapidSelect();
 
-        int SelectTrack(RapidTrack* track, TTree* tree);
+        std::vector<RapidTrack*> SelectTracks(TString part_name,
+                                              Int_t n_tracks,
+                                              Ssiz_t event_number);
 
     private:
+        int SelectTrack(RapidTrack* track, TTree* tree, TObjArray* branches);
+
         RapidConfig* config_;
+        std::vector<TString> params_to_keep_;
 };
 
 #endif // RAPIDEVENT_RAPIDSELECT_H_
