@@ -2,6 +2,7 @@
 #include <vector>
 
 #include "TString.h"
+#include "TRandom3.h"
 
 #include "RapidConfig.h"
 #include "RapidNorm.h"
@@ -10,6 +11,8 @@
 using namespace std;
 
 int rapidEvent(const int kNEvtToGen, const TString kEvtFileName) {
+
+    gRandom->SetSeed(0.);
 
     // Load configuration.
     RapidConfig* conf = new RapidConfig();
@@ -44,7 +47,9 @@ int rapidEvent(const int kNEvtToGen, const TString kEvtFileName) {
     cout << norm->GetMeanNumber("pp")  << endl;
     cout << norm->GetMeanNumber("pm")  << endl;
 
-    RapidEvent* event = new RapidEvent(conf, norm, 1);
+    RapidSelect* select = new RapidSelect(conf);
+
+    RapidEvent* event = new RapidEvent(conf, norm, select, 1);
     event->BuildEvent();
 
     cout << "Number of tracks : " << event->GetNumberOfTracks() << endl;
@@ -101,13 +106,13 @@ int main(int argc, char const *argv[]) {
 
     switch (status) {
         case 0:
-            cout << "Status : Success" << endl;
+            cout << "Status : success" << endl;
             break;
         case 1:
-            cout << "Status : Failed" << endl;
+            cout << "Status : failed" << endl;
             break;
         default:
-            cout << "Status : Unknown" << endl;
+            cout << "Status : unknown" << endl;
             break;
     }
 
