@@ -6,6 +6,11 @@
 
 #include "TString.h"
 
+/*!
+ * \class RapidTrack
+ * Class used to define a track.
+*/
+
 class RapidTrack {
 
     public:
