@@ -38,24 +38,22 @@ RapidSelect::~RapidSelect()
 int RapidSelect::SelectTrack(RapidTrack* track, TTree* tree,
                              TObjArray* branches)
 {
+    tree->SetBranchStatus("nEvent", 0);
     const Int_t kNBranches = branches->GetEntries();
-    Double_t* branch_addresses[kNBranches]; // Array of pointers to store addresses
-                                            // of all the branches
-    // TBranch* branch_array[kNBranches];
+    // Array to store addresses of all the branches.
+    Double_t branch_addresses[kNBranches];
 
-    for (Int_t i = 0; i < kNBranches; i++) {
-        TObject* b = (TObject*)branches->At(i+1); // for some reason the
-                                        // removed branch is still in the array
-                                        // at the index 0
+    for (Int_t i = 1; i < kNBranches; i++) { // Starting from 1 to avoid nEvent
+        TObject* b = (TObject*)branches->At(i);
         auto branch_name = b->GetName();
-        tree->SetBranchAddress(branch_name, branch_addresses[i]);
+        tree->SetBranchAddress(branch_name, &branch_addresses[i]);
     }
 
     // Get a random entry of the tree
     TRandomMT64* random = new TRandomMT64();
     Ssiz_t entry_index = random->Integer(tree->GetEntries());
     cout << entry_index << endl;
-    tree->GetEntry(entry_index); // segfault here, maybe try ti initialise the pointers
+    tree->GetEntry(entry_index);
 
     for(Int_t i = 0; i < branches->GetEntries(); i++) { // loop over branches
         TBranch* branch = (TBranch*)branches->At(i);
@@ -69,6 +67,8 @@ int RapidSelect::SelectTrack(RapidTrack* track, TTree* tree,
             }
         }
     }
+
+    delete random;
 
     return 0;
 }
@@ -85,9 +85,8 @@ vector<RapidTrack*> RapidSelect::SelectTracks(TString part_name, Int_t n_tracks,
 
     // Remove nEvent branch because it is not a Double_t
     // DOTO: Find a better way to check and remove branches that are not Double_t.
-    TBranch *b = data_tree->GetBranch("nEvent");
-    data_tree->GetListOfBranches()->Remove(b);
-    delete b;
+    // TBranch *b = data_tree->GetBranch("nEvent");
+    // data_tree->GetListOfBranches()->Remove(b);
 
     TObjArray* branch_array = data_tree->GetListOfBranches();
     branch_array->SetOwner(kTRUE); // Set the TObjArray as owner of its
