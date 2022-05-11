@@ -2,6 +2,7 @@
 #define RAPIDEVENT_RAPIDTRACK_H_
 
 #include <map>
+#include <vector>
 
 #include "TString.h"
 
@@ -19,6 +20,7 @@ class RapidTrack {
         void SetEventNumber(const Ssiz_t event_number);
         void SetParam(const TString param_name, const Double_t value);
 
+        std::vector<TString> GetListOfParams();
         Double_t GetParam(const TString param_name);
         TString  GetName();
         Ssiz_t   GetEventNumber();

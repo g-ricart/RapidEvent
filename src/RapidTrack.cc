@@ -1,6 +1,7 @@
 #include "RapidTrack.h"
 
 #include <map>
+#include <vector>
 
 #include "TString.h"
 
@@ -38,6 +39,17 @@ void RapidTrack::SetEventNumber(const Ssiz_t event_number)
 void RapidTrack::SetParam(const TString param_name, const Double_t value)
 {
     params_map_[param_name] = value;
+}
+
+//______________________________________________________________________________
+vector<TString> RapidTrack::GetListOfParams()
+{
+    vector<TString> list_of_params;
+    for (auto &it: params_map_) {
+        list_of_params.push_back(it.first);
+    }
+
+    return list_of_params;
 }
 
 //______________________________________________________________________________
