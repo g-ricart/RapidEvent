@@ -72,7 +72,12 @@ int RapidEvent::BuildEvent()
         Int_t n_particles = norm_->GetPoisson(particle);
         n_tracks_ += n_particles;
 
-        tracks_ = select_->SelectTracks(particle, n_particles, event_number_);
+        auto tracks_to_add = select_->SelectTracks(particle, n_particles,
+                                                        event_number_);
+
+        // Append track_to_add at the end of tracks_
+        tracks_.insert(end(tracks_), begin(tracks_to_add), end(tracks_to_add));
+
     }
 
     return 0;

@@ -8,6 +8,7 @@
 #include "TTree.h"
 #include "TBranch.h"
 #include "TString.h"
+#include "TRandomGen.h"
 
 #include "RapidConfig.h"
 #include "RapidTrack.h"
@@ -35,6 +36,7 @@ class RapidSelect {
         int SelectTrack(RapidTrack* track, TTree* tree, TObjArray* branches);
 
         RapidConfig* config_;
+        TRandomMT64* random_;
         std::vector<TString> params_to_keep_;
 };
 

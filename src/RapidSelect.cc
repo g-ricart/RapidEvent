@@ -1,6 +1,7 @@
 #include "RapidSelect.h"
 
 #include <vector>
+#include <map>
 
 #include "TFile.h"
 #include "TString.h"
@@ -19,12 +20,14 @@ using namespace std;
 RapidSelect::RapidSelect()
 {
     config_ = nullptr;
+    random_ = nullptr;
 }
 
 //______________________________________________________________________________
 RapidSelect::RapidSelect(RapidConfig* config)
 {
     config_ = config;
+    random_ = new TRandomMT64();
     params_to_keep_ = config_->GetParams();
 }
 
@@ -32,6 +35,7 @@ RapidSelect::RapidSelect(RapidConfig* config)
 RapidSelect::~RapidSelect()
 {
     delete config_;
+    delete random_;
 }
 
 //______________________________________________________________________________
@@ -40,35 +44,35 @@ int RapidSelect::SelectTrack(RapidTrack* track, TTree* tree,
 {
     tree->SetBranchStatus("nEvent", 0);
     const Int_t kNBranches = branches->GetEntries();
-    // Array to store addresses of all the branches.
-    Double_t branch_addresses[kNBranches];
+    // Map to store the branch values. Keys are branch names.
+    map<TString, Double_t> var_map;
 
-    for (Int_t i = 1; i < kNBranches; i++) { // Starting from 1 to avoid nEvent
+    for (Int_t i = 1; i < kNBranches; i++) { // Starting from 1 to avoid nEvent.
         TObject* b = (TObject*)branches->At(i);
-        auto branch_name = b->GetName();
-        tree->SetBranchAddress(branch_name, &branch_addresses[i]);
+        TString branch_name = b->GetName();
+        var_map[branch_name] = 0.;
+    }
+
+    // Separate loop to ensure pointer stability.
+    for (auto &it: var_map) {
+        tree->SetBranchAddress(it.first,     // The branch name.
+                              &(it.second)); // The address of the value.
     }
 
     // Get a random entry of the tree
-    TRandomMT64* random = new TRandomMT64();
-    Ssiz_t entry_index = random->Integer(tree->GetEntries());
-    cout << entry_index << endl;
+    Ssiz_t entry_index = random_->Integer(tree->GetEntries());
     tree->GetEntry(entry_index);
 
-    for(Int_t i = 0; i < branches->GetEntries(); i++) { // loop over branches
-        TBranch* branch = (TBranch*)branches->At(i);
-        TString branch_name = branch->GetName();
-        for(auto param: params_to_keep_) { // loop over parameters
-            if (branch_name.Contains(param)) {
-                if (branch_name.Contains("TRUE",
-                                         TString::ECaseCompare::kIgnoreCase)) {
+    for (auto &it: var_map) {
+        TString  branch_name = it.first;
+        Double_t value       = it.second;
 
-                }
+        for (auto param: params_to_keep_) {
+            if (branch_name.Contains(param)) {
+                track->SetParam(branch_name, value);
             }
         }
     }
-
-    delete random;
 
     return 0;
 }
