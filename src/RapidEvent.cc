@@ -57,6 +57,12 @@ Ssiz_t RapidEvent::GetNumberOfTracks()
 }
 
 //______________________________________________________________________________
+vector<RapidTrack*> RapidEvent::GetTracks()
+{
+    return tracks_;
+}
+
+//______________________________________________________________________________
 int RapidEvent::BuildEvent()
 {
     vector<TString> particles = config_->GetParticles();

@@ -23,6 +23,7 @@ class RapidEvent {
         ~RapidEvent();
 
         Ssiz_t GetNumberOfTracks();
+        std::vector<RapidTrack*> GetTracks();
         //! Build the event.
         int BuildEvent();
 
