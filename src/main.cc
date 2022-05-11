@@ -52,6 +52,13 @@ int rapidEvent(const int kNEvtToGen, const TString kEvtFileName) {
     RapidEvent* event = new RapidEvent(conf, norm, select, 1);
     event->BuildEvent();
 
+    auto tracks = event->GetTracks();
+
+    auto track_params = tracks[0]->GetListOfParams();
+    for (auto param: track_params) {
+        cout << param << endl;
+    }
+
     cout << "Number of tracks : " << event->GetNumberOfTracks() << endl;
 
     return 0;
