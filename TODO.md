@@ -2,7 +2,7 @@
 
 ### Highest priority
 
-- [ ] Finish implementing RapidWriter
+- [x] Finish implementing RapidWriter
 - [ ] Add decaying particles
 
 ### High priority

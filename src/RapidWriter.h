@@ -3,7 +3,7 @@
 
 #include "TFile.h"
 #include "TTree.h"
-#include "TSTring.h"
+#include "TString.h"
 
 #include "RapidConfig.h"
 #include "RapidEvent.h"
@@ -16,16 +16,26 @@
 class RapidWriter {
 
     public:
-        // Default constructor
+        //! Default constructor
         RapidWriter();
-        // Standard constructor
-        RapidWriter(TSTring out_file_path);
-        // Destructor
+        //! Standard constructor
+        RapidWriter(TString out_file_path, RapidConfig* config);
+        //! Destructor
         ~RapidWriter();
 
+        //! Write event into output file.
+        Int_t SaveEvent(RapidEvent* event);
+
     private:
-        TTree* out_tree_;
-        TFile* out_file_;
+        Int_t SetupTree(TString out_file_path);
+        TTree*       out_tree_;
+        TFile*       out_file_;
+        RapidConfig* config_;
+
+        // variables to store in tree
+        Ssiz_t event_number_;
+        TString name_;
+        std::map<TString, Double_t> params_map_;
 
 };
 

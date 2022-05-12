@@ -7,6 +7,7 @@
 #include "RapidConfig.h"
 #include "RapidNorm.h"
 #include "RapidEvent.h"
+#include "RapidWriter.h"
 
 using namespace std;
 
@@ -36,6 +37,9 @@ int rapidEvent(const int kNEvtToGen, const TString kEvtFileName) {
     }
     cout << endl;
 
+    // Writer
+    RapidWriter* writer = new RapidWriter("out_test.root", conf);
+
     // Check normalisation
     RapidNorm* norm = new RapidNorm(conf);
     cout << norm->GetMeanNumber("pip") << endl;
@@ -59,10 +63,15 @@ int rapidEvent(const int kNEvtToGen, const TString kEvtFileName) {
 
     cout << "Number of tracks : " << event->GetNumberOfTracks() << endl;
 
+    // Save event
+    writer->SaveEvent(event);
+
     return 0;
 }
 
 int main(int argc, char const *argv[]) {
+
+    ios_base::sync_with_stdio(false); // Faster cout
 
     if (argc != 3) { // Check usage
 		cout << "Usage: " << argv[0] << " event_file_name "
