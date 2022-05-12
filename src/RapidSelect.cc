@@ -92,11 +92,6 @@ vector<RapidTrack*> RapidSelect::SelectTracks(TString part_name, Int_t n_tracks,
     TFile* data_file = TFile::Open(config_->GetDataFile(part_name), "READ");
     TTree* data_tree = (TTree*)data_file->Get("DecayTree");
 
-    // Remove nEvent branch because it is not a Double_t
-    // DOTO: Find a better way to check and remove branches that are not Double_t.
-    // TBranch *b = data_tree->GetBranch("nEvent");
-    // data_tree->GetListOfBranches()->Remove(b);
-
     TObjArray* branch_array = data_tree->GetListOfBranches();
     branch_array->SetOwner(kTRUE); // Set the TObjArray as owner of its
                                    // content, allowing proper delete
