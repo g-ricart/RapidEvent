@@ -70,8 +70,12 @@ int RapidSelect::SelectTrack(RapidTrack* track, TTree* tree,
 
         for (auto param: params_to_keep_) {
             if (branch_name.Contains(param)) {
-                track->SetParam(branch_name, value);
-            }
+                if (branch_name.Contains("TRUE")) {
+                    track->SetParam(param + "_TRUE", value);
+                } else {
+                    track->SetParam(param, value);
+                }
+            } else { continue; }
         }
     }
 
