@@ -30,6 +30,7 @@ RapidNorm::RapidNorm(RapidConfig* config)
     norm_map_.clear();
 
     random_ = new TRandom3();
+    random_->SetSeed(0);
 
     ComputeNorm();
 }

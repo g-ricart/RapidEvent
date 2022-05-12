@@ -28,6 +28,7 @@ RapidSelect::RapidSelect(RapidConfig* config)
 {
     config_ = config;
     random_ = new TRandomMT64();
+    random_->SetSeed(0);
     params_to_keep_ = config_->GetParams();
 }
 
