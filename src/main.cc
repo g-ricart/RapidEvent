@@ -12,8 +12,6 @@ using namespace std;
 
 int rapidEvent(const int kNEvtToGen, const TString kEvtFileName) {
 
-    gRandom->SetSeed(0.);
-
     // Load configuration.
     RapidConfig* conf = new RapidConfig();
     if (conf->Load(kEvtFileName)) {
