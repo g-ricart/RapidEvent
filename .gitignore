@@ -15,3 +15,6 @@ events/
 data/
 norm/
 mcr/
+
+# Output
+output/
