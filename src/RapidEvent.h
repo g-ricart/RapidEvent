@@ -22,6 +22,8 @@ class RapidEvent {
         //! Destructor
         ~RapidEvent();
 
+        // Getters
+        Ssiz_t GetEventNumber();
         Ssiz_t GetNumberOfTracks();
         std::vector<RapidTrack*> GetTracks();
         //! Build the event.

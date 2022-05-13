@@ -51,6 +51,12 @@ RapidEvent::~RapidEvent()
 }
 
 //______________________________________________________________________________
+Ssiz_t RapidEvent::GetEventNumber()
+{
+    return event_number_;
+}
+
+//______________________________________________________________________________
 Ssiz_t RapidEvent::GetNumberOfTracks()
 {
     return n_tracks_;

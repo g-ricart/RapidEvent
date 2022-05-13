@@ -21,51 +21,24 @@ int rapidEvent(const int kNEvtToGen, const TString kEvtFileName) {
         return 1;
     }
 
-    // Check configuration
-    auto particles = conf->GetParticles();
-    auto params    = conf->GetParams();
-
-    cout << "particles : ";
-    for(auto part: particles) {
-        cout << part << " ";
-    }
-    cout << endl;
-
-    cout << "parameters : ";
-    for(auto param: params) {
-        cout << param << " ";
-    }
-    cout << endl;
-
     // Writer
     RapidWriter* writer = new RapidWriter("out_test.root", conf);
 
-    // Check normalisation
+    // Normalisator
     RapidNorm* norm = new RapidNorm(conf);
-    cout << norm->GetMeanNumber("pip") << endl;
-    cout << norm->GetMeanNumber("pim") << endl;
-    cout << norm->GetMeanNumber("Kp")  << endl;
-    cout << norm->GetMeanNumber("Km")  << endl;
-    cout << norm->GetMeanNumber("pp")  << endl;
-    cout << norm->GetMeanNumber("pm")  << endl;
 
+    // Selector
     RapidSelect* select = new RapidSelect(conf);
 
-    RapidEvent* event = new RapidEvent(conf, norm, select, 1);
-    event->BuildEvent();
+    for (Ssiz_t i = 0; i < kNEvtToGen; i++) {
+        cout << "\r" << i+1 << "/" << kNEvtToGen << flush;
+        RapidEvent* event = new RapidEvent(conf, norm, select, i+1);
+        event->BuildEvent();
 
-    auto tracks = event->GetTracks();
-
-    auto track_params = tracks[0]->GetListOfParams();
-    for (auto param: track_params) {
-        cout << param << endl;
+        // Save event
+        writer->SaveEvent(event);
     }
-
-    cout << "Number of tracks : " << event->GetNumberOfTracks() << endl;
-
-    // Save event
-    writer->SaveEvent(event);
-
+    cout << endl;
     return 0;
 }
 

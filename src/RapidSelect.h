@@ -3,12 +3,10 @@
 
 #include <vector>
 
-#include "TFile.h"
-#include "TString.h"
 #include "TTree.h"
-#include "TBranch.h"
 #include "TString.h"
 #include "TRandomGen.h"
+#include "TObjArray.h"
 
 #include "RapidConfig.h"
 #include "RapidTrack.h"
@@ -33,7 +31,12 @@ class RapidSelect {
                                               Ssiz_t event_number);
 
     private:
-        int SelectTrack(RapidTrack* track, TTree* tree, TObjArray* branches);
+        Int_t SelectTrack(RapidTrack* track, TTree* tree, TObjArray* branches);
+        Int_t SetTrackParams(RapidTrack* track, TObjArray* tokens,
+                                                Double_t value);
+        Int_t SetTrackParamsTrue(RapidTrack* track, TObjArray* tokens,
+                                                    Double_t value);
+        Bool_t KeepParam(TString param);
 
         RapidConfig* config_;
         TRandomMT64* random_;

@@ -33,6 +33,8 @@ RapidWriter::~RapidWriter()
     out_file_->Close();
     delete out_tree_;
     delete out_file_;
+
+    delete config_;
 }
 
 //______________________________________________________________________________
@@ -40,13 +42,16 @@ Int_t RapidWriter::SaveEvent(RapidEvent* event)
 {
     vector<RapidTrack*> tracks = event->GetTracks();
 
+    event_number_ = event->GetEventNumber();
+
     for (auto track: tracks) {
         for (auto &it: params_map_) {
             it.second = track->GetParam(it.first);
+            name_ = track->GetName();
         }
+        out_tree_->Fill();
     }
 
-    out_tree_->Fill();
     out_tree_->AutoSave();
 
     while(!tracks.empty()) {
