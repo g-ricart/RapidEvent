@@ -6,18 +6,18 @@
 
 ### High priority
 
-- [ ] **#SEGFAULT** when trying to delete anything in _main_. Seems to come
+- [ ] **#SEGFAULT** in _main_ when trying to delete anything. Seems to come
 from the TSTring destructor.
-- [ ] Find a way to test the type of every branch of the data ROOT files to
-avoid hardcoded skip of "nEvent" in RapidSelect.
+- [ ] _RapidSelect_ Find a way to test the type of every branch of the data ROOT files to
+avoid hardcoded skip of "nEvent".
 - [ ] _RapidSelect::SelectTrack_ Manage error when a branch name is ill-formed.
 
 ### Low priority
 
 - [ ] Add a warning when user ask for parameters which are not present in
 the TTree.
-- [ ] Print more info in _RapidConfig_.
-- [ ] Better progress
+- [ ] _RapidConfig_ Print more info.
+- [ ] Better progress monitoring.
 
 ### Done [x]
 
