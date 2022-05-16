@@ -2,6 +2,8 @@
 
 ### Highest priority
 
+- [ ] Reduce smearing of origin vertex for prompt particles.
+- [ ] Add ProbNN variables with boolean values.
 - [ ] Add decaying particles.
 
 ### High priority
