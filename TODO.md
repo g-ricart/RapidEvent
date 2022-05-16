@@ -8,8 +8,6 @@
 
 ### High priority
 
-- [ ] **#SEGFAULT** in _main_ when trying to delete anything. Seems to come
-from the TSTring destructor.
 - [ ] _RapidSelect_ Find a way to test the type of every branch of the data ROOT files to
 avoid hardcoded skip of "nEvent".
 - [ ] _RapidSelect::SelectTrack_ Manage error when a branch name is ill-formed.
@@ -25,3 +23,5 @@ the TTree.
 
 - [x] **#BUG** _RapidTrack::SelectTrack_ if some parametres have a letter in
 common (try tokenize the branch name and get third token)
+- [x] **#SEGFAULT** in _main_ when trying to delete anything. Seems to come
+from the TSTring destructor.
