@@ -1,6 +1,8 @@
 #ifndef RAPIDEVENT_RAPIDWRITER_H_
 #define RAPIDEVENT_RAPIDWRITER_H_
 
+#include <map>
+
 #include "TFile.h"
 #include "TTree.h"
 #include "TString.h"

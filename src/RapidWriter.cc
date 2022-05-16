@@ -1,12 +1,15 @@
 #include "RapidWriter.h"
 
+#include <vector>
+#include <map>
+
 #include "TFile.h"
 #include "TTree.h"
 #include "TString.h"
-#include "TBranch.h"
 #include "TString.h"
 
 #include "RapidEvent.h"
+#include "RapidConfig.h"
 #include "RapidTrack.h"
 
 using namespace std;
