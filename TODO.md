@@ -14,10 +14,10 @@ avoid hardcoded skip of "nEvent".
 
 ### Low priority
 
-- [ ] Add a warning when user ask for parameters which are not present in
+- [ ] _RapidConfig_ Add a warning when user ask for parameters which are not present in
 the TTree.
 - [ ] _RapidConfig_ Print more info.
-- [ ] Better progress monitoring.
+- [ ] _main_ Better progress monitoring.
 
 ### Done [x]
 
