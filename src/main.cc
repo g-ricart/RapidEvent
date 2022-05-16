@@ -2,7 +2,6 @@
 #include <vector>
 
 #include "TString.h"
-#include "TRandom3.h"
 
 #include "RapidConfig.h"
 #include "RapidNorm.h"
@@ -37,8 +36,15 @@ int rapidEvent(const int kNEvtToGen, const TString kEvtFileName) {
 
         // Save event
         writer->SaveEvent(event);
+
+        delete event;
     }
     cout << endl;
+
+    delete select;
+    delete norm;
+    delete writer;
+    delete conf;
     return 0;
 }
 

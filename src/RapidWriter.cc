@@ -30,8 +30,6 @@ RapidWriter::RapidWriter(TString out_file_path, RapidConfig* config)
 RapidWriter::~RapidWriter()
 {
     out_tree_->AutoSave();
-    out_file_->Close();
-    delete out_tree_;
     delete out_file_;
 }
 
@@ -51,11 +49,6 @@ Int_t RapidWriter::SaveEvent(RapidEvent* event)
     }
 
     out_tree_->AutoSave();
-
-    while(!tracks.empty()) {
-		delete tracks[tracks.size()-1];
-		tracks.pop_back();
-	}
 
     return 0;
 }
