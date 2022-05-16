@@ -40,10 +40,6 @@ RapidEvent::RapidEvent(RapidConfig* config, RapidNorm* norm,
 //______________________________________________________________________________
 RapidEvent::~RapidEvent()
 {
-    delete config_;
-    delete norm_;
-    delete select_;
-
     while(!tracks_.empty()) {
 		delete tracks_[tracks_.size()-1];
 		tracks_.pop_back();

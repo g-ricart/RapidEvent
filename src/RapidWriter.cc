@@ -33,8 +33,6 @@ RapidWriter::~RapidWriter()
     out_file_->Close();
     delete out_tree_;
     delete out_file_;
-
-    delete config_;
 }
 
 //______________________________________________________________________________

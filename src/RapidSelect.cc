@@ -36,7 +36,6 @@ RapidSelect::RapidSelect(RapidConfig* config)
 //______________________________________________________________________________
 RapidSelect::~RapidSelect()
 {
-    delete config_;
     delete random_;
 }
 

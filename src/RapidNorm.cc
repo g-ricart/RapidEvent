@@ -38,7 +38,6 @@ RapidNorm::RapidNorm(RapidConfig* config)
 //______________________________________________________________________________
 RapidNorm::~RapidNorm()
 {
-    delete config_;
     delete random_;
 }
 
