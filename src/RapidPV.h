@@ -1,5 +1,5 @@
-#ifndef RAPIDEVENT_RAPIDPVSMEAR_H_
-#define RAPIDEVENT_RAPIDPVSMEAR_H_
+#ifndef RAPIDEVENT_RAPIDPV_H_
+#define RAPIDEVENT_RAPIDPV_H_
 
 #include "RapidConfig.h"
 #include "TRandom3.h"
@@ -23,4 +23,4 @@ class RapidPV {
         TRandom3*    random_;
 };
 
-#endif // RAPIDEVENT_RAPIDPVSMEAR_H_
+#endif // RAPIDEVENT_RAPIDPV_H_
