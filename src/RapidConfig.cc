@@ -53,7 +53,8 @@ int RapidConfig::Load(const TString file_name)
             continue;
         }
 
-        int colon = buffer.Index(":"); // Get position of the colon in the TString
+        // Get position of the colon in the TString
+        int colon = buffer.Index(":");
         // Get the string before the colon and strip it
 		TString command = buffer(0,colon);
 		command = command.Strip(TString::kBoth);
