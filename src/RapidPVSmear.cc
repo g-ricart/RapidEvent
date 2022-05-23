@@ -1,13 +1,13 @@
-#include "RapidVertexSmear.h"
+#include "RapidPVSmear.h"
 
 using namespace std;
 
 //______________________________________________________________________________
-RapidVertexSmear::RapidVertexSmear()
+RapidPVSmear::RapidPVSmear()
 {
 }
 
 //______________________________________________________________________________
-RapidVertexSmear::~RapidVertexSmear()
+RapidPVSmear::~RapidPVSmear()
 {
 }
