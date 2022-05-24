@@ -24,16 +24,21 @@ class RapidTrack {
         void SetName(const TString track_name);
         void SetEventNumber(const Ssiz_t event_number);
         void SetParam(const TString param_name, const Double_t value);
+        //! Specify if a track is prompt ('true') or not ('false').
+        void SetPrompt(const Bool_t is_prompt);
 
         std::vector<TString> GetListOfParams();
         Double_t GetParam(const TString param_name);
         TString  GetName();
         Ssiz_t   GetEventNumber();
+        Bool_t   IsPrompt();
 
     private:
         std::map<TString, Double_t> params_map_;
-        Ssiz_t event_number_;
+
+        Ssiz_t  event_number_;
         TString name_;
+        Bool_t  is_prompt_;
 
 };
 

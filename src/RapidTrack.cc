@@ -42,6 +42,12 @@ void RapidTrack::SetParam(const TString param_name, const Double_t value)
 }
 
 //______________________________________________________________________________
+void RapidTrack::SetPrompt(const Bool_t is_prompt)
+{
+    is_prompt_ = is_prompt;
+}
+
+//______________________________________________________________________________
 vector<TString> RapidTrack::GetListOfParams()
 {
     vector<TString> list_of_params;
@@ -64,7 +70,14 @@ TString RapidTrack::GetName()
     return name_;
 }
 
+//______________________________________________________________________________
 Ssiz_t RapidTrack::GetEventNumber()
 {
     return event_number_;
+}
+
+//______________________________________________________________________________
+Bool_t RapidTrack::IsPrompt()
+{
+    return is_prompt_;
 }
