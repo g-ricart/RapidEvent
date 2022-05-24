@@ -45,9 +45,9 @@ void RapidPV::SetXYZ(Double_t x, Double_t y, Double_t z) {
 void RapidPV::SmearVertex() {
 
     // Units are in mm.
-    Double_t xS = 0.010817 + 0.03784*TMath::Exp(-0.0815*ntracks_);
-    Double_t yS = 0.010817 + 0.03784*TMath::Exp(-0.0815*ntracks_);
-    Double_t zS = 0.04252  + 0.2235 *TMath::Exp(-0.0814*ntracks_);
+    Double_t xS = 0.010817 + 0.03784*TMath::Exp(-0.0815*n_tracks_);
+    Double_t yS = 0.010817 + 0.03784*TMath::Exp(-0.0815*n_tracks_);
+    Double_t zS = 0.04252  + 0.2235 *TMath::Exp(-0.0814*n_tracks_);
 
     // Stored in micro-meters.
     vertex_smeared_ = ROOT::Math::XYZPoint( \
