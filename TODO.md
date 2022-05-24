@@ -3,6 +3,13 @@
 ### Highest priority
 
 - [ ] Reduce smearing of origin vertex for prompt particles.
+    - [x] Add a _RapidPV_ class to define and smear the primary vertex.
+    - [ ] _RapidConfig_ Differentiate between prompt and non-prompt particles.
+    - [ ] _RapidEvent_ Add a 'RapidPV' data member.
+    - [ ] _RapidEvent_ Differentiate between prompt and non-prompt tracks.
+    - [ ] _RapidWriter_ Add a 'is_prompt' branch and add origin vertex
+    coordinates of prompt tracks to the tree.
+    - [ ] Check that smearing corresponds to VELO resolution.
 - [ ] Add ProbNN variables with boolean values.
 - [ ] Add decaying particles.
 
@@ -25,6 +32,9 @@ present in the TTree.
     - [ ] _RapidSelect_
     - [ ] _RapidTrack_
     - [x] _RapidWriter_
+- [ ] _RapidConfig_ Forbid request of origin vertex coordinates of prompt
+particles.
+
 
 ### Done [x]
 
