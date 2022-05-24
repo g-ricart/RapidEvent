@@ -3,10 +3,10 @@
 ### Highest priority
 
 - [ ] Reduce smearing of origin vertex for prompt particles.
-    - [x] Add a _RapidPV_ class to define and smear the primary vertex.
+    - [x] Add a `RapidPV` class to define and smear the primary vertex.
     - [x] Add a way to specify if a track is prompt or not.
     - [x] _RapidConfig_ Differentiate between prompt and non-prompt particles.
-    - [ ] _RapidEvent_ Add a `RapidPV` data member.
+    - [x] _RapidEvent_ Add a `RapidPV` data member.
     - [ ] _RapidEvent_ Differentiate between prompt and non-prompt tracks.
     - [ ] _RapidWriter_ Add a `is_prompt` branch and add origin vertex
     coordinates of prompt tracks to the tree.

@@ -5,6 +5,7 @@
 #include "RapidNorm.h"
 #include "RapidTrack.h"
 #include "RapidSelect.h"
+#include "RapidPV.h"
 
 /*!
  * \class RapidEvent
@@ -33,6 +34,7 @@ class RapidEvent {
         RapidConfig* config_;
         RapidNorm*   norm_;
         RapidSelect* select_;
+        RapidPV*     pv_;
         std::vector<RapidTrack*> tracks_;
 
         Ssiz_t event_number_;
