@@ -3,12 +3,12 @@
 ### Highest priority
 
 - [ ] Reduce smearing of origin vertex for prompt particles.
-    - [x] Add a _RapidPV_ class to define and smear the primary vertex.
+    - [x] Add a `RapidPV` class to define and smear the primary vertex.
     - [x] _RapidTrack_ Add a way to specify if a track is prompt or not.
     - [ ] _RapidConfig_ Differentiate between prompt and non-prompt particles.
-    - [ ] _RapidEvent_ Add a 'RapidPV' data member.
+    - [ ] _RapidEvent_ Add a `RapidPV` data member.
     - [ ] _RapidEvent_ Differentiate between prompt and non-prompt tracks.
-    - [ ] _RapidWriter_ Add a 'is_prompt' branch and add origin vertex
+    - [ ] _RapidWriter_ Add a `is_prompt` branch and add origin vertex
     coordinates of prompt tracks to the tree.
     - [ ] Check that smearing corresponds to VELO resolution.
 - [ ] Add ProbNN variables with boolean values.
@@ -19,7 +19,7 @@
 - [ ] _RapidPV_ Add different smearing techniques.
     - [ ] _RapidConfig_ Add a way to select them in the event config file.
 - [ ] _RapidSelect_ Find a way to test the type of every branch of the data
-ROOT files to avoid hardcoded skip of "nEvent".
+ROOT files to avoid hardcoded skip of `nEvent`.
 - [ ] _RapidSelect::SelectTrack_ Manage error when a branch name is ill-formed.
 
 ### Low priority
