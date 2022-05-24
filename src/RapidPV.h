@@ -25,9 +25,7 @@ class RapidPV {
         //! Set the coordinates of the PV.
         void SetXYZ(Double_t x, Double_t y, Double_t z);
 
-        //! Get smeared PV.
         ROOT::Math::XYZPoint GetSmearedPV() {return vertex_smeared_;}
-        //! Get true PV.
         ROOT::Math::XYZPoint GetTruePV() {return vertex_true_;}
 
     private:
