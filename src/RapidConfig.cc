@@ -15,7 +15,7 @@ RapidConfig::RapidConfig()
 {
     config_file_name_ = "";
     config_file_path_ = "";
-    particles_in_event_.clear();
+    prompts_in_event_.clear();
     params_.clear();
 }
 
@@ -62,8 +62,8 @@ int RapidConfig::Load(const TString file_name)
 		TString value = buffer(colon+1, buffer.Length()-colon-1);
 		value = value.Strip(TString::kBoth);
 
-        if (command == "stable") {
-            ParseParticles(value);
+        if (command == "prompt") {
+            ParsePrompts(value);
         } else if (command == "params") {
             ParseParams(value);
         } else {
@@ -82,9 +82,9 @@ int RapidConfig::Load(const TString file_name)
 }
 
 //______________________________________________________________________________
-vector<TString> RapidConfig::GetParticles()
+vector<TString> RapidConfig::GetPrompts()
 {
-    return particles_in_event_;
+    return prompts_in_event_;
 }
 
 Double_t* RapidConfig::GetAcceptance()
@@ -109,7 +109,7 @@ vector<TString> RapidConfig::GetNormFiles()
 {
     vector<TString> norm_files;
 
-    for(auto part_name: particles_in_event_) {
+    for(auto part_name: prompts_in_event_) {
 
         norm_files.push_back(GetNormFile(part_name));
     }
@@ -133,7 +133,7 @@ vector<TString> RapidConfig::GetDataFiles()
 {
     vector<TString> data_files;
 
-    for(auto part_name: particles_in_event_) {
+    for(auto part_name: prompts_in_event_) {
 
         data_files.push_back(GetNormFile(part_name));
     }
@@ -180,13 +180,13 @@ TString RapidConfig::SanitizeName(TString name)
 }
 
 //______________________________________________________________________________
-int RapidConfig::ParseParticles(const TString event_str)
+int RapidConfig::ParsePrompts(const TString event_str)
 {
     TString token;
     Ssiz_t  from = 0;
 
     while (event_str.Tokenize(token, from, " ")) {
-        particles_in_event_.push_back(SanitizeName(token));
+        prompts_in_event_.push_back(SanitizeName(token));
     }
 
     return 0;
@@ -207,7 +207,7 @@ int RapidConfig::ParseParams(const TString params_str)
 //______________________________________________________________________________
 int RapidConfig::MissingFile()
 {
-    for(auto part: particles_in_event_) {
+    for(auto part: prompts_in_event_) {
 
         TString data_file_path = GetDataFile(part);
 
