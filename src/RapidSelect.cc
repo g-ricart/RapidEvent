@@ -14,6 +14,7 @@
 
 #include "RapidConfig.h"
 #include "RapidTrack.h"
+#include "RapidPV.h"
 
 using namespace std;
 
@@ -40,8 +41,11 @@ RapidSelect::~RapidSelect()
 }
 
 //______________________________________________________________________________
-vector<RapidTrack*> RapidSelect::SelectTracks(TString part_name, Int_t n_tracks,
-                                              Ssiz_t event_number)
+vector<RapidTrack*> RapidSelect::SelectTracks(TString  part_name,
+                                              Int_t    n_tracks,
+                                              Ssiz_t   event_number,
+                                              RapidPV* pv,
+                                              Bool_t   prompt /*=false*/)
 {
     vector<RapidTrack*> selected_tracks;
 
@@ -60,10 +64,14 @@ vector<RapidTrack*> RapidSelect::SelectTracks(TString part_name, Int_t n_tracks,
         TString track_name = part_name + Form("_%d", i);
         track->SetName(track_name);
         track->SetEventNumber(event_number);
+        track->SetPrompt(prompt);
 
+        // Select the track
         SelectTrack(track, data_tree, branch_array);
         selected_tracks.push_back(track);
 
+        // If prompt, change origin vertex.
+        if (track->IsPrompt()) {track->SetOriginVertex(pv);}
     }
 
     // cleanup
@@ -76,8 +84,8 @@ vector<RapidTrack*> RapidSelect::SelectTracks(TString part_name, Int_t n_tracks,
 }
 
 //______________________________________________________________________________
-Int_t RapidSelect::SelectTrack(RapidTrack* track, TTree* tree,
-                             TObjArray* branches)
+Int_t RapidSelect::SelectTrack(RapidTrack* track, TTree*     tree,
+                                                  TObjArray* branches)
 {
     tree->SetBranchStatus("nEvent", 0);
     const Int_t kNBranches = branches->GetEntries();
@@ -133,7 +141,7 @@ Int_t RapidSelect::SelectTrack(RapidTrack* track, TTree* tree,
 
 //______________________________________________________________________________
 Int_t RapidSelect::SetTrackParams(RapidTrack* track, TObjArray* tokens,
-                                                     Double_t value)
+                                                     Double_t   value)
 {
     TString param = ((TObjString*)tokens->At(2))->GetString();
 
@@ -144,7 +152,7 @@ Int_t RapidSelect::SetTrackParams(RapidTrack* track, TObjArray* tokens,
 
 //______________________________________________________________________________
 Int_t RapidSelect::SetTrackParamsTrue(RapidTrack* track, TObjArray* tokens,
-                                                     Double_t value)
+                                                         Double_t   value)
 {
     TString param = ((TObjString*)tokens->At(2))->GetString();
 
