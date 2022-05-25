@@ -4,12 +4,12 @@
 
 - [ ] Reduce smearing of origin vertex for prompt particles.
     - [x] Add a `RapidPV` class to define and smear the primary vertex.
-    - [x] Add a way to specify if a track is prompt or not.
+    - [x] _RapidTrack_  Add a way to specify if a track is prompt or not.
     - [x] _RapidConfig_ Differentiate between prompt and non-prompt particles.
-    - [x] _RapidEvent_ Add a `RapidPV` data member.
-    - [ ] _RapidEvent_ Differentiate between prompt and non-prompt tracks.
-    - [ ] _RapidWriter_ Add PV smeared and true coordinates of prompt
-    tracks to the tree.
+    - [x] _RapidEvent_  Add a `RapidPV` data member.
+    - [x] _RapidEvent_  Differentiate between prompt and non-prompt tracks.
+    - [x] _RapidTrack_  Add PV smeared and true coordinates of prompt
+    tracks to the track parameters if the track is prompt.
     - [ ] Check that smearing corresponds to VELO resolution.
 - [ ] Add ProbNN variables with boolean values.
 - [ ] Add decaying particles.
