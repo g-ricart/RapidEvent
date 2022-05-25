@@ -8,8 +8,8 @@
     - [x] _RapidConfig_ Differentiate between prompt and non-prompt particles.
     - [x] _RapidEvent_ Add a `RapidPV` data member.
     - [ ] _RapidEvent_ Differentiate between prompt and non-prompt tracks.
-    - [ ] _RapidWriter_ Add a `is_prompt` branch and add origin vertex
-    coordinates of prompt tracks to the tree.
+    - [ ] _RapidWriter_ Add PV smeared and true coordinates of prompt
+    tracks to the tree.
     - [ ] Check that smearing corresponds to VELO resolution.
 - [ ] Add ProbNN variables with boolean values.
 - [ ] Add decaying particles.
