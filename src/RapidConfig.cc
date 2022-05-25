@@ -192,6 +192,7 @@ int RapidConfig::ParsePrompts(const TString event_str)
     return 0;
 }
 
+//______________________________________________________________________________
 int RapidConfig::ParseParams(const TString params_str)
 {
     TString token;

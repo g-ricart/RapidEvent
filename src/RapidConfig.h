@@ -42,11 +42,6 @@ class RapidConfig {
         //! vector of TString.
         std::vector<TString> GetParams();
 
-        // TO BE REMOVED WHEN PROMPT DIFFERENTIATION IS FULLY IMPLEMENTED
-        // Kept fo rnow to allow compilation.
-        std::vector<TString> GetParticles() {return prompts_in_event_;}
-
-
     private:
         TString SanitizeName(TString name);
         int     ParsePrompts(const TString event_str);
