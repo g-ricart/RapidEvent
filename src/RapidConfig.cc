@@ -32,13 +32,13 @@ int RapidConfig::Load(const TString file_name)
     config_file_path_ = getenv("RAPIDEVENT_EVTS") + config_file_path_;
 
     cout << "INFO in RapidConfig::Load : "
-         << "loading event descriptor from file: " << config_file_path_ << endl;
+         << "Loading event descriptor from file: " << config_file_path_ << endl;
 
     ifstream fin;
     fin.open(config_file_path_);
 
     if(!fin.good()) {
-		cout << "ERROR in RapidConfig::Load : file " << config_file_path_
+		cout << "ERROR in RapidConfig::Load : File " << config_file_path_
              << " not found." << endl;
 		return 1;
 	}
@@ -216,12 +216,12 @@ int RapidConfig::MissingFile()
 
         if(access(data_file_path, R_OK) == -1) { // Check the file can be read.
             cout << "ERROR in RapidConfig::MissingFile : "
-                 << "missing data file : " << data_file_path << endl;
+                 << "Missing data file : " << data_file_path << endl;
             return 1;
         }
         if(access(norm_file_path, R_OK) == -1) {
             cout << "ERROR in RapidConfig::MissingFile : "
-                 << "missing normalisation file : " << norm_file_path << endl;
+                 << "Missing normalisation file : " << norm_file_path << endl;
             return 1;
         }
     }

@@ -47,7 +47,7 @@ Double_t RapidNorm::GetMeanNumber(const TString part_name)
     if(norm_map_.count(part_name)) { // check if part_name is a key of the map
         return norm_map_.at(part_name);
     } else {
-        cout << "ERROR in RapidNorm::GetMeanNumber : unknown key "
+        cout << "ERROR in RapidNorm::GetMeanNumber : Unknown key "
              << part_name << " in normalisation map." << endl;
         return -1;
     }
@@ -60,7 +60,7 @@ Int_t RapidNorm::GetPoisson(const TString part_name)
         Double_t mean = norm_map_.at(part_name);
         return random_->Poisson(mean);
     } else {
-        cout << "ERROR in RapidNorm::GetMeanNumber : unknown key "
+        cout << "ERROR in RapidNorm::GetMeanNumber : Unknown key "
              << part_name << " in normalisation map." << endl;
         return -1;
     }
