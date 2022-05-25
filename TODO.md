@@ -27,7 +27,6 @@ ROOT files to avoid hardcoded skip of `nEvent`.
 - [ ] _RapidConfig_ Add a warning when user ask for parameters which are not
 present in the TTree.
 - [ ] _RapidConfig_ Print more info.
-- [ ] _main_ Better progress monitoring.
 - [ ] Check every include.
     - [ ] _RapidEvent_
     - [ ] _RapidConfig_
@@ -35,9 +34,6 @@ present in the TTree.
     - [ ] _RapidSelect_
     - [ ] _RapidTrack_
     - [x] _RapidWriter_
-- [ ] _RapidConfig_ Forbid request of origin vertex coordinates of prompt
-particles.
-
 
 ### Done [x]
 
@@ -45,3 +41,4 @@ particles.
 common (try tokenize the branch name and get third token)
 - [x] **#SEGFAULT** in _main_ when trying to delete anything. Seems to come
 from the TSTring destructor.
+- [x] _main_ Better progress monitoring.

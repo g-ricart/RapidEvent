@@ -1,5 +1,6 @@
 #include <iostream>
 #include <vector>
+#include <ctime>
 
 #include "TString.h"
 
@@ -12,12 +13,16 @@ using namespace std;
 
 int rapidEvent(const int kNEvtToGen, const TString kEvtFileName) {
 
+    clock_t t0, t1;
+
     // Load configuration.
     RapidConfig* conf = new RapidConfig();
     if (conf->Load(kEvtFileName)) {
         cout << "Configuration failed!"
              << "             Terminating" << endl;
         return 1;
+    } else {
+        cout << "INFO in main : Successfully loaded configuration !" << endl;
     }
 
     // Writer
@@ -29,8 +34,15 @@ int rapidEvent(const int kNEvtToGen, const TString kEvtFileName) {
     // Selector
     RapidSelect* select = new RapidSelect(conf);
 
+    cout << "INFO in main : Initialisation done !" << endl;
+
+    cout << "INFO in main : Generating events" << endl;
+
+    Float_t delta_t = 0; // Total time used to generate the events.
+
     for (Ssiz_t i = 0; i < kNEvtToGen; i++) {
-        cout << "\r" << i+1 << "/" << kNEvtToGen << flush;
+        t0 = clock();
+
         RapidEvent* event = new RapidEvent(conf, norm, select, i+1);
         event->BuildEvent();
 
@@ -38,7 +50,17 @@ int rapidEvent(const int kNEvtToGen, const TString kEvtFileName) {
         writer->SaveEvent(event);
 
         delete event;
+
+        // Display mean event per second.
+        t1 = clock();
+        delta_t += (float(t1) - float(t0)) / CLOCKS_PER_SEC;
+        cout << "\r" << "     " << i+1 << "/" << kNEvtToGen;
+        cout << "    " << 1./(delta_t/(i+1)) << " evt/s" << flush;
     }
+    cout << "\r";
+
+    cout << "INFO in main : Generated " << kNEvtToGen << " events in ";
+    cout << delta_t << " seconds (" << 1./(delta_t/(kNEvtToGen)) << " evt/s).";
     cout << endl;
 
     delete select;
@@ -50,7 +72,7 @@ int rapidEvent(const int kNEvtToGen, const TString kEvtFileName) {
 
 int main(int argc, char const *argv[]) {
 
-    ios_base::sync_with_stdio(false); // Faster cout
+    //ios_base::sync_with_stdio(false); // Faster cout
 
     if (argc != 3) { // Check usage
 		cout << "Usage: " << argv[0] << " event_file_name "
@@ -59,7 +81,7 @@ int main(int argc, char const *argv[]) {
 	}
 
     if(!getenv("RAPIDEVENT_ROOT")) {
-		cout << "ERROR in main : environment variable "
+		cout << "ERROR in main : Environment variable "
              << "'RAPIDEVENT_ROOT' is not set" << endl
 			 << "                    Terminating" << endl;
 		return 1;
@@ -69,7 +91,7 @@ int main(int argc, char const *argv[]) {
         TString rapid_evts_path = getenv("RAPIDEVENT_ROOT");
         rapid_evts_path += "/events";
         setenv("RAPIDEVENT_EVTS", rapid_evts_path, 1);
-        cout << "INFO in main : environment variable "
+        cout << "INFO in main : Environment variable "
              << "'RAPIDEVENT_EVTS' was set to '" << getenv("RAPIDEVENT_EVTS")
              << "'" << endl;
     }
@@ -78,7 +100,7 @@ int main(int argc, char const *argv[]) {
         TString rapid_data_path = getenv("RAPIDEVENT_ROOT");
         rapid_data_path += "/data";
         setenv("RAPIDEVENT_DATA", rapid_data_path, 1);
-        cout << "INFO in main : environment variable "
+        cout << "INFO in main : Environment variable "
              << "'RAPIDEVENT_DATA' was set to '" << getenv("RAPIDEVENT_DATA")
              << "'" << endl;
     }
@@ -87,7 +109,7 @@ int main(int argc, char const *argv[]) {
         TString rapid_norm_path = getenv("RAPIDEVENT_ROOT");
         rapid_norm_path += "/norm";
         setenv("RAPIDEVENT_NORM", rapid_norm_path, 1);
-        cout << "INFO in main : environment variable "
+        cout << "INFO in main : Environment variable "
              << "'RAPIDEVENT_NORM' was set to '" << getenv("RAPIDEVENT_NORM")
              << "'" << endl;
     }
@@ -97,15 +119,17 @@ int main(int argc, char const *argv[]) {
 
     int status = rapidEvent(kNEvtToGen, kEvtFileName);
 
+    cout << "STATUS : ";
+
     switch (status) {
         case 0:
-            cout << "Status : success" << endl;
+            cout << "success" << endl;
             break;
         case 1:
-            cout << "Status : failed" << endl;
+            cout << "failed" << endl;
             break;
         default:
-            cout << "Status : unknown" << endl;
+            cout << "unknown" << endl;
             break;
     }
 
