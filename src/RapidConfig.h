@@ -24,8 +24,8 @@ class RapidConfig {
 
         //! Load the event config file.
         int Load(const TString file_name);
-        //! Get the particles to be included in the event.
-        std::vector<TString> GetParticles();
+        //! Get the prompt particles to be included in the event.
+        std::vector<TString> GetPrompts();
         //! Return the acceptance.
         //! For now fixed to LHCb acceptance: 2 < eta < 5
         //! \todo{Read the event config file and get acceptance from there.}
@@ -42,16 +42,15 @@ class RapidConfig {
         //! vector of TString.
         std::vector<TString> GetParams();
 
-
     private:
         TString SanitizeName(TString name);
-        int     ParseParticles(const TString event_str);
+        int     ParsePrompts(const TString event_str);
         int     ParseParams(const TString params_str);
         int     MissingFile();
 
         TString              config_file_name_;
         TString              config_file_path_;
-        std::vector<TString> particles_in_event_;
+        std::vector<TString> prompts_in_event_;
         std::vector<TString> params_;
 };
 

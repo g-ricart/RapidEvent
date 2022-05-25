@@ -10,6 +10,7 @@
 
 #include "RapidConfig.h"
 #include "RapidTrack.h"
+#include "RapidPV.h"
 
 /*!
  * \class RapidSelect
@@ -27,15 +28,17 @@ class RapidSelect {
         ~RapidSelect();
 
         std::vector<RapidTrack*> SelectTracks(TString part_name,
-                                              Int_t n_tracks,
-                                              Ssiz_t event_number);
+                                              Int_t   n_tracks,
+                                              Ssiz_t  event_number,
+                                              RapidPV* pv,
+                                              Bool_t prompt=false);
 
     private:
         Int_t SelectTrack(RapidTrack* track, TTree* tree, TObjArray* branches);
         Int_t SetTrackParams(RapidTrack* track, TObjArray* tokens,
-                                                Double_t value);
+                                                Double_t   value);
         Int_t SetTrackParamsTrue(RapidTrack* track, TObjArray* tokens,
-                                                    Double_t value);
+                                                    Double_t   value);
         Bool_t KeepParam(TString param);
 
         RapidConfig* config_;
