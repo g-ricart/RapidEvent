@@ -4,6 +4,9 @@
 #include <vector>
 
 #include "TString.h"
+#include "Math/Point3D.h"
+
+#include "RapidPV.h"
 
 using namespace std;
 
@@ -45,6 +48,23 @@ void RapidTrack::SetParam(const TString param_name, const Double_t value)
 void RapidTrack::SetPrompt(const Bool_t is_prompt)
 {
     is_prompt_ = is_prompt;
+}
+
+//______________________________________________________________________________
+void RapidTrack::SetOriginVertex(RapidPV* pv)
+{
+    ROOT::Math::XYZPoint smeared_pv = pv->GetSmearedPV();
+    ROOT::Math::XYZPoint true_pv    = pv->GetTruePV();
+
+    // smeared PV params.
+    SetParam("origX", smeared_pv.x());
+    SetParam("origY", smeared_pv.y());
+    SetParam("origZ", smeared_pv.z());
+
+    // true PV params.
+    SetParam("origX_TRUE", true_pv.x());
+    SetParam("origY_TRUE", true_pv.y());
+    SetParam("origZ_TRUE", true_pv.z());
 }
 
 //______________________________________________________________________________

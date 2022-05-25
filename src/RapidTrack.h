@@ -6,6 +6,8 @@
 
 #include "TString.h"
 
+#include "RapidPV.h"
+
 /*!
  * \class RapidTrack
  * Class used to define a track.
@@ -24,8 +26,9 @@ class RapidTrack {
         void SetName(const TString track_name);
         void SetEventNumber(const Ssiz_t event_number);
         void SetParam(const TString param_name, const Double_t value);
-        //! Specify if a track is prompt ('true') or not ('false').
+        //! Specify if a track is prompt (`true`) or not (`false`).
         void SetPrompt(const Bool_t is_prompt);
+        void SetOriginVertex(RapidPV* pv);
 
         std::vector<TString> GetListOfParams();
         Double_t GetParam(const TString param_name);
