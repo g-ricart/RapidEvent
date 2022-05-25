@@ -69,9 +69,9 @@ Int_t RapidNorm::GetPoisson(const TString part_name)
 //______________________________________________________________________________
 Int_t RapidNorm::ComputeNorm()
 {
-    vector<TString> particles  = config_->GetParticles();
+    vector<TString> prompt_particles  = config_->GetPrompts();
 
-    for(auto part: particles) {
+    for(auto part: prompt_particles) {
 
         TString path = config_->GetNormFile(part);
 
