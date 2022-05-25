@@ -29,6 +29,7 @@ class RapidConfig {
         //! Return the acceptance.
         //! For now fixed to LHCb acceptance: 2 < eta < 5
         //! \todo{Read the event config file and get acceptance from there.}
+        //! \note{Not implemented yet.}
         Double_t* GetAcceptance();
         //! Return the normalisation file corresponding to the given particle.
         TString GetNormFile(const TString part_name);
