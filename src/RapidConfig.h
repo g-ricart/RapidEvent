@@ -42,6 +42,8 @@ class RapidConfig {
         //! Return all the parameters found in the event config file as a
         //! vector of TString.
         std::vector<TString> GetParams();
+        //! Return if PID is perfect (true) or not (false).
+        Bool_t IsPIDPerfect();
 
     private:
         TString SanitizeName(TString name);
@@ -53,6 +55,8 @@ class RapidConfig {
         TString              config_file_path_;
         std::vector<TString> prompts_in_event_;
         std::vector<TString> params_;
+        Bool_t               perfect_pid_;
+
 };
 
 #endif // RAPIDEVENT_RAPIDCONFIG_H_

@@ -3,9 +3,9 @@
 ### Highest priority
 
 - [ ] Add ProbNN variables with boolean values.
-    - [ ] _RapidConfig_ Add command to force PID to be perfect (0 or 1).
-    - [ ] _RapidSelect_ Add all the ProbNN parameters when PID is forced
-    to perfectPID.
+    - [x] _RapidConfig_ Add command to force PID to be perfect (0 or 1).
+    - [ ] _RapidSelect_ & _RapidTrack_ Add all the ProbNN parameters when
+    PID is forced to perfectPID.
 - [ ] Add decaying particles.
 
 ### High priority
