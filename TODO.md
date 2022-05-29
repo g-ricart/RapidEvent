@@ -26,7 +26,7 @@ present in the TTree.
     - [ ] _RapidTrack_
     - [x] _RapidWriter_
 
-### Done [x]
+### Done :heavy_check_mark:
 
 - [x] **#BUG** _RapidTrack::SelectTrack_ if some parametres have a letter in
 common (try tokenize the branch name and get third token)
