@@ -29,6 +29,7 @@ class RapidTrack {
         //! Specify if a track is prompt (`true`) or not (`false`).
         void SetPrompt(const Bool_t is_prompt);
         void SetOriginVertex(RapidPV* pv);
+        void SetPID();
 
         std::vector<TString> GetListOfParams();
         Double_t GetParam(const TString param_name);

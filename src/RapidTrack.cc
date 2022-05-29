@@ -68,6 +68,25 @@ void RapidTrack::SetOriginVertex(RapidPV* pv)
 }
 
 //______________________________________________________________________________
+void RapidTrack::SetPID()
+{
+    params_map_[TString("ProbNNpi")] = 0.;
+    params_map_[TString("ProbNNp")] = 0.;
+    params_map_[TString("ProbNNK")] = 0.;
+    params_map_[TString("ProbNNmu")] = 0.;
+
+    if (name_.Contains("pi")) {
+        params_map_[TString("ProbNNpi")] = 1.;
+    } else if (name_.Contains("p")) {
+        params_map_[TString("ProbNNp")] = 1.;
+    } else if (name_.Contains("K")) {
+        params_map_[TString("ProbNNK")] = 1.;
+    } else if (name_.Contains("mu")) {
+        params_map_[TString("ProbNNmu")] = 1.;
+    }
+}
+
+//______________________________________________________________________________
 vector<TString> RapidTrack::GetListOfParams()
 {
     vector<TString> list_of_params;

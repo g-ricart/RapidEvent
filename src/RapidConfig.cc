@@ -17,6 +17,7 @@ RapidConfig::RapidConfig()
     config_file_path_ = "";
     prompts_in_event_.clear();
     params_.clear();
+    perfect_pid_ = false;
 }
 
 //______________________________________________________________________________
@@ -47,8 +48,7 @@ int RapidConfig::Load(const TString file_name)
     while (fin.good()) {
 
         buffer.ReadLine(fin);
-
-        // ignore empty lines or comments
+        // Ignore empty lines or comments
         if (buffer.Length() == 0 || buffer[0] == '#') {
             continue;
         }
@@ -66,6 +66,12 @@ int RapidConfig::Load(const TString file_name)
             ParsePrompts(value);
         } else if (command == "params") {
             ParseParams(value);
+        } else if (command == "perfectPID") {
+            perfect_pid_ = true;
+            params_.push_back(TString("ProbNNpi"));
+            params_.push_back(TString("ProbNNp"));
+            params_.push_back(TString("ProbNNK"));
+            params_.push_back(TString("ProbNNmu"));
         } else {
             cout << "ERROR in RapidConfig::Load : Unknown setting '"
                  << command << "' in " << config_file_path_ << endl;
@@ -226,4 +232,10 @@ int RapidConfig::MissingFile()
         }
     }
     return 0;
+}
+
+//______________________________________________________________________________
+Bool_t RapidConfig::IsPIDPerfect()
+{
+    return perfect_pid_;
 }
