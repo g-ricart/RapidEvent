@@ -68,6 +68,10 @@ int RapidConfig::Load(const TString file_name)
             ParseParams(value);
         } else if (command == "perfectPID") {
             perfect_pid_ = true;
+            params_.push_back(TString("ProbNNpi"));
+            params_.push_back(TString("ProbNNp"));
+            params_.push_back(TString("ProbNNK"));
+            params_.push_back(TString("ProbNNmu"));
         } else {
             cout << "ERROR in RapidConfig::Load : Unknown setting '"
                  << command << "' in " << config_file_path_ << endl;

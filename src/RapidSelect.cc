@@ -72,6 +72,9 @@ vector<RapidTrack*> RapidSelect::SelectTracks(TString  part_name,
 
         // If prompt, change origin vertex.
         if (track->IsPrompt()) {track->SetOriginVertex(pv);}
+
+        // If perfect PID is requested, set it.
+        if (config_->IsPIDPerfect()) {track->SetPID();}
     }
 
     // cleanup

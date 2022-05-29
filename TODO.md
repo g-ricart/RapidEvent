@@ -2,10 +2,6 @@
 
 ### Highest priority
 
-- [ ] Add ProbNN variables with boolean values.
-    - [x] _RapidConfig_ Add command to force PID to be perfect (0 or 1).
-    - [ ] _RapidSelect_ & _RapidTrack_ Add all the ProbNN parameters when
-    PID is forced to perfectPID.
 - [ ] Add decaying particles.
 
 ### High priority
@@ -38,3 +34,4 @@ common (try tokenize the branch name and get third token)
 from the TSTring destructor.
 - [x] _main_ Better progress monitoring.
 - [x] Reduce smearing of origin vertex for prompt particles.
+- [x] Add ProbNN variables with boolean values.

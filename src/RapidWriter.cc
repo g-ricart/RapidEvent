@@ -70,7 +70,9 @@ Int_t RapidWriter::SetupTree(TString out_file_path)
 
     for (auto param: config_->GetParams()) {
         params_map_[param] = -999.;
-        params_map_[param + "_TRUE"] = -999.;
+        if (!param.Contains("ProbNN")) {
+            params_map_[param + "_TRUE"] = -999.;
+        }
     }
 
     // Separate loop to ensure pointer stability.
