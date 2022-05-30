@@ -2,6 +2,7 @@
 
 ### Highest priority
 
+- [ ] Correctly normalize prompt particles.
 - [ ] Add decaying particles.
 
 ### High priority
