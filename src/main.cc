@@ -26,7 +26,7 @@ int rapidEvent(const int kNEvtToGen, const TString kEvtFileName) {
     }
 
     // Writer
-    RapidWriter* writer = new RapidWriter("out_test.root", conf);
+    RapidWriter* writer = new RapidWriter(kEvtFileName + "_tree.root", conf);
 
     // Normalisator
     RapidNorm* norm = new RapidNorm(conf);
