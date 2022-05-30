@@ -2,7 +2,10 @@
 
 ### Highest priority
 
+- [ ] Check that P, PT and eta distributions are the same than in data files.
 - [ ] Correctly normalize prompt particles.
+- [ ] Correctly generate prompt particles with _RapidSim_ with PT vs eta
+histograms.
 - [ ] Add decaying particles.
 
 ### High priority
