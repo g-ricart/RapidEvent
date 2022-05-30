@@ -9,12 +9,3 @@
 # Build
 bin/
 obj/
-
-# Setup
-events/
-data/
-norm/
-mcr/
-
-# Output
-output/
