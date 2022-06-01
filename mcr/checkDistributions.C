@@ -6,13 +6,18 @@
 #include "TCanvas.h"
 #include "TRatioPlot.h"
 
-void checkDistributions() {
+#include "lhcbStyle.C"
 
-    // histogram for rapidsim pions.
-    TH1D* pi_pt_h = new TH1D("pi_pt_h", "RapidSim pions pT", 100, 0, 2);
+void checkPionPt() {
 
-    // histogram for rapidevent pions.
-    TH1D* pi_pt_event_h = new TH1D("pi_pt_event_h", "RapidEvent pions pT", 100, 0, 2);
+    //lhcbStyle();
+    gStyle->SetOptStat(0);
+
+    // Histogram for rapidsim pions.
+    TH1D* pi_pt_h = new TH1D("pi_pt_h", "pions pT comparison", 500, 0, 2);
+
+    // Histogram for rapidevent pions.
+    TH1D* pi_pt_event_h = new TH1D("pi_pt_event_h", "RapidEvent pions pT", 500, 0, 2);
 
 //_______________________________ pions ________________________________________
     TFile* pip_file = TFile::Open("../data/pip_tree.root");
@@ -65,9 +70,11 @@ void checkDistributions() {
 
 //_______________________________plot___________________________________________
 
-    // normalise histograms
+    // Normalize histograms.
     pi_pt_event_h->Scale(pi_pt_h->GetEntries()/pi_pt_event_h->GetEntries());
-    TCanvas* c1 = new TCanvas("c1", "", 0, 0, 1000, 800);
-    TRatioPlot* pi_plot = new TRatioPlot(pi_pt_event_h, pi_pt_h);
+    TCanvas* c1 = new TCanvas("c1", "", 0, 0, 1200, 1000);
+    TRatioPlot* pi_plot = new TRatioPlot(pi_pt_h, pi_pt_event_h);
     pi_plot->Draw();
+    pi_plot->GetLowerRefYaxis()->SetTitle("ratio");
+    pi_plot->GetUpperRefYaxis()->SetTitle("number of tracks / 20 MeV");
 }
