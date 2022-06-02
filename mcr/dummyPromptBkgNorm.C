@@ -12,9 +12,9 @@ void dummyPromptBkgNorm() {
     TH1D* pp_hist  = new TH1D("pp",  "", 1, -0.5, 0.5);
     TH1D* pm_hist  = new TH1D("pm",  "", 1, -0.5, 0.5);
 
-    Double_t pi_N = (1699.80 + 1377.49);
-    Double_t k_N  = (273.41 + 222.48);
-    Double_t p_N  = (74.56 + 61.51);
+    Double_t pi_N = (1699.80 + 1377.49)/2.;
+    Double_t k_N  = (273.41 + 222.48)/2.;
+    Double_t p_N  = (74.56 + 61.51)/2.;
 
     pip_hist->SetBinContent(1, pi_N);
     pim_hist->SetBinContent(1, pi_N);
