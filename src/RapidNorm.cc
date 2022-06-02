@@ -79,7 +79,7 @@ Int_t RapidNorm::ComputeNorm()
         TFile* in_file   = TFile::Open(path);
         TH1D*  norm_hist = (TH1D*)in_file->Get(part);
 
-        Double_t integral = norm_hist->Integral();
+        Double_t integral = norm_hist->Integral("width");
         norm_map_[part] = integral;
 
         delete norm_hist;
