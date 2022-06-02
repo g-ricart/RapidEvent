@@ -1,10 +1,9 @@
-#include <iostream>
-
 #include "TFile.h"
 #include "TH1D.h"
 
 void dummyPromptBkgNorm() {
 
+    // Normalisation histograms for pions, kaons and protons at mid-rapidity.
     TH1D* pip_hist = new TH1D("pip", "", 1, -0.5, 0.5);
     TH1D* pim_hist = new TH1D("pim", "", 1, -0.5, 0.5);
     TH1D* Kp_hist  = new TH1D("Kp",  "", 1, -0.5, 0.5);
@@ -12,6 +11,8 @@ void dummyPromptBkgNorm() {
     TH1D* pp_hist  = new TH1D("pp",  "", 1, -0.5, 0.5);
     TH1D* pm_hist  = new TH1D("pm",  "", 1, -0.5, 0.5);
 
+    // ALICE measurments at mid-rapidity (0-5% + 5-10% in centrality).
+    // Divide by two to account for charges.
     Double_t pi_N = (1699.80 + 1377.49)/2.;
     Double_t k_N  = (273.41 + 222.48)/2.;
     Double_t p_N  = (74.56 + 61.51)/2.;
