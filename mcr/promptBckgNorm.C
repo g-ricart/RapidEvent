@@ -3,6 +3,7 @@
 #include "TFile.h"
 #include "TH1F.h"
 #include "TCanvas.h"
+#include "TMath.h"
 
 void promptBckgNorm() {
 
@@ -21,7 +22,27 @@ void promptBckgNorm() {
     Double_t k_N  = (273.41 + 222.48);
     Double_t p_N  = (74.56 + 61.51);
 
-    cout << "------- ALICE measurements --------" << endl;
+    cout << "---- ALICE measurements (dN/dy) ----" << endl;
+    cout << "Number of pions : "          << pi_N << endl;
+    cout << "Number of kaons : "          << k_N  << endl;
+    cout << "Number of (anti)protons  : " << p_N << endl;
+
+    // Mean pT (GeV)
+    Double_t mean_pi_pt = (0.5682 + 0.5711)/2.;
+    Double_t mean_k_pt  = (0.9177 + 0.9214)/2.;
+    Double_t mean_p_pt  = (1.4482 + 1.4334)/2.;
+
+    // Masses (GeV)
+    Double_t m_pi = 0.139570;
+    Double_t m_k  = 0.493677;
+    Double_t m_p  = 0.938272;
+
+    // Convert dN/dy to dN/deta
+    pi_N *= TMath::Sqrt( 1 - TMath::Power(m_pi / TMath::Sqrt(TMath::Power(mean_pi_pt, 2) + TMath::Power(m_pi, 2)*TMath::CosH(0)), 2) );
+    k_N  *= TMath::Sqrt( 1 - TMath::Power(m_k  / TMath::Sqrt(TMath::Power(mean_k_pt,  2) + TMath::Power(m_k,  2)*TMath::CosH(0)), 2) );
+    p_N  *= TMath::Sqrt( 1 - TMath::Power(m_p  / TMath::Sqrt(TMath::Power(mean_p_pt,  2) + TMath::Power(m_p,  2)*TMath::CosH(0)), 2) );
+
+    cout << "--- ALICE measurements (dN/deta) ---" << endl;
     cout << "Number of pions : "          << pi_N << endl;
     cout << "Number of kaons : "          << k_N  << endl;
     cout << "Number of (anti)protons  : " << p_N << endl;
