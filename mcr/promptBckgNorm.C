@@ -18,9 +18,9 @@ void promptBckgNorm() {
 
     // ALICE measurements at mid-rapidity (0-5% + 5-10% centrality).
     // Not accouting for charges (should divide everything by 2).
-    Double_t pi_N = (1699.80 + 1377.49);
-    Double_t k_N  = (273.41 + 222.48);
-    Double_t p_N  = (74.56 + 61.51);
+    Double_t pi_N = (1699.80 + 1377.49)/2.;
+    Double_t k_N  = (273.41 + 222.48)/2.;
+    Double_t p_N  = (74.56 + 61.51)/2.;
 
     cout << "---- ALICE measurements (dN/dy) ----" << endl;
     cout << "Number of pions : "          << pi_N << endl;
@@ -55,6 +55,8 @@ void promptBckgNorm() {
 
     // 0-10% centrality
     TH1F* density_hist = new TH1F("densisty_h", "", 34, -3.5, 5);
+    density_hist_1->Scale(0.5);
+    density_hist_2->Scale(0.5);
     density_hist->Add(density_hist_1, density_hist_2);
 
     // Integrate in range -0.5 < eta < +0.5
@@ -78,8 +80,8 @@ void promptBckgNorm() {
 
     cout << "------------- Boosted -------------" << endl;
     cout << "Number of pions : "          << pip_hist->Integral("width") +  pim_hist->Integral("width") << endl;
-    cout << "Number of kaons : "          << Kp_hist->Integral("width") +  Km_hist->Integral("width")  << endl;
-    cout << "Number of (anti)protons  : " << pp_hist->Integral("width") +  pm_hist->Integral("width") << endl;
+    cout << "Number of kaons : "          << Kp_hist->Integral("width")  +  Km_hist->Integral("width")  << endl;
+    cout << "Number of (anti)protons  : " << pp_hist->Integral("width")  +  pm_hist->Integral("width") << endl;
 
     TFile* pip_file = new TFile("pip_norm.root", "RECREATE");
 
