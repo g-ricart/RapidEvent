@@ -18,13 +18,13 @@ void checkPions() {
     pi_pt_h->GetXaxis()->SetTitle("p_{T} (GeV)");
     TH1D* pi_p_h  = new TH1D("pi_p_h",  "pions momentum comparison", 100, 0, 50);
     pi_p_h->GetXaxis()->SetTitle("p (GeV)");
-    TH1D* pi_eta_h = new TH1D("pi_eta_h", "pions #eta comparison", 25, 1, 5);
+    TH1D* pi_eta_h = new TH1D("pi_eta_h", "pions #eta comparison", 25, 2, 5);
     pi_eta_h->GetXaxis()->SetTitle("#eta");
 
     // Histograms for RapidEvent.
     TH1D* pi_pt_event_h = new  TH1D("pi_pt_event_h",  "RapidEvent pions pT", 100, 0, 2);
     TH1D* pi_p_event_h  = new  TH1D("pi_p_event_h",   "RapidEvent pions momentum", 100, 0, 50);
-    TH1D* pi_eta_event_h = new TH1D("pi_eta_event_h", "RapidEvent pions pseudo-rapidity", 25, 1, 5);
+    TH1D* pi_eta_event_h = new TH1D("pi_eta_event_h", "RapidEvent pions pseudo-rapidity", 25, 2, 5);
 
     TFile* pip_file = TFile::Open("../data/pip_tree.root");
     TTree* pip_tree = (TTree*)pip_file->Get("DecayTree");
@@ -71,7 +71,7 @@ void checkPions() {
 
     pim_file->Close();
 
-    TFile* track_file = TFile::Open("../output/incorrectPrompts.root");
+    TFile* track_file = TFile::Open("../output/test_tree.root");
     TTree* track_tree = (TTree*)track_file->Get("trackTree");
     track_tree->SetBranchStatus("*",        0);
     track_tree->SetBranchStatus("PT",       1);
