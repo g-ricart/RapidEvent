@@ -4,8 +4,8 @@
 
 - [ ] **#FEATURE** Add decaying particles.
     - [x] _RapidConfig_ Read config file.
-    - [ ] _RapidEvent_ Add decays.
     - [ ] _RapidNorm_ Add decays.
+    - [ ] _RapidEvent_ Add decays.
     - [ ] _RapidTrack_ Add track ID data member.
     - [ ] _RapidTrack_ Add mother track ID data member.
 - [ ] **#ERROR_HNDLG** _RapidSelect_ Find a way to test the type of every
