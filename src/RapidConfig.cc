@@ -3,6 +3,7 @@
 #include <iostream>
 #include <fstream>
 #include <vector>
+#include <map>
 
 #include <unistd.h>
 
@@ -65,6 +66,8 @@ Int_t RapidConfig::Load(const TString file_name)
 
         if (command == "prompt") {
             ParsePrompts(value);
+        } else if (command == "decay") {
+            ParseDecay(value);
         } else if (command == "params") {
             ParseParams(value);
         } else if (command == "perfectPID") {
@@ -80,6 +83,11 @@ Int_t RapidConfig::Load(const TString file_name)
         }
     }
     fin.close();
+
+    // Append prompts and mothers to list of particles coming from the PV.
+    from_PV_.insert(end(from_PV_), begin(prompts_in_event_), end(prompts_in_event_));
+    from_PV_.insert(end(from_PV_), begin(mothers_in_event_), end(mothers_in_event_));
+
 
     if (MissingFile()) {
         return 1;
@@ -101,7 +109,7 @@ Double_t* RapidConfig::GetAcceptance()
 }
 
 //______________________________________________________________________________
-vector<TString> RapidConfig::GetDecays()
+map<TString, vector<TString>> RapidConfig::GetDecays()
 {
     return decays_in_event_;
 }
@@ -122,7 +130,7 @@ vector<TString> RapidConfig::GetNormFiles()
 {
     vector<TString> norm_files;
 
-    for(auto part_name: prompts_in_event_) {
+    for(auto part_name: from_PV_) {
 
         norm_files.push_back(GetNormFile(part_name));
     }
@@ -146,7 +154,7 @@ vector<TString> RapidConfig::GetDataFiles()
 {
     vector<TString> data_files;
 
-    for(auto part_name: prompts_in_event_) {
+    for(auto part_name: from_PV_) {
 
         data_files.push_back(GetNormFile(part_name));
     }
@@ -208,6 +216,33 @@ Int_t RapidConfig::ParsePrompts(const TString event_str)
 //______________________________________________________________________________
 Int_t RapidConfig::ParseDecay(const TString decay_str)
 {
+    // Get the position of the "->".
+    Ssiz_t arrow_start = decay_str.Index("->");
+    Ssiz_t arrow_end   = arrow_start + 1;
+
+    // Get the mother particle name and strip it.
+    TString mother = decay_str(0, arrow_start);
+    mother = mother.Strip(TString::kBoth);
+
+    // Get the daughter particles string and strip it.
+    TString daughters_str = decay_str(arrow_end+1,
+                                      decay_str.Length()-arrow_end-1);
+    daughters_str = daughters_str.Strip(TString::kBoth);
+
+    // Parse daughter names and add them in a vector.
+    vector<TString> daughters;
+    TString token;
+    Ssiz_t  from = 0;
+    while (daughters_str.Tokenize(token, from, " ")) {
+        daughters.push_back(SanitizeName(token));
+    }
+
+    // Fill the map of decays.
+    decays_in_event_[SanitizeName(mother)] = daughters;
+
+    // Add mother to mothers vector.
+    mothers_in_event_.push_back(mother);
+
     return 0;
 }
 

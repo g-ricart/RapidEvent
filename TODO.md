@@ -2,23 +2,30 @@
 
 ### Highest priority
 
-- [ ] Add decaying particles.
+- [ ] **#FEATURE** Add decaying particles.
+    - [x] _RapidConfig_ Read config file.
+    - [ ] _RapidEvent_ Add decays.
+    - [ ] _RapidNorm_ Add decays.
+    - [ ] _RapidTrack_ Add track ID data member.
+    - [ ] _RapidTrack_ Add mother track ID data member.
+- [ ] **#ERROR_HNDLG** _RapidSelect_ Find a way to test the type of every
+branch of the data ROOT files to avoid hardcoded skip of `nEvent`.
 
 ### High priority
 
-- [ ] _RapidPV_ Add different smearing techniques.
+- [ ] **#FEATURE** _RapidPV_ Add different smearing techniques.
     - [ ] Check that smearing corresponds to VELO resolution.
     - [ ] _RapidConfig_ Add a way to select them in the event config file.
-- [ ] _RapidSelect_ Find a way to test the type of every branch of the data
-ROOT files to avoid hardcoded skip of `nEvent`.
-- [ ] _RapidSelect::SelectTrack_ Manage error when a branch name is ill-formed.
+- [ ] **#ERROR_HNDLG** _RapidSelect::SelectTrack_ Manage error when a branch
+name is ill-formed.
+- [ ] **#FEATURE** Add possibility to have several decays of the same particle.
 
 ### Low priority
 
-- [ ] _RapidConfig_ Add a warning when user ask for parameters which are not
-present in the TTree.
-- [ ] _RapidConfig_ Print more info.
-- [ ] Check every include.
+- [ ] **#ERROR_HNDLG** _RapidConfig_ Add a warning when user ask for parameters
+which are not present in the TTree.
+- [ ] **#MISC** _RapidConfig_ Print more info.
+- [ ] **#MISC** Check every include.
     - [ ] _RapidEvent_
     - [ ] _RapidConfig_
     - [ ] _RapidNorm_
@@ -32,6 +39,6 @@ present in the TTree.
 common (try tokenize the branch name and get third token)
 - [x] **#SEGFAULT** in _main_ when trying to delete anything. Seems to come
 from the TSTring destructor.
-- [x] _main_ Better progress monitoring.
-- [x] Reduce smearing of origin vertex for prompt particles.
-- [x] Add ProbNN variables with boolean values.
+- [x] **#FEATURE** _main_ Better progress monitoring.
+- [x] **#FEATURE** Reduce smearing of origin vertex for prompt particles.
+- [x] **#FEATURE** Add ProbNN variables with boolean values.

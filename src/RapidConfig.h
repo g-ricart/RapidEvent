@@ -28,7 +28,7 @@ class RapidConfig {
         //! Get the prompt particles to be included in the event.
         std::vector<TString> GetPrompts();
         //! Get the decays to be included in the event.
-        std::vector<TString> GetDecays();
+        std::map<TString, std::vector<TString>> GetDecays();
         //! Return the acceptance.
         //! For now fixed to LHCb acceptance: 2 < eta < 5
         //! \todo{Read the event config file and get acceptance from there.}
@@ -50,17 +50,19 @@ class RapidConfig {
 
     private:
         TString SanitizeName(TString name);
-        Int_t     ParsePrompts(const TString event_str);
-        Int_t     ParseDecay(const TString decay_str);
-        Int_t     ParseParams(const TString params_str);
-        Bool_t     MissingFile();
+        Int_t   ParsePrompts(const TString event_str);
+        Int_t   ParseDecay(const TString decay_str);
+        Int_t   ParseParams(const TString params_str);
+        Bool_t  MissingFile();
 
-        TString                    config_file_name_;
-        TString                    config_file_path_;
-        std::vector<TString>       prompts_in_event_;
-        std::map<TString, TString> decays_in_event_;
-        std::vector<TString>       params_;
-        Bool_t                     perfect_pid_;
+        TString                                 config_file_name_;
+        TString                                 config_file_path_;
+        std::vector<TString>                    prompts_in_event_;
+        std::vector<TString>                    mothers_in_event_;
+        std::map<TString, std::vector<TString>> decays_in_event_;
+        std::vector<TString>                    params_;
+        std::vector<TString>                    from_PV_;
+        Bool_t                                  perfect_pid_;
 
 };
 
