@@ -2,8 +2,6 @@
 
 ### Highest priority
 
-- [ ] Correctly generate prompt particles with _RapidSim_ with PT vs eta
-histograms.
 - [ ] Add decaying particles.
 
 ### High priority
@@ -39,3 +37,4 @@ from the TSTring destructor.
 - [x] Add ProbNN variables with boolean values.
 - [x] Check that P, PT and eta distributions are the same than in data files.
 - [x] Correctly normalize prompt particles.
+- [x] Correctly generate prompt particles with _RapidSim_.
