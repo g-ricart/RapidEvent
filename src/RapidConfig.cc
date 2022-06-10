@@ -16,6 +16,7 @@ RapidConfig::RapidConfig()
     config_file_name_ = "";
     config_file_path_ = "";
     prompts_in_event_.clear();
+    decays_in_event_.clear();
     params_.clear();
     perfect_pid_ = false;
 }
@@ -26,7 +27,7 @@ RapidConfig::~RapidConfig()
 }
 
 //______________________________________________________________________________
-int RapidConfig::Load(const TString file_name)
+Int_t RapidConfig::Load(const TString file_name)
 {
     config_file_name_ = file_name + ".event";
     config_file_path_ = "/" + config_file_name_;
@@ -54,7 +55,7 @@ int RapidConfig::Load(const TString file_name)
         }
 
         // Get position of the colon in the TString
-        int colon = buffer.Index(":");
+        Int_t colon = buffer.Index(":");
         // Get the string before the colon and strip it
 		TString command = buffer(0,colon);
 		command = command.Strip(TString::kBoth);
@@ -97,6 +98,12 @@ Double_t* RapidConfig::GetAcceptance()
 {
     static Double_t acceptance[2] = {2, 5};
     return acceptance;
+}
+
+//______________________________________________________________________________
+vector<TString> RapidConfig::GetDecays()
+{
+    return decays_in_event_;
 }
 
 //______________________________________________________________________________
@@ -186,7 +193,7 @@ TString RapidConfig::SanitizeName(TString name)
 }
 
 //______________________________________________________________________________
-int RapidConfig::ParsePrompts(const TString event_str)
+Int_t RapidConfig::ParsePrompts(const TString event_str)
 {
     TString token;
     Ssiz_t  from = 0;
@@ -199,7 +206,13 @@ int RapidConfig::ParsePrompts(const TString event_str)
 }
 
 //______________________________________________________________________________
-int RapidConfig::ParseParams(const TString params_str)
+Int_t RapidConfig::ParseDecay(const TString decay_str)
+{
+    return 0;
+}
+
+//______________________________________________________________________________
+Int_t RapidConfig::ParseParams(const TString params_str)
 {
     TString token;
     Ssiz_t  from = 0;
@@ -212,7 +225,7 @@ int RapidConfig::ParseParams(const TString params_str)
 }
 
 //______________________________________________________________________________
-int RapidConfig::MissingFile()
+Bool_t RapidConfig::MissingFile()
 {
     for(auto part: prompts_in_event_) {
 
@@ -223,15 +236,15 @@ int RapidConfig::MissingFile()
         if(access(data_file_path, R_OK) == -1) { // Check the file can be read.
             cout << "ERROR in RapidConfig::MissingFile : "
                  << "Missing data file : " << data_file_path << endl;
-            return 1;
+            return true;
         }
         if(access(norm_file_path, R_OK) == -1) {
             cout << "ERROR in RapidConfig::MissingFile : "
                  << "Missing normalisation file : " << norm_file_path << endl;
-            return 1;
+            return true;
         }
     }
-    return 0;
+    return false;
 }
 
 //______________________________________________________________________________
