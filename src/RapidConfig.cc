@@ -262,7 +262,7 @@ Int_t RapidConfig::ParseParams(const TString params_str)
 //______________________________________________________________________________
 Bool_t RapidConfig::MissingFile()
 {
-    for(auto part: prompts_in_event_) {
+    for(auto part: from_PV_) {
 
         TString data_file_path = GetDataFile(part);
 
