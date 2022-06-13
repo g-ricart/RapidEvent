@@ -29,6 +29,10 @@ class RapidConfig {
         std::vector<TString> GetPrompts();
         //! Get the decays to be included in the event.
         std::map<TString, std::vector<TString>> GetDecays();
+        //! Get the mothers to be included in the event.
+        std::vector<TString> GetMothers();
+        //! Get all the particles coming from the PV in the event.
+        std::vector<TString> GetAllFromPV();
         //! Return the acceptance.
         //! For now fixed to LHCb acceptance: 2 < eta < 5
         //! \todo{Read the event config file and get acceptance from there.}

@@ -85,8 +85,10 @@ Int_t RapidConfig::Load(const TString file_name)
     fin.close();
 
     // Append prompts and mothers to list of particles coming from the PV.
-    from_PV_.insert(end(from_PV_), begin(prompts_in_event_), end(prompts_in_event_));
-    from_PV_.insert(end(from_PV_), begin(mothers_in_event_), end(mothers_in_event_));
+    from_PV_.insert(end(from_PV_), begin(prompts_in_event_),
+                                   end(prompts_in_event_));
+    from_PV_.insert(end(from_PV_), begin(mothers_in_event_),
+                                   end(mothers_in_event_));
 
 
     if (MissingFile()) {
@@ -102,16 +104,29 @@ vector<TString> RapidConfig::GetPrompts()
     return prompts_in_event_;
 }
 
-Double_t* RapidConfig::GetAcceptance()
-{
-    static Double_t acceptance[2] = {2, 5};
-    return acceptance;
-}
-
 //______________________________________________________________________________
 map<TString, vector<TString>> RapidConfig::GetDecays()
 {
     return decays_in_event_;
+}
+
+//______________________________________________________________________________
+vector<TString> RapidConfig::GetMothers()
+{
+    return mothers_in_event_;
+}
+
+//______________________________________________________________________________
+vector<TString> RapidConfig::GetAllFromPV()
+{
+    return from_PV_;
+}
+
+//______________________________________________________________________________
+Double_t* RapidConfig::GetAcceptance()
+{
+    static Double_t acceptance[2] = {2, 5};
+    return acceptance;
 }
 
 //______________________________________________________________________________
