@@ -244,7 +244,7 @@ Int_t RapidConfig::ParseDecay(const TString decay_str)
                                       decay_str.Length()-arrow_end-1);
     daughters_str = daughters_str.Strip(TString::kBoth);
 
-    // Parse daughter names and add them in a vector.
+    // Parse daughter names and store them in a vector.
     vector<TString> daughters;
     TString token;
     Ssiz_t  from = 0;
