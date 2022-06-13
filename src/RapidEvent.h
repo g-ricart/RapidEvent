@@ -42,8 +42,8 @@ class RapidEvent {
         RapidSelect* select_;
         RapidPV*     pv_;
         std::vector<RapidTrack*> tracks_;
-        // Map containing the particle name as a key and the number of tracks
-        // of this particle in the event as the associated value.
+        // Map containing the prompt particles name as a key and the number of
+        // tracks of this particle in the event as the associated value.
         std::map<TString, Int_t> n_part_map_;
 
         Ssiz_t event_number_;

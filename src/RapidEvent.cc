@@ -1,6 +1,7 @@
 #include "RapidEvent.h"
 
 #include <vector>
+#include <map>
 
 #include "TFile.h"
 #include "TTree.h"
@@ -81,7 +82,8 @@ vector<RapidTrack*> RapidEvent::GetTracks()
 //______________________________________________________________________________
 int RapidEvent::BuildEvent()
 {
-    vector<TString> prompt_particles = config_->GetPrompts();
+    vector<TString> prompt_particles     = config_->GetPrompts();
+    map<TString, vector<TString>> decays = config_->GetDecays();
 
     // First loop to get the number of prompt tracks.
     for(auto particle: prompt_particles) {
@@ -97,18 +99,28 @@ int RapidEvent::BuildEvent()
     // Second loop to select prompts tracks.
     for (auto particle: prompt_particles) {
 
-        auto n_particles = n_part_map_.at(particle);
+        Int_t n_particles = n_part_map_.at(particle);
 
-        auto tracks_to_add = select_->SelectTracks(particle, n_particles,
-                                                             event_number_,
-                                                             pv_,
-                                                             true);
+        vector<RapidTrack*> tracks_to_add = select_->SelectPromptTracks(particle,
+                                               n_particles, event_number_, pv_);
 
         // Append tracks_to_add to the end of tracks_
         tracks_.insert(end(tracks_), begin(tracks_to_add), end(tracks_to_add));
     }
 
-    // TODO : third loop for decays.
+    // Third loop for decays.
+    for (auto &it: decays) {
+
+        TString mother            = it.first;
+        vector<TString> daughters = it.second;
+
+        Int_t n_decays = norm_->GetPoisson(mother);
+
+        vector<RapidTrack*> tracks_to_add = select_->SelectDecays(mother,
+                                         daughters, n_decays, event_number_);
+
+        
+    }
 
     return 0;
 }
