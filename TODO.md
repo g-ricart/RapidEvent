@@ -5,15 +5,16 @@
 - [ ] **#FEATURE** Add decaying particles.
     - [x] _RapidConfig_ Read config file.
     - [x] _RapidNorm_ Add decays.
-    - [ ] _RapidTrack_ Add track ID data member.
-    - [ ] _RapidTrack_ Add mother track ID data member.
-    - [ ] _RapidSelect_ Add decays.
-    - [ ] _RapidEvent_ Add decays.
+    - [x] _RapidTrack_ Add track ID data member.
+    - [x] _RapidTrack_ Add mother track ID data member.
+    - [ ] _RapidSelect_ Add decays and IDs.
+    - [ ] _RapidEvent_ Add decays and IDs
+    - [ ] _RapidWriter_ Add IDs.
 - [ ] **#ERROR_HNDLG** _RapidSelect_ Find a way to test the type of every
-branch of the data ROOT files to avoid hardcoded skip of `nEvent`.
+    branch of the data ROOT files to avoid hardcoded skip of `nEvent`.
 
 ### High priority
-
+- [ ] **#FEATURE** Use MonteCarlo particle numbering scheme.
 - [ ] **#FEATURE** _RapidPV_ Add different smearing techniques.
     - [ ] Check that smearing corresponds to VELO resolution.
     - [ ] _RapidConfig_ Add a way to select them in the event config file.

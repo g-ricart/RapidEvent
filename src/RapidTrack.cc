@@ -13,12 +13,18 @@ using namespace std;
 //______________________________________________________________________________
 RapidTrack::RapidTrack()
 {
+    track_id_ = 0;
+    mother_track_id_ = 0;
+    is_prompt_ = true;
 }
 
 //______________________________________________________________________________
 RapidTrack::RapidTrack(const TString track_name)
 {
     name_ = track_name;
+    track_id_ = 0;
+    mother_track_id_ = 0;
+    is_prompt_ = true;
 }
 
 //______________________________________________________________________________
@@ -38,6 +44,18 @@ void RapidTrack::SetEventNumber(const Ssiz_t event_number)
     event_number_ = event_number;
 }
 
+//______________________________________________________________________________
+void RapidTrack::SetID(Ssiz_t id)
+{
+    track_id_ = id;
+}
+
+
+//______________________________________________________________________________
+void RapidTrack::SetMotherID(Ssiz_t id)
+{
+    mother_track_id_ = id;
+}
 //______________________________________________________________________________
 void RapidTrack::SetParam(const TString param_name, const Double_t value)
 {
@@ -113,6 +131,18 @@ TString RapidTrack::GetName()
 Ssiz_t RapidTrack::GetEventNumber()
 {
     return event_number_;
+}
+
+//______________________________________________________________________________
+Ssiz_t RapidTrack::GetID()
+{
+    return track_id_;
+}
+
+//______________________________________________________________________________
+Ssiz_t RapidTrack::GetMotherID()
+{
+    return mother_track_id_;
 }
 
 //______________________________________________________________________________
