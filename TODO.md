@@ -5,10 +5,10 @@
 - [ ] **#FEATURE** Add decaying particles.
     - [x] _RapidConfig_ Read config file.
     - [x] _RapidNorm_ Add decays.
-    - [ ] _RapidEvent_ Add decays.
     - [ ] _RapidTrack_ Add track ID data member.
     - [ ] _RapidTrack_ Add mother track ID data member.
     - [ ] _RapidSelect_ Add decays.
+    - [ ] _RapidEvent_ Add decays.
 - [ ] **#ERROR_HNDLG** _RapidSelect_ Find a way to test the type of every
 branch of the data ROOT files to avoid hardcoded skip of `nEvent`.
 
