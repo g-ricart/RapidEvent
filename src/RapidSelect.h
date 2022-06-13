@@ -48,6 +48,14 @@ class RapidSelect {
         Int_t SelectPromptTrack(RapidTrack* track, TTree* tree,
                                                    TObjArray* branches,
                                                    Ssiz_t n_entries);
+        Int_t SelectMotherTrack(RapidTrack* track, TString part_name,
+                                                   TTree* tree,
+                                                   TObjArray* branches,
+                                                   Ssiz_t n_entries);
+        Int_t SelectDaughterTrack(RapidTrack* track, TString part_name,
+                                                     TTree* tree,
+                                                     TObjArray branches,
+                                                     Ssiz_t n_entries);
         Int_t SetTrackParams(RapidTrack* track, TObjArray* tokens,
                                                 Double_t   value);
         Int_t SetTrackParamsTrue(RapidTrack* track, TObjArray* tokens,

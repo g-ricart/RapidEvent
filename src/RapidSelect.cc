@@ -118,7 +118,8 @@ vector<RapidTrack*> RapidSelect::SelectDecays(TString mother,
 
         // TODO : Find a way to set ID
 
-        SelectMotherTrack(mother_track, data_tree, branch_array, n_entries);
+        SelectMotherTrack(mother_track, mother, data_tree, branch_array,
+                                                           n_entries);
         selected_tracks.push_back(mother_track);
 
         for (auto part: particles) {
@@ -131,8 +132,8 @@ vector<RapidTrack*> RapidSelect::SelectDecays(TString mother,
 
             // TODO : Set IDs
 
-            SelectDaughterTrack(daughter_track, data_tree, branch_array,
-                                                           n_entries);
+            SelectDaughterTrack(daughter_track, part, data_tree, branch_array,
+                                                                 n_entries);
             selected_tracks.push_back(daughter_track);
         }
     }
@@ -194,6 +195,66 @@ Int_t RapidSelect::SelectPromptTrack(RapidTrack* track, TTree*     tree,
 
         delete tokens;
     }
+
+    return 0;
+}
+
+//______________________________________________________________________________
+Int_t RapidSelect::SelectMotherTrack(RapidTrack* track, TString part_name,
+                                                        TTree* tree,
+                                                        TObjArray* branches,
+                                                        Ssiz_t n_entries)
+{
+    tree->SetBranchStatus("nEvent", 0);
+    const Int_t kNBranches = branches->GetEntriesFast();
+    // Map to store the branch values. Keys are branch names.
+    map<TString, Double_t> var_map;
+
+    for (Int_t i = 1; i < kNBranches; i++) { // Starting from 1 to avoid nEvent.
+        TObject* b = (TObject*)branches->At(i);
+        TString branch_name = b->GetName();
+        var_map[branch_name] = 0.;
+    }
+
+    // Separate loop to ensure pointer stability.
+    for (auto &it: var_map) {
+        tree->SetBranchAddress(it.first,     // The branch name.
+                              &(it.second)); // The address of the value.
+    }
+
+    // Get a random entry of the tree.
+    Ssiz_t entry_index = random_->Integer(n_entries);
+    tree->GetEntry(entry_index);
+
+    return 0;
+}
+
+//______________________________________________________________________________
+Int_t RapidSelect::SelectDaughterTrack(RapidTrack* track, TString part_name,
+                                                          TTree* tree,
+                                                          TObjArray* branches,
+                                                          Ssiz_t n_entries)
+{
+    tree->SetBranchStatus("nEvent", 0);
+    const Int_t kNBranches = branches->GetEntriesFast();
+    // Map to store the branch values. Keys are branch names.
+    map<TString, Double_t> var_map;
+
+    for (Int_t i = 1; i < kNBranches; i++) { // Starting from 1 to avoid nEvent.
+        TObject* b = (TObject*)branches->At(i);
+        TString branch_name = b->GetName();
+        var_map[branch_name] = 0.;
+    }
+
+    // Separate loop to ensure pointer stability.
+    for (auto &it: var_map) {
+        tree->SetBranchAddress(it.first,     // The branch name.
+                              &(it.second)); // The address of the value.
+    }
+
+    // Get a random entry of the tree.
+    Ssiz_t entry_index = random_->Integer(n_entries);
+    tree->GetEntry(entry_index);
 
     return 0;
 }
