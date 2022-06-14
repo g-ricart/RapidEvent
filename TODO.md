@@ -21,6 +21,8 @@
 - [ ] **#ERROR_HNDLG** _RapidSelect::SelectTrack_ Manage error when a branch
 name is ill-formed.
 - [ ] **#FEATURE** Add possibility to have several decays of the same particle.
+- [ ] _RapidSelect_ Rewrite track selection to avoid code duplication and
+try to optimize a little.
 
 ### Low priority
 
