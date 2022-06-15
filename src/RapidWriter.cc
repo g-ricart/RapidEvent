@@ -50,6 +50,7 @@ Int_t RapidWriter::SaveEvent(RapidEvent* event)
         name_      = track->GetName();
         track_ID_  = track->GetID();
         mother_ID_ = track->GetMotherID();
+        isPrompt_  = track->IsPrompt();
                 for (auto &it: params_map_) {
             it.second = track->GetParam(it.first);
         }
@@ -72,6 +73,7 @@ Int_t RapidWriter::SetupTree(TString out_file_path)
     out_tree_->Branch("partName",    &name_);
     out_tree_->Branch("trackID",     &track_ID_);
     out_tree_->Branch("motherID",    &mother_ID_);
+    out_tree_->Branch("isPrompt",    &isPrompt_);
 
     vector<TString> params_list = config_->GetParams();
 

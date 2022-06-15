@@ -40,6 +40,7 @@ class RapidWriter {
         std::map<TString, Double_t> params_map_;
         Size_t track_ID_;
         Size_t mother_ID_;
+        Bool_t isPrompt_;
 
 };
 
