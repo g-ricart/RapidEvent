@@ -121,14 +121,17 @@ int RapidEvent::BuildEvent()
 
         Int_t n_decays = norm_->GetPoisson(mother);
 
-        vector<RapidTrack*> tracks_to_add = select_->SelectDecays(mother,
+        if (n_decays != 0) {
+
+            vector<RapidTrack*> tracks_to_add = select_->SelectDecays(mother,
                              daughters, n_decays, event_number_, pv_, first_ID);
 
-        // Append tracks_to_add to the end of tracks_
-        tracks_.insert(end(tracks_), begin(tracks_to_add), end(tracks_to_add));
+            // Append tracks_to_add to the end of tracks_
+            tracks_.insert(end(tracks_), begin(tracks_to_add), end(tracks_to_add));
 
-        // Setup first ID for next loop.
-        first_ID = tracks_.back()->GetID() + 1;
+            // Setup first ID for next loop.
+            first_ID = tracks_.back()->GetID() + 1;
+        }
     }
 
     return 0;
