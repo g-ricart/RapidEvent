@@ -41,12 +41,17 @@ Int_t RapidWriter::SaveEvent(RapidEvent* event)
 {
     vector<RapidTrack*> tracks = event->GetTracks();
 
+    // Event parameters.
     event_number_ = event->GetEventNumber();
 
     for (auto track: tracks) {
-        for (auto &it: params_map_) {
+
+        // Track parameters.
+        name_      = track->GetName();
+        track_ID_  = track->GetID();
+        mother_ID_ = track->GetMotherID();
+                for (auto &it: params_map_) {
             it.second = track->GetParam(it.first);
-            name_ = track->GetName();
         }
         out_tree_->Fill();
     }
@@ -65,12 +70,14 @@ Int_t RapidWriter::SetupTree(TString out_file_path)
 
     out_tree_->Branch("eventNumber", &event_number_);
     out_tree_->Branch("partName",    &name_);
+    out_tree_->Branch("trackID",     &track_ID_);
+    out_tree_->Branch("motherID",    &mother_ID_);
 
     vector<TString> params_list = config_->GetParams();
 
     for (auto param: config_->GetParams()) {
         params_map_[param] = -999.;
-        if (!param.Contains("ProbNN")) {
+        if (!param.Contains("ProbNN")) { // Add true value except for ProbNN.
             params_map_[param + "_TRUE"] = -999.;
         }
     }

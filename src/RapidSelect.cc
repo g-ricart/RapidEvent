@@ -42,9 +42,10 @@ RapidSelect::~RapidSelect()
 
 //______________________________________________________________________________
 vector<RapidTrack*> RapidSelect::SelectPromptTracks(TString  part_name,
-                                                    Int_t    n_tracks,
+                                                    Ssiz_t   n_tracks,
                                                     Ssiz_t   event_number,
-                                                    RapidPV* pv)
+                                                    RapidPV* pv,
+                                                    Size_t   first_ID)
 {
     vector<RapidTrack*> selected_tracks;
 
@@ -66,8 +67,7 @@ vector<RapidTrack*> RapidSelect::SelectPromptTracks(TString  part_name,
         track->SetName(track_name);
         track->SetEventNumber(event_number);
         track->SetPrompt(true);
-
-        track->SetID(i+1); // Add 1 to ID to avoid 0.
+        track->SetID(first_ID + i);
 
         // Select the track
         SelectPromptTrack(track, data_tree, branch_array, n_entries);
@@ -91,10 +91,12 @@ vector<RapidTrack*> RapidSelect::SelectPromptTracks(TString  part_name,
 }
 
 //______________________________________________________________________________
-vector<RapidTrack*> RapidSelect::SelectDecays(TString mother,
+vector<RapidTrack*> RapidSelect::SelectDecays(TString         mother,
                                               vector<TString> daughters,
-                                              Int_t n_decays,
-                                              Ssiz_t event_number)
+                                              Ssiz_t          n_decays,
+                                              Ssiz_t          event_number,
+                                              RapidPV*        pv,
+                                              Size_t          first_ID)
 {
     vector<RapidTrack*> selected_tracks;
 
@@ -108,37 +110,58 @@ vector<RapidTrack*> RapidSelect::SelectDecays(TString mother,
 
     Ssiz_t n_entries = data_tree->GetEntriesFast();
 
-    for (size_t i = 0; i < n_decays; i++) {
+    Size_t n_daughters = daughters.size();
+
+    for (Ssiz_t i = 0; i < n_decays; i++) {
         // Setup mother track.
         RapidTrack* mother_track = new RapidTrack();
-        TString mother_track_name = mother + Form("_%d", i);
-        track->SetName(mother_track_name);
-        track->SetEventNumber(event_number);
-        track->SetPrompt(true);
+        TString mother_track_name = mother + Form("_%d", int(i));
+        mother_track->SetName(mother_track_name);
+        mother_track->SetEventNumber(event_number);
+        mother_track->SetPrompt(true);
 
-        // TODO : Find a way to set ID
+        // Set mother ID.
+        Size_t mother_ID = first_ID + i*(n_daughters+1);
+        mother_track->SetID(mother_ID);
 
-        SelectMotherTrack(mother_track, mother, data_tree, branch_array,
-                                                           n_entries);
+        Ssiz_t entry_index = SelectMotherTrack(mother_track, mother, data_tree,
+                                                       branch_array, n_entries);
+
+        // Change origin vertex to event PV.
+        mother_track->SetOriginVertex(pv);
+
+        // If perfect PID is requested, set it.
+        if (config_->IsPIDPerfect()) {mother_track->SetPID();}
+
         selected_tracks.push_back(mother_track);
 
-        for (auto part: particles) {
+        for (auto part: daughters) {
+            Size_t j = 0; // Loop counter.
+
             // Setup daughter track.
             RapidTrack* daughter_track = new RapidTrack();
-            TString daughter_track_name = part + Form("_%d", i);
+            TString daughter_track_name = part + Form("_%d", int(i));
             daughter_track->SetName(daughter_track_name);
             daughter_track->SetEventNumber(event_number);
             daughter_track->SetPrompt(false);
 
-            // TODO : Set IDs
+            // Set daughter track IDs.
+            Size_t daughter_ID = mother_ID + j+1;
+            daughter_track->SetID(daughter_ID);
+            daughter_track->SetMotherID(mother_ID);
 
             SelectDaughterTrack(daughter_track, part, data_tree, branch_array,
-                                                                 n_entries);
+                                                                   entry_index);
+
+            // If perfect PID is requested, set it.
+            if (config_->IsPIDPerfect()) {daughter_track->SetPID();}
+
             selected_tracks.push_back(daughter_track);
+
+            j++;
         }
     }
-
-
+    return selected_tracks;
 }
 
 //______________________________________________________________________________
@@ -192,8 +215,6 @@ Int_t RapidSelect::SelectPromptTrack(RapidTrack* track, TTree*     tree,
                 return 1;
             }
         }
-
-        delete tokens;
     }
 
     return 0;
@@ -213,7 +234,13 @@ Int_t RapidSelect::SelectMotherTrack(RapidTrack* track, TString part_name,
     for (Int_t i = 1; i < kNBranches; i++) { // Starting from 1 to avoid nEvent.
         TObject* b = (TObject*)branches->At(i);
         TString branch_name = b->GetName();
-        var_map[branch_name] = 0.;
+        tree->SetBranchStatus(branch_name, 0);
+
+        if (branch_name.Contains(part_name)) { // Only store branches
+                                               // containing the mother name.
+            var_map[branch_name] = 0.;
+            tree->SetBranchStatus(branch_name, 1);
+        }
     }
 
     // Separate loop to ensure pointer stability.
@@ -226,14 +253,40 @@ Int_t RapidSelect::SelectMotherTrack(RapidTrack* track, TString part_name,
     Ssiz_t entry_index = random_->Integer(n_entries);
     tree->GetEntry(entry_index);
 
-    return 0;
+    for (auto &it: var_map) {
+        TString  branch_name = it.first;
+        Double_t value       = it.second;
+
+        TObjArray* tokens = branch_name.Tokenize("_");
+        tokens->SetOwner(kTRUE);
+
+        switch (tokens->GetEntriesFast()) {
+            case 3:
+            {
+                SetTrackParams(track, tokens, value);
+                break;
+            }
+            case 4:
+            {
+                SetTrackParamsTrue(track, tokens, value);
+                break;
+            }
+            default:
+            {
+                cout << "ERROR in RapidSelect::SelectTrack : ill-formed branch "
+                     << "name " << branch_name << endl;
+                return 1;
+            }
+        }
+    }
+    return entry_index;
 }
 
 //______________________________________________________________________________
 Int_t RapidSelect::SelectDaughterTrack(RapidTrack* track, TString part_name,
                                                           TTree* tree,
                                                           TObjArray* branches,
-                                                          Ssiz_t n_entries)
+                                                          Ssiz_t entry_index)
 {
     tree->SetBranchStatus("nEvent", 0);
     const Int_t kNBranches = branches->GetEntriesFast();
@@ -243,7 +296,13 @@ Int_t RapidSelect::SelectDaughterTrack(RapidTrack* track, TString part_name,
     for (Int_t i = 1; i < kNBranches; i++) { // Starting from 1 to avoid nEvent.
         TObject* b = (TObject*)branches->At(i);
         TString branch_name = b->GetName();
-        var_map[branch_name] = 0.;
+        tree->SetBranchStatus(branch_name, 0);
+
+        if (branch_name.Contains(part_name)) { // Only store branches
+                                               // containing the mother name.
+            var_map[branch_name] = 0.;
+            tree->SetBranchStatus(branch_name, 1);
+        }
     }
 
     // Separate loop to ensure pointer stability.
@@ -252,10 +311,35 @@ Int_t RapidSelect::SelectDaughterTrack(RapidTrack* track, TString part_name,
                               &(it.second)); // The address of the value.
     }
 
-    // Get a random entry of the tree.
-    Ssiz_t entry_index = random_->Integer(n_entries);
+    // Get the same entry as the mother.
     tree->GetEntry(entry_index);
 
+    for (auto &it: var_map) {
+        TString  branch_name = it.first;
+        Double_t value       = it.second;
+
+        TObjArray* tokens = branch_name.Tokenize("_");
+        tokens->SetOwner(kTRUE);
+
+        switch (tokens->GetEntriesFast()) {
+            case 3:
+            {
+                SetTrackParams(track, tokens, value);
+                break;
+            }
+            case 4:
+            {
+                SetTrackParamsTrue(track, tokens, value);
+                break;
+            }
+            default:
+            {
+                cout << "ERROR in RapidSelect::SelectTrack : ill-formed branch "
+                     << "name " << branch_name << endl;
+                return 1;
+            }
+        }
+    }
     return 0;
 }
 

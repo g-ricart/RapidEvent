@@ -13,18 +13,18 @@ using namespace std;
 //______________________________________________________________________________
 RapidTrack::RapidTrack()
 {
-    track_id_ = 0;
+    track_id_        = 0;
     mother_track_id_ = 0;
-    is_prompt_ = true;
+    is_prompt_       = true;
 }
 
 //______________________________________________________________________________
 RapidTrack::RapidTrack(const TString track_name)
 {
-    name_ = track_name;
-    track_id_ = 0;
+    name_            = track_name;
+    track_id_        = 0;
     mother_track_id_ = 0;
-    is_prompt_ = true;
+    is_prompt_       = true;
 }
 
 //______________________________________________________________________________

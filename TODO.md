@@ -7,11 +7,16 @@
     - [x] _RapidNorm_ Add decays.
     - [x] _RapidTrack_ Add track ID data member.
     - [x] _RapidTrack_ Add mother track ID data member.
-    - [ ] _RapidSelect_ Add decays and IDs.
-    - [ ] _RapidEvent_ Add decays and IDs
-    - [ ] _RapidWriter_ Add IDs.
+    - [x] _RapidSelect_ Add decays and IDs.
+    - [x] _RapidEvent_ Add decays and IDs
+    - [x] _RapidWriter_ Add IDs.
 - [ ] **#ERROR_HNDLG** _RapidSelect_ Find a way to test the type of every
     branch of the data ROOT files to avoid hardcoded skip of `nEvent`.
+
+### Optimization
+- [ ] _RapidSelect_ Rewrite track selection to avoid code duplication and
+try to optimize a little -> Get only one entry per decay.
+    - [x] Deactivate unused branches.
 
 ### High priority
 - [ ] **#FEATURE** Use MonteCarlo particle numbering scheme.
@@ -21,8 +26,6 @@
 - [ ] **#ERROR_HNDLG** _RapidSelect::SelectTrack_ Manage error when a branch
 name is ill-formed.
 - [ ] **#FEATURE** Add possibility to have several decays of the same particle.
-- [ ] _RapidSelect_ Rewrite track selection to avoid code duplication and
-try to optimize a little.
 
 ### Low priority
 
@@ -36,6 +39,7 @@ which are not present in the TTree.
     - [ ] _RapidSelect_
     - [ ] _RapidTrack_
     - [x] _RapidWriter_
+- [ ] **#MISC** Change all `Ssiz_t` to `Size_t`
 
 ### Done :heavy_check_mark:
 

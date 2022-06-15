@@ -96,16 +96,21 @@ int RapidEvent::BuildEvent()
     pv_->SetNTracks(pv_n_tracks_);
     pv_->SetXYZ(0., 0., 0.);
 
+    Size_t first_ID = 1;
+
     // Second loop to select prompts tracks.
     for (auto particle: prompt_particles) {
 
         Int_t n_particles = n_part_map_.at(particle);
 
         vector<RapidTrack*> tracks_to_add = select_->SelectPromptTracks(particle,
-                                               n_particles, event_number_, pv_);
+                                     n_particles, event_number_, pv_, first_ID);
 
         // Append tracks_to_add to the end of tracks_
         tracks_.insert(end(tracks_), begin(tracks_to_add), end(tracks_to_add));
+
+        // Setup first ID for next loop.
+        first_ID = tracks_.back()->GetID() + 1;
     }
 
     // Third loop for decays.
@@ -117,9 +122,13 @@ int RapidEvent::BuildEvent()
         Int_t n_decays = norm_->GetPoisson(mother);
 
         vector<RapidTrack*> tracks_to_add = select_->SelectDecays(mother,
-                                         daughters, n_decays, event_number_);
+                             daughters, n_decays, event_number_, pv_, first_ID);
 
-        
+        // Append tracks_to_add to the end of tracks_
+        tracks_.insert(end(tracks_), begin(tracks_to_add), end(tracks_to_add));
+
+        // Setup first ID for next loop.
+        first_ID = tracks_.back()->GetID() + 1;
     }
 
     return 0;
