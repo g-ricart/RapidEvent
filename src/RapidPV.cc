@@ -49,10 +49,9 @@ void RapidPV::SmearVertex() {
     Double_t yS = 0.010817 + 0.03784*TMath::Exp(-0.0815*n_tracks_);
     Double_t zS = 0.04252  + 0.2235 *TMath::Exp(-0.0814*n_tracks_);
 
-    // Stored in micro-meters.
     vertex_smeared_ = ROOT::Math::XYZPoint( \
-        vertex_true_.X() + random_->Gaus(0,xS)*1000., \
-        vertex_true_.Y() + random_->Gaus(0,yS)*1000., \
-        vertex_true_.Z() + random_->Gaus(0,zS)*1000.);
+        vertex_true_.X() + random_->Gaus(0,xS), \
+        vertex_true_.Y() + random_->Gaus(0,yS), \
+        vertex_true_.Z() + random_->Gaus(0,zS));
 
 }
