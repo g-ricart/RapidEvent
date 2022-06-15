@@ -27,18 +27,47 @@ class RapidSelect {
         //! Destructor.
         ~RapidSelect();
 
-        std::vector<RapidTrack*> SelectTracks(TString part_name,
-                                              Int_t   n_tracks,
-                                              Ssiz_t  event_number,
-                                              RapidPV* pv,
-                                              Bool_t prompt=false);
+        //! Select the prompt tracks to add in an event.
+        //! Tracks are randomly selected in the data file corresponding to
+        //! `part_name`. Their event numbers are set as well as their PVs.
+        std::vector<RapidTrack*> SelectPromptTracks(TString  part_name,
+                                                    Ssiz_t   n_tracks,
+                                                    Ssiz_t   event_number,
+                                                    RapidPV* pv,
+                                                    Size_t   first_ID);
+
+        //! Select the tracks associated to the decay defined by `mother`
+        //! and `daughters`.
+        //! Track are randomly slected in the data file corresponding to
+        // `mother`. Their event number are set.
+        std::vector<RapidTrack*> SelectDecays(TString              mother,
+                                              std::vector<TString> daughters,
+                                              Ssiz_t               n_decays,
+                                              Ssiz_t               event_number,
+                                              RapidPV*             pv,
+                                              Size_t               first_ID);
 
     private:
-        Int_t SelectTrack(RapidTrack* track, TTree* tree, TObjArray* branches);
+        // Track selectors.
+        Int_t SelectPromptTrack(RapidTrack* track, TTree*     tree,
+                                                   TObjArray* branches,
+                                                   Ssiz_t     n_entries);
+        Ssiz_t SelectMotherTrack(RapidTrack* track, TString   part_name,
+                                                    TTree*     tree,
+                                                    TObjArray* branches,
+                                                    Ssiz_t     n_entries);
+        Int_t SelectDaughterTrack(RapidTrack* track, TString    part_name,
+                                                     TTree*     tree,
+                                                     TObjArray* branches,
+                                                     Ssiz_t     entry_index);
+
+        // Track parameters setters.
         Int_t SetTrackParams(RapidTrack* track, TObjArray* tokens,
                                                 Double_t   value);
         Int_t SetTrackParamsTrue(RapidTrack* track, TObjArray* tokens,
                                                     Double_t   value);
+
+        // Check if parameter needs to be stored.
         Bool_t KeepParam(TString param);
 
         RapidConfig* config_;
