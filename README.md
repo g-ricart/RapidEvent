@@ -23,5 +23,5 @@ $ make
 $ export RAPIDEVENT_ROOT=<install location>
 $ mkdir output/
 $ cd output/
-$ ../bin/Rapidevent <event config file name> <nb of events to generate>
+$ ../bin/RapidEvent <event config file name> <nb of events to generate>
 ```
