@@ -55,12 +55,12 @@ int rapidEvent(const int kNEvtToGen, const TString kEvtFileName) {
         t1 = clock();
         delta_t += (float(t1) - float(t0)) / CLOCKS_PER_SEC;
         cout << "\r" << "     " << i+1 << "/" << kNEvtToGen;
-        cout << "    " << 1./(delta_t/(i+1)) << " evt/s" << flush;
+        cout << "    " << delta_t/(i+1) << " s/evt" << flush;
     }
     cout << "\r";
 
     cout << "INFO in main : Generated " << kNEvtToGen << " events in ";
-    cout << delta_t << " seconds (" << 1./(delta_t/(kNEvtToGen)) << " evt/s).";
+    cout << delta_t << " seconds (" << delta_t/kNEvtToGen << " s/evt).";
     cout << endl;
 
     delete select;
