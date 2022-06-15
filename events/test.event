@@ -1,5 +1,7 @@
-params : P PT eta origX origY origZ
+params : P PT eta origX origY origZ FD
 
 prompt : pi+ pi- K+ K- p+ p-
+
+decay : D0 -> K- mu+ numu
 
 perfectPID : true
