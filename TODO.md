@@ -2,14 +2,6 @@
 
 ### Highest priority
 
-- [ ] **#FEATURE** Add decaying particles.
-    - [x] _RapidConfig_ Read config file.
-    - [x] _RapidNorm_ Add decays.
-    - [x] _RapidTrack_ Add track ID data member.
-    - [x] _RapidTrack_ Add mother track ID data member.
-    - [x] _RapidSelect_ Add decays and IDs.
-    - [x] _RapidEvent_ Add decays and IDs
-    - [x] _RapidWriter_ Add IDs.
 - [ ] **#ERROR_HNDLG** _RapidSelect_ Find a way to test the type of every
     branch of the data ROOT files to avoid hardcoded skip of `nEvent`.
 
@@ -50,3 +42,4 @@ from the TSTring destructor.
 - [x] **#FEATURE** _main_ Better progress monitoring.
 - [x] **#FEATURE** Reduce smearing of origin vertex for prompt particles.
 - [x] **#FEATURE** Add ProbNN variables with boolean values.
+- [x] **#FEATURE** Add decaying particles.
