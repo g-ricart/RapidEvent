@@ -2,6 +2,7 @@
 
 #include <map>
 #include <vector>
+#include <stdexcept> // std::out_of_range
 
 #include "TString.h"
 #include "Math/Point3D.h"
@@ -118,7 +119,17 @@ vector<TString> RapidTrack::GetListOfParams()
 //______________________________________________________________________________
 Double_t RapidTrack::GetParam(const TString param_name)
 {
-    return params_map_.at(param_name);
+    Double_t param;
+
+    try {
+        param = params_map_.at(param_name);
+        return param;
+    }
+    catch (const std::out_of_range& oor) { // If param_name is not a parameter
+                                           // of the track, return an absurd
+                                           // value.
+        return -999;
+    }
 }
 
 //______________________________________________________________________________
