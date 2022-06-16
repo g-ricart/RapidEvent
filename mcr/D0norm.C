@@ -24,8 +24,8 @@ void buildD0norm() {
 
     Double_t pb          = 1e-12;        // Data is in pb.
     Double_t inv_mb      = 1e3;          // T_AB is in mb^-1.
-    Double_t D0_frag     = 0.391;        // D0 fragmentation fraction.
-    Double_t decay_gamma = 0.0341;       // Partial width of D0 -> K- mu+ numu decay.
+    Double_t D0_frag     = 1;            // D0 fragmentation fraction. 0.391
+    Double_t decay_gamma = 0.07;        // Partial width of D0 -> K- mu+ numu decay. 0.0341
     Double_t T_PbPb_0_10 = 23.26*inv_mb; // Nuclear overlap function for the
                                          // 10% most central Pb-Pb collisions.
 
@@ -33,7 +33,7 @@ void buildD0norm() {
 
     D0_hist->Draw();
 
-    cout << "Number of D0 -> K- mu+ numu : ";
+    cout << "Number of c -> mu+ anything : ";
     cout << D0_hist->Integral("width") << endl;
 
     TFile* D0_file = new TFile("D0_norm.root", "RECREATE");

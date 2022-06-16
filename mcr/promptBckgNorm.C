@@ -22,10 +22,10 @@ void promptBckgNorm() {
     Double_t k_N  = (273.41 + 222.48)/2.;
     Double_t p_N  = (74.56 + 61.51)/2.;
 
-    cout << "---- ALICE measurements (dN/dy) ----" << endl;
-    cout << "Number of pions : "          << pi_N << endl;
-    cout << "Number of kaons : "          << k_N  << endl;
-    cout << "Number of (anti)protons  : " << p_N << endl;
+    cout << "\n---- ALICE measurements (dN/dy) ----" << endl;
+    cout << "Number of pions : "          << pi_N    << endl;
+    cout << "Number of kaons : "          << k_N     << endl;
+    cout << "Number of (anti)protons  : " << p_N     << endl;
 
     // Mean pT (GeV)
     Double_t mean_pi_pt = (0.5682 + 0.5711)/2.;
@@ -42,10 +42,10 @@ void promptBckgNorm() {
     k_N  *= TMath::Sqrt( 1 - TMath::Power(m_k  / TMath::Sqrt(TMath::Power(mean_k_pt,  2) + TMath::Power(m_k,  2)*TMath::CosH(0)), 2) );
     p_N  *= TMath::Sqrt( 1 - TMath::Power(m_p  / TMath::Sqrt(TMath::Power(mean_p_pt,  2) + TMath::Power(m_p,  2)*TMath::CosH(0)), 2) );
 
-    cout << "--- ALICE measurements (dN/deta) ---" << endl;
-    cout << "Number of pions : "          << pi_N << endl;
-    cout << "Number of kaons : "          << k_N  << endl;
-    cout << "Number of (anti)protons  : " << p_N << endl;
+    cout << "\n--- ALICE measurements (dN/deta) ---" << endl;
+    cout << "Number of pions : "          << pi_N    << endl;
+    cout << "Number of kaons : "          << k_N     << endl;
+    cout << "Number of (anti)protons  : " << p_N     << endl;
 
     TFile* density_file = TFile::Open("../norm/chargedPartDensity.root");
     // 0-5% centrality
@@ -62,6 +62,8 @@ void promptBckgNorm() {
     // Integrate in range -0.5 < eta < +0.5
     Double_t mid_N = density_hist->Integral(13, 16, "width");
 
+    cout << "\n eta   dN/dEta" << endl;
+
     // Loop over bins corresponding to 2 <= eta < 5.
     for (size_t bin = 23; bin <= 34; bin++) {
 
@@ -76,12 +78,16 @@ void promptBckgNorm() {
         Km_hist->SetBinContent(bin,  (k_N/2.)  * boost_N);
         pp_hist->SetBinContent(bin,  (p_N/2.)  * boost_N);
         pm_hist->SetBinContent(bin,  (p_N/2.)  * boost_N);
+
+        Double_t tot_mult = (pi_N + k_N + p_N)*boost_N;
+
+        cout << pip_hist->GetBinCenter(bin) << "  " << tot_mult << endl;
     }
 
-    cout << "------------- Boosted -------------" << endl;
+    cout << "\n------------- Boosted -------------" << endl;
     cout << "Number of pions : "          << pip_hist->Integral("width") +  pim_hist->Integral("width") << endl;
     cout << "Number of kaons : "          << Kp_hist->Integral("width")  +  Km_hist->Integral("width")  << endl;
-    cout << "Number of (anti)protons  : " << pp_hist->Integral("width")  +  pm_hist->Integral("width") << endl;
+    cout << "Number of (anti)protons  : " << pp_hist->Integral("width")  +  pm_hist->Integral("width")  << endl;
 
     TFile* pip_file = new TFile("pip_norm.root", "RECREATE");
 
