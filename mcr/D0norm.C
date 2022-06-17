@@ -5,7 +5,7 @@
 
 void buildD0norm() {
     auto eta_tree = new TTree();
-    eta_tree->ReadFile("FONLL_eta_c_5TeV.csv", "eta/D:s");
+    eta_tree->ReadFile("../norm/FONLL_eta_c_5TeV.csv", "eta/D:s");
 
     auto D0_hist = new TH1D("D0", "", 301, 2, 5);
 
@@ -36,8 +36,12 @@ void buildD0norm() {
     cout << "Number of c -> mu+ anything : ";
     cout << D0_hist->Integral("width") << endl;
 
-    TFile* D0_file = new TFile("D0_norm.root", "RECREATE");
-
+    TFile* D0_file = new TFile("../norm/D0_norm.root", "RECREATE");
     D0_hist->Write();
     D0_file->Close();
+
+    TFile* D0b_file = new TFile("../norm/D0b_norm.root", "RECREATE");
+    D0_hist->SetName("DOb");
+    D0_hist->Write();
+    D0b_file->Close();
 }
