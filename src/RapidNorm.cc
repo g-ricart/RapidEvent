@@ -79,8 +79,6 @@ Int_t RapidNorm::ComputeNorm()
         TFile* in_file   = TFile::Open(path);
         TH1D*  norm_hist = (TH1D*)in_file->Get(part);
 
-        cout << norm_hist->GetName() << endl;
-
         Double_t integral = norm_hist->Integral("width");
         norm_map_[part] = integral;
 
