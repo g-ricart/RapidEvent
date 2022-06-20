@@ -47,7 +47,7 @@ void promptBckgNorm() {
     cout << "Number of kaons : "          << k_N     << endl;
     cout << "Number of (anti)protons  : " << p_N     << endl;
 
-    TFile* density_file = TFile::Open("../norm/chargedPartDensity.root");
+    TFile* density_file = TFile::Open("../norm/rawData/chargedPartDensity.root");
     // 0-5% centrality
     TH1F* density_hist_1 = (TH1F*)density_file->Get("DN-DETARAP/Hist1D_y1");
     // 5-10% centrality
