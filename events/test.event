@@ -1,8 +1,9 @@
-params : P PT eta origX origY origZ FD
+params : P PT eta origX origY origZ FD IP
 
 prompt : pi+ pi- K+ K- p+ p-
 
 decay : D0 -> K- mu+ numu
 decay : D0b -> K+ mu- anti-numu
+decay : gammastar -> mu+ mu-
 
 perfectPID : true
