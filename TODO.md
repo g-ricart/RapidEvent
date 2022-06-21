@@ -1,9 +1,13 @@
 # TODO for RapidEvent
 
 ### Highest priority
-
 - [ ] **#ERROR_HNDLG** _RapidSelect_ Find a way to test the type of every
     branch of the data ROOT files to avoid hardcoded skip of `nEvent`.
+
+### Bugs
+- [ ] **#MEMORYLEAK** Somewhere.
+- [ ] **#SEGFAULT** _RapidNorm::ComputeNorm_ When the name of the normalisation
+histogram does not correspond to the particle name.
 
 ### Optimization
 - [ ] _RapidSelect_ Rewrite track selection to avoid code duplication and

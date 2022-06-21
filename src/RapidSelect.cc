@@ -161,13 +161,13 @@ vector<RapidTrack*> RapidSelect::SelectDecays(TString         mother,
             j++;
         }
     }
-    
+
     // cleanup
     branch_array->Delete();
     delete data_tree;
     data_file->Close();
     delete data_file;
-
+    
     return selected_tracks;
 }
 
