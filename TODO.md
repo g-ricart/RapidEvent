@@ -5,6 +5,7 @@
     branch of the data ROOT files to avoid hardcoded skip of `nEvent`.
 
 ### Bugs
+- [ ] **#MEMORYLEAK** Somewhere.
 - [ ] **#SEGFAULT** _RapidNorm::ComputeNorm_ When the name of the normalisation
 histogram does not correspond to the particle name.
 
