@@ -36,6 +36,7 @@ class RapidWriter {
 
         // variables to store in tree
         Ssiz_t event_number_;
+        Ssiz_t n_tracks_;
         TString name_;
         std::map<TString, Double_t> params_map_;
         Size_t track_ID_;

@@ -43,6 +43,7 @@ Int_t RapidWriter::SaveEvent(RapidEvent* event)
 
     // Event parameters.
     event_number_ = event->GetEventNumber();
+    n_tracks_     = event->GetNumberOfTracks();
 
     for (auto track: tracks) {
 
@@ -70,6 +71,7 @@ Int_t RapidWriter::SetupTree(TString out_file_path)
     out_tree_->SetDirectory(out_file_);
 
     out_tree_->Branch("eventNumber", &event_number_);
+    out_tree_->Branch("nTracks",     &n_tracks_);
     out_tree_->Branch("partName",    &name_);
     out_tree_->Branch("trackID",     &track_ID_);
     out_tree_->Branch("motherID",    &mother_ID_);
