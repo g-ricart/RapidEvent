@@ -1,0 +1,7 @@
+params : P PT eta origX origY origZ FD IP
+
+prompt : p+ p-
+
+decay : D0 -> K- mu+ numu
+
+perfectPID : true
