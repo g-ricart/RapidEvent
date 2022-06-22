@@ -39,13 +39,11 @@ class RapidNorm {
 
     private:
 
-        typedef std::map<TString, Double_t> PartNorm;
-
         Int_t ComputeNorm();
 
-        RapidConfig* config_;
-        PartNorm     norm_map_;
-        TRandom3*    random_;
+        RapidConfig*                config_;
+        std::map<TString, Double_t> norm_map_;
+        TRandom3*                   random_;
 };
 
 #endif // RAPIDEVENT_RAPIDNORM_H_

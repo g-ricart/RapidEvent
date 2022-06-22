@@ -23,6 +23,8 @@ RapidEvent::RapidEvent()
     select_ = nullptr;
     pv_     = nullptr;
 
+    tracks_.clear();
+
     event_number_ = 0;
     n_tracks_     = 0;
     pv_n_tracks_  = 0;
@@ -38,6 +40,8 @@ RapidEvent::RapidEvent(RapidConfig* config, RapidNorm* norm,
     select_ = select;
 
     pv_ = new RapidPV(config_);
+
+    tracks_.clear();
 
     event_number_ = event_number;
     n_tracks_     = 0;

@@ -76,14 +76,15 @@ Int_t RapidNorm::ComputeNorm()
         TString path = config_->GetNormFile(part);
 
         // fetch histogram
-        TFile* in_file   = TFile::Open(path);
+        TFile* in_file   = new TFile(path, "READ");
         TH1D*  norm_hist = (TH1D*)in_file->Get(part);
+        norm_hist->SetDirectory(0);
 
         Double_t integral = norm_hist->Integral("width");
         norm_map_[part] = integral;
 
         delete norm_hist;
-        in_file->Close();
+        in_file->Close("R");
         delete in_file;
     }
 
