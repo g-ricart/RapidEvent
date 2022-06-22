@@ -51,13 +51,10 @@ vector<RapidTrack*> RapidSelect::SelectPromptTracks(TString  part_name,
     vector<RapidTrack*> selected_tracks;
 
     // Open data file
-    TFile* data_file = TFile::Open(config_->GetDataFile(part_name), "READ");
+    TFile* data_file = new TFile(config_->GetDataFile(part_name), "READ");
     TTree* data_tree = (TTree*)data_file->Get("DecayTree");
-    data_tree->SetDirectory(0);
 
     TObjArray* branch_array = data_tree->GetListOfBranches();
-    branch_array->SetOwner(kTRUE); // Set the TObjArray as owner of its
-                                   // content, allowing proper delete
 
     Ssiz_t n_entries = data_tree->GetEntriesFast();
 
@@ -84,9 +81,8 @@ vector<RapidTrack*> RapidSelect::SelectPromptTracks(TString  part_name,
     }
 
     // cleanup
-    branch_array->Delete();
     delete data_tree;
-    data_file->Close("R");
+    data_file->Close("nodelete");
     delete data_file;
 
     return selected_tracks;
@@ -103,13 +99,10 @@ vector<RapidTrack*> RapidSelect::SelectDecays(TString         mother,
     vector<RapidTrack*> selected_tracks;
 
     // Open data file.
-    TFile* data_file = TFile::Open(config_->GetDataFile(mother), "READ");
+    TFile* data_file = new TFile(config_->GetDataFile(mother), "READ");
     TTree* data_tree = (TTree*)data_file->Get("DecayTree");
-    data_tree->SetDirectory(0);
 
     TObjArray* branch_array = data_tree->GetListOfBranches();
-    branch_array->SetOwner(kTRUE); // Set the TObjArray as owner of its
-                                   // content, allowing proper delete
 
     Ssiz_t n_entries = data_tree->GetEntriesFast();
 
@@ -166,9 +159,8 @@ vector<RapidTrack*> RapidSelect::SelectDecays(TString         mother,
     }
 
     // cleanup
-    branch_array->Delete();
     delete data_tree;
-    data_file->Close("R");
+    data_file->Close("nodelete");
     delete data_file;
 
     return selected_tracks;
