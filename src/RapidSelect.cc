@@ -167,7 +167,7 @@ vector<RapidTrack*> RapidSelect::SelectDecays(TString         mother,
     delete data_tree;
     data_file->Close();
     delete data_file;
-    
+
     return selected_tracks;
 }
 
@@ -222,6 +222,7 @@ Int_t RapidSelect::SelectPromptTrack(RapidTrack* track, TTree*     tree,
                 return 1;
             }
         }
+        tokens->Delete();
     }
 
     return 0;
@@ -285,6 +286,7 @@ Int_t RapidSelect::SelectMotherTrack(RapidTrack* track, TString part_name,
                 return 1;
             }
         }
+        tokens->Delete();
     }
     return entry_index;
 }
@@ -346,6 +348,7 @@ Int_t RapidSelect::SelectDaughterTrack(RapidTrack* track, TString part_name,
                 return 1;
             }
         }
+        tokens->Delete();
     }
     return 0;
 }
