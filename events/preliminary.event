@@ -1,4 +1,4 @@
-params : P PT eta origX origY origZ FD IP
+params : P PT PX PY PZ eta origX origY origZ FD IP
 
 prompt : K+ K-
 
