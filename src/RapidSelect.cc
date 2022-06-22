@@ -204,7 +204,8 @@ Int_t RapidSelect::SelectPromptTrack(RapidTrack* track, TTree*     tree,
         TString  branch_name = it.first;
         Double_t value       = it.second;
 
-        TObjArray* tokens = branch_name.Tokenize("_");
+        TObjArray* tokens = branch_name.Tokenize("_"); // Returned array is the
+                                                       // owner of the objects
 
         switch (tokens->GetEntriesFast()) {
             case 3:
@@ -267,7 +268,8 @@ Int_t RapidSelect::SelectMotherTrack(RapidTrack* track, TString part_name,
         TString  branch_name = it.first;
         Double_t value       = it.second;
 
-        TObjArray* tokens = branch_name.Tokenize("_");
+        TObjArray* tokens = branch_name.Tokenize("_"); // Returned array is the
+                                                       // owner of the objects
 
         switch (tokens->GetEntriesFast()) {
             case 3:
@@ -328,7 +330,8 @@ Int_t RapidSelect::SelectDaughterTrack(RapidTrack* track, TString part_name,
         TString  branch_name = it.first;
         Double_t value       = it.second;
 
-        TObjArray* tokens = branch_name.Tokenize("_");
+        TObjArray* tokens = branch_name.Tokenize("_"); // Returned array is the
+                                                       // owner of the objects
 
         switch (tokens->GetEntriesFast()) {
             case 3:
