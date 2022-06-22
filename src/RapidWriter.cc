@@ -25,6 +25,7 @@ RapidWriter::RapidWriter()
 RapidWriter::RapidWriter(TString out_file_path, RapidConfig* config)
 {
     config_ = config;
+    out_file_ = nullptr;
 
     SetupTree(out_file_path);
 }
@@ -33,6 +34,8 @@ RapidWriter::RapidWriter(TString out_file_path, RapidConfig* config)
 RapidWriter::~RapidWriter()
 {
     out_tree_->AutoSave();
+    out_file_->Close("nodelete");
+    delete out_tree_;
     delete out_file_;
 }
 
