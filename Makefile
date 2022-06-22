@@ -12,7 +12,7 @@ ROOTGLIBS  	= $(shell root-config --glibs)
 ROOTLDFLAGS	= $(shell root-config --ldflags)
 
 # C++ compiler
-CXX        	= g++ -std=c++11 -g -O2
+CXX        	= g++ -std=c++11 -g
 CXXFLAGS   	= -W -Wall -Wextra -pedantic $(ROOTCFLAGS)
 LDFLAGS    	= $(ROOTLDFLAGS) $(ROOTLIBS) $(ROOTGLIBS) -lMinuit
 
