@@ -1,4 +1,6 @@
 #include <iostream>
+#include <vector>
+#include <map>
 
 #include "TFile.h"
 #include "TTree.h"
@@ -6,8 +8,13 @@
 #include "TH1I.h"
 #include "TString.h"
 #include "TCanvas.h"
+#include "TLorentzVector.h"
+#include "TMath.h"
+#include "TTreeIndex.h"
 
 using namespace std;
+
+const Double_t kMmu = 0.10565837;
 
 void checkIDs(TString input_file_name) {
 
@@ -137,6 +144,7 @@ void muonPairBkgAna(TString input_file_name) {
 
     // Build TTree index
     track_tree->BuildIndex("eventNumber", "trackID");
+    TTreeIndex* index = (TTreeIndex*)track_tree->GetTreeIndex();
 
     // Set branch addresses
     Ssiz_t event_number;
@@ -161,9 +169,11 @@ void muonPairBkgAna(TString input_file_name) {
     track_tree->SetBranchAddress("partName",    &part_name);
     track_tree->SetBranchAddress("isPrompt",    &is_prompt);
     track_tree->SetBranchAddress("ProbNNmu",    &probNNmu);
+    track_tree->SetBranchAddress("P",           &p);
     track_tree->SetBranchAddress("PX",          &px);
     track_tree->SetBranchAddress("PY",          &py);
     track_tree->SetBranchAddress("PZ",          &pz);
+    track_tree->SetBranchAddress("P_TRUE",      &p_true);
     track_tree->SetBranchAddress("PX_TRUE",     &px_true);
     track_tree->SetBranchAddress("PY_TRUE",     &py_true);
     track_tree->SetBranchAddress("PZ_TRUE",     &pz_true);
@@ -175,10 +185,43 @@ void muonPairBkgAna(TString input_file_name) {
     track_tree->SetBranchStatus("partName",    1);
     track_tree->SetBranchStatus("isPrompt",    1);
     track_tree->SetBranchStatus("ProbNNmu",    1);
+    track_tree->SetBranchStatus("P",           1);
     track_tree->SetBranchStatus("PX",          1);
     track_tree->SetBranchStatus("PY",          1);
     track_tree->SetBranchStatus("PZ",          1);
+    track_tree->SetBranchStatus("P_TRUE",      1);
     track_tree->SetBranchStatus("PX_TRUE",     1);
     track_tree->SetBranchStatus("PY_TRUE",     1);
     track_tree->SetBranchStatus("PZ_TRUE",     1);
+
+    Ssiz_t current_event = 1;
+
+    std::vector<Size_t> mup_IDs;
+    std::vector<Size_t> mum_IDs;
+
+    size_t n_entries = track_tree->GetEntries();
+
+    for (size_t i = 0; i < n_entries; i++) {
+
+        if (i % 10000 == 0) {
+            cout << i << "/" << n_entries << "\r";
+        }
+
+        track_tree->GetEntry(index->GetIndex()[i]);
+
+        if (event_number == current_event) {
+            if (probNNmu > 0.8) {
+                Double_t E = TMath::Sqrt(p*p + kMmu*kMmu);
+                TLorentzVector muon = TLorentzVector();
+                muon.SetPxPyPzE(px, py, pz, E);
+            }
+            else { continue; }
+        }
+        else {
+            current_event = event_number;
+            // TODO: clear vectors
+        }
+    }
+
+    TCanvas* c1 = new TCanvas("c1", "", 1000, 800);
 }
