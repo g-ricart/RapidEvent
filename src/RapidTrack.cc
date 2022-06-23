@@ -100,7 +100,7 @@ void RapidTrack::SetPID()
         params_map_[TString("ProbNNp")] = 1.;
     } else if (name_.Contains("K")) {
         params_map_[TString("ProbNNK")] = 1.;
-    } else if (name_.Contains("mu")) {
+    } else if (name_.Contains("mum") || name_.Contains("mup")) {
         params_map_[TString("ProbNNmu")] = 1.;
     }
 }
