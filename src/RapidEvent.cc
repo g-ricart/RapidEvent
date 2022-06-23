@@ -138,5 +138,7 @@ int RapidEvent::BuildEvent()
         }
     }
 
+    n_tracks_ = tracks_.size();
+
     return 0;
 }
