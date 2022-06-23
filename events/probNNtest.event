@@ -1,6 +1,6 @@
 params : P PT PX PY PZ eta origX origY origZ FD IP
 
-prompt : p+
+prompt : p+ pi-
 
 decay : D0 -> K- mu+ numu
 decay : D0b -> K+ mu- anti-numu
