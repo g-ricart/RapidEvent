@@ -303,7 +303,7 @@ Int_t RapidSelect::SelectDaughterTrack(RapidTrack* track, TString part_name,
         tree->SetBranchStatus(branch_name, 0);
 
         if (branch_name.Contains(part_name)) { // Only store branches
-                                               // containing the mother name.
+                                               // containing the daughter name.
             var_map[branch_name] = 0.;
             tree->SetBranchStatus(branch_name, 1);
         }
