@@ -19,6 +19,17 @@ using namespace std;
 
 const Double_t kMmu = 0.10565837;
 
+Double_t computeSignificance(TH1* signal_h, vector<TH1*> bkg_vec){
+
+    Double_t n_signal = static_cast<Double_t>(signal_h->GetEntries());
+    Double_t n_bkg = 0.;
+    for (auto& bkg_h: bkg_vec) {
+        n_bkg += static_cast<Double_t>(bkg_h->GetEntries());
+    }
+
+    return n_signal / TMath::Sqrt(n_signal + n_bkg);
+}
+
 void checkIDs(TString input_file_name) {
 
     TFile* input_file = new TFile(input_file_name, "READ");
@@ -340,19 +351,29 @@ void muonPairBkgAna(TString input_file_name) {
     stack->Add(dimu_m_mix_comb_h);
     stack->Add(dimu_m_bkg_comb_h);
 
+    vector<TH1*> bkg_histos;
+    bkg_histos.push_back(dimu_m_sig_comb_h);
+    bkg_histos.push_back(dimu_m_mix_comb_h);
+    bkg_histos.push_back(dimu_m_bkg_comb_h);
+
+    Double_t sig = computeSignificance(dimu_m_sig_h, bkg_histos);
+
     TCanvas* c1 = new TCanvas("c1", "", 1000, 800);
     dimu_m_h->Draw();
 
     TCanvas* c2 = new TCanvas("c2", "", 1000, 800);
     stack->Draw();
 
-    TLegend* legend = new TLegend(0.4, 0.2);
+    TLegend* legend = new TLegend(0.2, 0.2);
     // legend->SetHeader("The Legend Title","C"); // option "C" allows to center the header
     legend->AddEntry(dimu_m_sig_h, "Signal", "f");
     legend->AddEntry(dimu_m_sig_comb_h, "#gamma_{1} + #gamma_{2}", "f");
     legend->AddEntry(dimu_m_mix_comb_h, "#gamma + D^{0}", "f");
     legend->AddEntry(dimu_m_bkg_comb_h, "D^{0} + #bar{D^{0}}", "f");
+    legend->SetEntrySeparation(0.4);
     legend->Draw();
+
+    cout << sig << endl;
 
     c2->Update();
 
