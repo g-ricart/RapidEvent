@@ -19,7 +19,12 @@ using namespace std;
 
 const Double_t kMmu = 0.10565837;
 
-Double_t computeSignificance(TH1* signal_h, vector<TH1*> bkg_vec){
+const Double_t kMinDimuMass = 1.;
+const Double_t kMaxDimuMass = 5.;
+
+const Double_t kMinMuP = 3.;
+
+Double_t computeSigBkgRatio(TH1* signal_h, vector<TH1*> bkg_vec){
 
     Double_t n_signal = static_cast<Double_t>(signal_h->GetEntries());
     Double_t n_bkg = 0.;
@@ -27,7 +32,7 @@ Double_t computeSignificance(TH1* signal_h, vector<TH1*> bkg_vec){
         n_bkg += static_cast<Double_t>(bkg_h->GetEntries());
     }
 
-    return n_signal / TMath::Sqrt(n_signal + n_bkg);
+    return n_signal / n_bkg;
 }
 
 void checkIDs(TString input_file_name) {
@@ -174,6 +179,7 @@ void muonPairBkgAna(TString input_file_name) {
     Double_t origY, origY_true;
     Double_t origZ, origZ_true;
     Double_t probNNk, probNNmu, probNNpi, probNNp;
+
     track_tree->SetBranchAddress("eventNumber", &event_number);
     track_tree->SetBranchAddress("trackID",     &track_id);
     track_tree->SetBranchAddress("motherID",    &mother_id);
@@ -211,21 +217,21 @@ void muonPairBkgAna(TString input_file_name) {
 
     THStack* stack = new THStack("stack", "Dimuons invariant mass");
 
-    TH1D* dimu_m_h = new TH1D("dimu_m_h", "", 100, 0, 10); // All dimuons.
-    TH1D* dimu_m_sig_h = new TH1D("dimu_m_sig_h", "signal", 100, 0, 10); // Dimuons from same gamma
+    TH1D* dimu_m_h = new TH1D("dimu_m_h", "", 100, kMinDimuMass, kMaxDimuMass); // All dimuons.
+    TH1D* dimu_m_sig_h = new TH1D("dimu_m_sig_h", "signal", 100, kMinDimuMass, kMaxDimuMass); // Dimuons from same gamma
     dimu_m_sig_h->SetFillColor(kGreen);
     TH1D* dimu_m_sig_comb_h = new TH1D("dimu_m_sig_comb_h", // Dimuons from two different gammas
-                                       "signal combinatorial", 100, 0, 10);
+                                       "signal combinatorial", 100, kMinDimuMass, kMaxDimuMass);
     dimu_m_sig_comb_h->SetFillColor(kBlue);
     TH1D* dimu_m_mix_comb_h = new TH1D("dimu_m_mix_comb_h", // Dimuons from gammma + D0/D0b
-                                       "mixed combinatorial", 100, 0, 10);
+                                       "mixed combinatorial", 100, kMinDimuMass, kMaxDimuMass);
     dimu_m_mix_comb_h->SetFillColor(kRed);
     TH1D* dimu_m_bkg_comb_h = new TH1D("dimu_m_bkg_comb_h", // Dimuons from D0 + D0b
-                                       "background combinatorial", 100, 0, 10);
+                                       "background combinatorial", 100, kMinDimuMass, kMaxDimuMass);
     dimu_m_bkg_comb_h->SetFillColor(kYellow);
 
-    std::vector<Size_t> mup_IDs;
-    std::vector<Size_t> mum_IDs;
+    vector<Size_t> mup_IDs;
+    vector<Size_t> mum_IDs;
 
     size_t n_entries = track_tree->GetEntries();
 
@@ -248,7 +254,8 @@ void muonPairBkgAna(TString input_file_name) {
         // different vectors.
         if (event_number == current_event) {
             if (probNNmu > 0.8) {
-                if (part_name->Contains("mup")) {
+                if (p < kMinMuP) { continue; } // Cut on mu P for PID.
+                else if (part_name->Contains("mup")) {
                     mup_IDs.push_back(track_id);
                     continue;
                 } else if (part_name->Contains("mum")) {
@@ -293,12 +300,21 @@ void muonPairBkgAna(TString input_file_name) {
                     Double_t dimu_m = (mum + mup).M();
 
                     // Fill histograms.
-                    dimu_m_h->Fill(dimu_m); // All pairs.
-
                     if (mup_mother_name == mum_mother_name) { // Pure signal.
+                        // Select pairs with 1 GeV < M < 5 GeV only.
+                        if (m < kMinDimuMass || m > kMaxDimuMass) {
+                            continue;
+                        }
                         dimu_m_sig_h->Fill(m); // Fill with mother mass.
+                        dimu_m_h->Fill(m); // All pairs.
                         continue;
                     } else {
+                        // Select pairs with 1 GeV < M < 5 GeV only.
+                        if (dimu_m < kMinDimuMass || dimu_m > kMaxDimuMass) {
+                            continue;
+                        }
+                        dimu_m_h->Fill(dimu_m); // All pairs.
+
                         TObjArray* mup_tokens = mup_mother_name.Tokenize("_");
                         TObjArray* mum_tokens = mum_mother_name.Tokenize("_");
 
@@ -356,7 +372,7 @@ void muonPairBkgAna(TString input_file_name) {
     bkg_histos.push_back(dimu_m_mix_comb_h);
     bkg_histos.push_back(dimu_m_bkg_comb_h);
 
-    Double_t sig = computeSignificance(dimu_m_sig_h, bkg_histos);
+    Double_t sig = computeSigBkgRatio(dimu_m_sig_h, bkg_histos);
 
     TCanvas* c1 = new TCanvas("c1", "", 1000, 800);
     dimu_m_h->Draw();
@@ -376,5 +392,131 @@ void muonPairBkgAna(TString input_file_name) {
     cout << sig << endl;
 
     c2->Update();
+}
 
+void vtxTagAna(TString input_file_name) {
+
+    TFile* input_file = new TFile(input_file_name, "READ");
+    TTree* track_tree = (TTree*)input_file->Get("trackTree");
+
+    // Set branch addresses
+    Ssiz_t event_number;
+    Size_t track_id, mother_id;
+    TString* part_name = new TString();
+    Bool_t is_prompt;
+    Double_t fd,    fd_true;
+    Double_t ip,    ip_true;
+    Double_t m,     m_true;
+    Double_t p,     p_true;
+    Double_t pt,    pt_true;
+    Double_t px,    px_true;
+    Double_t py,    py_true;
+    Double_t pz,    pz_true;
+    Double_t eta,   eta_true;
+    Double_t origX, origx_true;
+    Double_t origY, origY_true;
+    Double_t origZ, origZ_true;
+    Double_t probNNk, probNNmu, probNNpi, probNNp;
+
+    track_tree->SetBranchAddress("eventNumber", &event_number);
+    track_tree->SetBranchAddress("trackID",     &track_id);
+    track_tree->SetBranchAddress("motherID",    &mother_id);
+    track_tree->SetBranchAddress("partName",    &part_name);
+    track_tree->SetBranchAddress("isPrompt",    &is_prompt);
+    track_tree->SetBranchAddress("ProbNNmu",    &probNNmu);
+    track_tree->SetBranchAddress("M",           &m);
+    track_tree->SetBranchAddress("P",           &p);
+    track_tree->SetBranchAddress("PX",          &px);
+    track_tree->SetBranchAddress("PY",          &py);
+    track_tree->SetBranchAddress("PZ",          &pz);
+    track_tree->SetBranchAddress("M_TRUE",      &m_true);
+    track_tree->SetBranchAddress("P_TRUE",      &p_true);
+    track_tree->SetBranchAddress("PX_TRUE",     &px_true);
+    track_tree->SetBranchAddress("PY_TRUE",     &py_true);
+    track_tree->SetBranchAddress("PZ_TRUE",     &pz_true);
+
+    track_tree->SetBranchStatus("*", 0);
+    track_tree->SetBranchStatus("eventNumber", 1);
+    track_tree->SetBranchStatus("trackID",     1);
+    track_tree->SetBranchStatus("motherID",    1);
+    track_tree->SetBranchStatus("partName",    1);
+    track_tree->SetBranchStatus("isPrompt",    1);
+    track_tree->SetBranchStatus("ProbNNmu",    1);
+    track_tree->SetBranchStatus("M",           1);
+    track_tree->SetBranchStatus("P",           1);
+    track_tree->SetBranchStatus("PX",          1);
+    track_tree->SetBranchStatus("PY",          1);
+    track_tree->SetBranchStatus("PZ",          1);
+    track_tree->SetBranchStatus("M_TRUE",      1);
+    track_tree->SetBranchStatus("P_TRUE",      1);
+    track_tree->SetBranchStatus("PX_TRUE",     1);
+    track_tree->SetBranchStatus("PY_TRUE",     1);
+    track_tree->SetBranchStatus("PZ_TRUE",     1);
+
+    vector<Size_t> mup_IDs;
+    vector<Size_t> mum_IDs;
+    vector<Size_t> Kp_IDs;
+    vector<Size_t> Km_IDs;
+
+    size_t n_entries = track_tree->GetEntries();
+
+    // Build TTree index
+    track_tree->BuildIndex("eventNumber", "trackID");
+    TTreeIndex* index = (TTreeIndex*)track_tree->GetTreeIndex();
+
+    Ssiz_t current_event = 1; // Event numbering starts at 1.
+
+    for (size_t i = 0; i < n_entries; i++) {
+
+        if (i % 10000 == 0) {
+            cout << i << "/" << n_entries << "\r";
+        }
+
+        // Get entries in event number -> track ID order
+        track_tree->GetEntry(index->GetIndex()[i]);
+
+        // Add all mu+, mu-, K+ and K- track IDs of the same event to four
+        // different vectors.
+        if (event_number == current_event) {
+            if (probNNmu > 0.8) {
+                if (part_name->Contains("mup")) {
+                    mup_IDs.push_back(track_id);
+                    continue;
+                } else if (part_name->Contains("mum")) {
+                    mum_IDs.push_back(track_id);
+                    continue;
+                } else {
+                    cout << "Muon PID error." << endl;
+                    continue;
+                }
+            } else if (probNNk > 0.8) {
+                if (part_name->Contains("Kp")) {
+                    Kp_IDs.push_back(track_id);
+                    continue;
+                } else if (part_name->Contains("Km")) {
+                    Km_IDs.push_back(track_id);
+                    continue;
+                } else {
+                    cout << "Kaon PID error." << endl;
+                    continue;
+                }
+            } else { continue; }
+        }
+        else {
+            // Form every mu+K- pair.
+
+            // Form every mu-K+ pair.
+
+            // Re get base entry to correctly set current event.
+            track_tree->GetEntry(index->GetIndex()[i]);
+            current_event = event_number;
+
+            // Empty track id vectors.
+            mup_IDs.clear();
+            mum_IDs.clear();
+            Kp_IDs.clear();
+            Km_IDs.clear();
+        }
+    }
+    cout << endl;
 }
