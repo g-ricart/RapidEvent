@@ -14,10 +14,16 @@
 #include "TTreeIndex.h"
 #include "TObjArray.h"
 #include "TLegend.h"
+#include "TText.h"
+#include "TStyle.h"
+
+#include "setStyle.h"
 
 using namespace std;
 
-const Double_t kMmu = 0.10565837;
+const Double_t kMmu  = 0.10565837;
+const Double_t kMKch = 0.49368;
+const Double_t kMD0  = 1.86484;
 
 const Double_t kMinDimuMass = 1.;
 const Double_t kMaxDimuMass = 5.;
@@ -396,6 +402,19 @@ void muonPairBkgAna(TString input_file_name) {
 
 void vtxTagAna(TString input_file_name) {
 
+    Int_t T2KstyleIndex = 2;
+    // Official T2K style as described in http://www.t2k.org/comm/pubboard/style/index_html
+    TString localStyleName = "T2K";
+    // -- WhichStyle --
+    // 1 = presentation large fonts
+    // 2 = presentation small fonts
+    // 3 = publication/paper
+    Int_t localWhichStyle = T2KstyleIndex;
+
+    TStyle* t2kstyle = T2K().SetT2KStyle(localWhichStyle, localStyleName);
+    gROOT->SetStyle(t2kstyle->GetName());
+    gROOT->ForceStyle();
+
     TFile* input_file = new TFile(input_file_name, "READ");
     TTree* track_tree = (TTree*)input_file->Get("trackTree");
 
@@ -424,6 +443,7 @@ void vtxTagAna(TString input_file_name) {
     track_tree->SetBranchAddress("partName",    &part_name);
     track_tree->SetBranchAddress("isPrompt",    &is_prompt);
     track_tree->SetBranchAddress("ProbNNmu",    &probNNmu);
+    track_tree->SetBranchAddress("ProbNNK",     &probNNk);
     track_tree->SetBranchAddress("M",           &m);
     track_tree->SetBranchAddress("P",           &p);
     track_tree->SetBranchAddress("PX",          &px);
@@ -442,6 +462,7 @@ void vtxTagAna(TString input_file_name) {
     track_tree->SetBranchStatus("partName",    1);
     track_tree->SetBranchStatus("isPrompt",    1);
     track_tree->SetBranchStatus("ProbNNmu",    1);
+    track_tree->SetBranchStatus("ProbNNK",     1);
     track_tree->SetBranchStatus("M",           1);
     track_tree->SetBranchStatus("P",           1);
     track_tree->SetBranchStatus("PX",          1);
@@ -453,10 +474,42 @@ void vtxTagAna(TString input_file_name) {
     track_tree->SetBranchStatus("PY_TRUE",     1);
     track_tree->SetBranchStatus("PZ_TRUE",     1);
 
+    // Histos for K-mu pairs.
+    TH1D* true_D0_m = new TH1D("true_D0_m", "", 100, 0, 10);
+    true_D0_m->SetFillColor(kGreen);
+    TH1D* rejected_D0_m = new TH1D("rejected_D0", "", 100, 0, 10);
+    // rejected_D0->SetFillColor(kBlue);
+    TH1D* cor_rejected_D0_m = new TH1D("cor_rejected_D0_m", "", 100, 0, 10);
+    cor_rejected_D0_m->SetFillColor(kGreen);
+    cor_rejected_D0_m->SetFillStyle(3354);
+    TH1D* misrejected_D0_m = new TH1D("misrejected_D0_m", "", 100, 0, 10);
+    misrejected_D0_m->SetFillColor(kRed);
+    TH1D* tagged_D0_m = new TH1D("tagged_D0_m", "", 100, 0, 10);
+    // tagged_D0_m->SetFillColor(kYellow);
+    TH1D* mistagged_D0_m = new TH1D("mistagged_D0_m", "", 100, 0, 10);
+    mistagged_D0_m->SetFillColor(kYellow);
+
+    // Histos for dimuons.
+    TH1D* dimu_m_h = new TH1D("dimu_m_h", "", 100, kMinDimuMass, kMaxDimuMass); // All dimuons.
+    TH1D* dimu_m_sig_h = new TH1D("dimu_m_sig_h", "signal", 100, kMinDimuMass, kMaxDimuMass); // Dimuons from same gamma
+    dimu_m_sig_h->SetFillColor(kGreen);
+    TH1D* dimu_m_sig_comb_h = new TH1D("dimu_m_sig_comb_h", // Dimuons from two different gammas
+                                       "signal combinatorial", 100, kMinDimuMass, kMaxDimuMass);
+    dimu_m_sig_comb_h->SetFillColor(kBlue);
+    TH1D* dimu_m_mix_comb_h = new TH1D("dimu_m_mix_comb_h", // Dimuons from gammma + D0/D0b
+                                       "mixed combinatorial", 100, kMinDimuMass, kMaxDimuMass);
+    dimu_m_mix_comb_h->SetFillColor(kRed);
+    TH1D* dimu_m_bkg_comb_h = new TH1D("dimu_m_bkg_comb_h", // Dimuons from D0 + D0b
+                                       "background combinatorial", 100, kMinDimuMass, kMaxDimuMass);
+    dimu_m_bkg_comb_h->SetFillColor(kYellow);
+
     vector<Size_t> mup_IDs;
     vector<Size_t> mum_IDs;
     vector<Size_t> Kp_IDs;
     vector<Size_t> Km_IDs;
+
+    vector<Size_t> kept_mup_IDs;
+    vector<Size_t> kept_mum_IDs;
 
     size_t n_entries = track_tree->GetEntries();
 
@@ -502,10 +555,214 @@ void vtxTagAna(TString input_file_name) {
                 }
             } else { continue; }
         }
+        // -------- K-MU ANALYSIS --------
         else {
             // Form every mu+K- pair.
+            for (auto mup_ID: mup_IDs) {
+                // Get entry corresponding to mu+ track.
+                track_tree->GetEntryWithIndex(current_event, mup_ID);
 
+                Double_t E_mup = TMath::Sqrt(p*p+kMmu*kMmu); // Compute energy.
+                TLorentzVector mup = TLorentzVector();
+                mup.SetPxPyPzE(px, py, pz, E_mup);
+
+                // Get mu+ mother name.
+                // Get entry corresponding to mu+ mother track.
+                track_tree->GetEntryWithIndex(current_event, mother_id);
+                TString mup_mother_name = *part_name;
+
+                for (auto Km_ID: Km_IDs) {
+                    // Get entry corresponding to K- track.
+                    track_tree->GetEntryWithIndex(current_event, Km_ID);
+
+                    Double_t E_Km = TMath::Sqrt(p*p+kMKch*kMKch); // Compute energy.
+                    TLorentzVector Km = TLorentzVector();
+                    Km.SetPxPyPzE(px, py, pz, E_Km);
+
+                    Double_t mup_Km_m = (mup + Km).M();
+
+                    // Get K- mother name.
+                    // Get entry corresponding to K- mother track.
+                    track_tree->GetEntryWithIndex(current_event, mother_id);
+                    TString Km_mother_name = *part_name;
+
+                    // Replace pair mass by mother mass when both particles
+                    // have the same mother (problem with rapidsim ?)
+                    // Still ok because RapidSim reconstruct mother mass
+                    // without the neutrino.
+                    if (Km_mother_name == mup_mother_name) {
+                        mup_Km_m = m;
+                    }
+
+                    if (mup_Km_m > kMD0) {
+                        rejected_D0_m->Fill(mup_Km_m);
+                        kept_mup_IDs.push_back(mup_ID);
+
+                        if (Km_mother_name == mup_mother_name) { // Same mother = true D0.
+                            misrejected_D0_m->Fill(mup_Km_m); // Fill with mother mass.
+                            continue;
+                        } else {
+                            cor_rejected_D0_m->Fill(mup_Km_m);
+                            continue;
+                        }
+                    } else {
+                        tagged_D0_m->Fill(mup_Km_m);
+
+                        if (Km_mother_name == mup_mother_name) { // Same mother = true D0.
+                            true_D0_m->Fill(mup_Km_m); // Fill with mother mass.
+                            continue;
+                        } else {
+                            mistagged_D0_m->Fill(mup_Km_m);
+                            continue;
+                        }
+                    }
+                }
+            }
             // Form every mu-K+ pair.
+            for (auto mum_ID: mum_IDs) {
+                // Get entry corresponding to mu- track.
+                track_tree->GetEntryWithIndex(current_event, mum_ID);
+
+                Double_t E_mum = TMath::Sqrt(p*p+kMmu*kMmu); // Compute energy.
+                TLorentzVector mum = TLorentzVector();
+                mum.SetPxPyPzE(px, py, pz, E_mum);
+
+                // Get mu- mother name.
+                // Get entry corresponding to mu- mother track.
+                track_tree->GetEntryWithIndex(current_event, mother_id);
+                TString mum_mother_name = *part_name;
+
+                for (auto Kp_ID: Kp_IDs) {
+                    // Get entry corresponding to K+ track.
+                    track_tree->GetEntryWithIndex(current_event, Kp_ID);
+
+                    Double_t E_Kp = TMath::Sqrt(p*p+kMKch*kMKch); // Compute energy.
+                    TLorentzVector Kp = TLorentzVector();
+                    Kp.SetPxPyPzE(px, py, pz, E_Kp);
+
+                    Double_t mum_Kp_m = (mum + Kp).M();
+
+                    // Get K+ mother name.
+                    // Get entry corresponding to K+ mother track.
+                    track_tree->GetEntryWithIndex(current_event, mother_id);
+                    TString Kp_mother_name = *part_name;
+
+                    // Replace pair mass by mother mass when both particles
+                    // have the same mother (problem with rapidsim ?)
+                    // Still ok because RapidSim reconstruct mother mass
+                    // without the neutrino.
+                    if (Kp_mother_name == mum_mother_name) {
+                        mum_Kp_m = m;
+                    }
+
+                    if (mum_Kp_m > kMD0) {
+                        rejected_D0_m->Fill(mum_Kp_m);
+                        kept_mum_IDs.push_back(mum_ID);
+
+                        if (Kp_mother_name == mum_mother_name) { // Same mother = true D0.
+                            misrejected_D0_m->Fill(mum_Kp_m); // Fill with mother mass.
+                            continue;
+                        } else {
+                            cor_rejected_D0_m->Fill(mum_Kp_m);
+                            continue;
+                        }
+                    } else {
+                        tagged_D0_m->Fill(mum_Kp_m);
+
+                        if (Kp_mother_name == mum_mother_name) { // Same mother = true D0.
+                            true_D0_m->Fill(mum_Kp_m);
+                            continue;
+                        } else {
+                            mistagged_D0_m->Fill(mum_Kp_m);
+                            continue;
+                        }
+                    }
+                }
+            }
+
+            // ------- DIMU ANALYSIS -------
+            // Form every possible dimuon pair in the event.
+            for(auto mup_ID: kept_mup_IDs) { // Loop on mu+
+                // Get entry corresponding to mu+ track.
+                track_tree->GetEntryWithIndex(current_event, mup_ID);
+
+                Double_t E_mup = TMath::Sqrt(p*p+kMmu*kMmu); // Compute energy.
+                TLorentzVector mup = TLorentzVector();
+                mup.SetPxPyPzE(px, py, pz, E_mup);
+
+                // Get mu+ mother name.
+                // Get entry corresponding to mu+ mother track.
+                track_tree->GetEntryWithIndex(current_event, mother_id);
+                TString mup_mother_name = *part_name;
+
+                for(auto mum_ID: kept_mum_IDs) { // Loop on mu-
+                    // Get entry corresponding to mu- track.
+                    track_tree->GetEntryWithIndex(current_event, mum_ID);
+
+                    Double_t E_mum = TMath::Sqrt(p*p+kMmu*kMmu); // Compute energy.
+                    TLorentzVector mum = TLorentzVector();
+                    mum.SetPxPyPzE(px, py, pz, E_mum);
+
+                    // Get mu- mother name.
+                    // Get entry corresponding to mu- mother track.
+                    track_tree->GetEntryWithIndex(current_event, mother_id);
+                    TString mum_mother_name = *part_name;
+
+                    // Compute dimuon invariant mass.
+                    Double_t dimu_m = (mum + mup).M();
+
+                    // Fill histograms.
+                    if (mup_mother_name == mum_mother_name) { // Pure signal.
+                        // Select pairs with 1 GeV < M < 5 GeV only.
+                        if (m < kMinDimuMass || m > kMaxDimuMass) {
+                            continue;
+                        }
+                        dimu_m_sig_h->Fill(m); // Fill with mother mass.
+                        dimu_m_h->Fill(m); // All pairs.
+                        continue;
+                    } else {
+                        // Select pairs with 1 GeV < M < 5 GeV only.
+                        if (dimu_m < kMinDimuMass || dimu_m > kMaxDimuMass) {
+                            continue;
+                        }
+                        dimu_m_h->Fill(dimu_m); // All pairs.
+
+                        TObjArray* mup_tokens = mup_mother_name.Tokenize("_");
+                        TObjArray* mum_tokens = mum_mother_name.Tokenize("_");
+
+                        TString mup_mother = ((TObjString*)mup_tokens->At(0))->GetString();
+                        TString mum_mother = ((TObjString*)mum_tokens->At(0))->GetString();
+
+                        if (mup_mother == "gammastar") {
+                            if (mum_mother == "gammastar") { // Signal combinatorial.
+                                dimu_m_sig_comb_h->Fill(dimu_m);
+                                continue;
+                            } else if (mum_mother == "D0b") { // Mixed combinatorial.
+                                dimu_m_mix_comb_h->Fill(dimu_m);
+                                continue;
+                            } else { // Shouldn't happen.
+                                cout << "wtf_1" << endl;
+                                continue;
+                            }
+                        }
+                        else if (mup_mother == "D0")  {
+                            if (mum_mother == "gammastar") { // Mixed combinatorial.
+                                dimu_m_mix_comb_h->Fill(dimu_m);
+                                continue;
+                            } else if (mum_mother == "D0b") { // Pure background combinatorial.
+                                dimu_m_bkg_comb_h->Fill(dimu_m);
+                                continue;
+                            } else { // Shouldn't happen.
+                                cout << "wtf_2" << endl;
+                                continue;
+                            }
+                        } else { // Shouldn't happen.
+                            cout << "wtf_3" << endl;
+                            continue;
+                        }
+                    }
+                }
+            }
 
             // Re get base entry to correctly set current event.
             track_tree->GetEntry(index->GetIndex()[i]);
@@ -516,7 +773,78 @@ void vtxTagAna(TString input_file_name) {
             mum_IDs.clear();
             Kp_IDs.clear();
             Km_IDs.clear();
+
+            kept_mum_IDs.clear();
+            kept_mup_IDs.clear();
         }
     }
     cout << endl;
+
+    Double_t n_tagged    = static_cast<Double_t>(tagged_D0_m->GetEntries());
+    Double_t n_true      = static_cast<Double_t>(true_D0_m->GetEntries());
+    Double_t n_mistagged = static_cast<Double_t>(mistagged_D0_m->GetEntries());
+
+    Double_t efficiency = n_tagged / (n_true + n_mistagged);
+    Double_t purity     = n_true   / (n_true + n_mistagged);
+
+    THStack* all_D0 = new THStack("all_D0", "K#mu invariant mass distribution");
+    // all_D0->SetMinimum(0.7);
+    // all_D0->SetMaximum(1e4);
+
+    all_D0->Add(true_D0_m);
+    all_D0->Add(misrejected_D0_m);
+    all_D0->Add(cor_rejected_D0_m);
+    all_D0->Add(mistagged_D0_m);
+
+    TLegend* legend_Kmu = new TLegend(0.55, 0.7, 0.84, 0.85);
+    legend_Kmu->AddEntry(true_D0_m,         "Correctly tagged",   "f");
+    legend_Kmu->AddEntry(cor_rejected_D0_m, "Correctly rejected", "f");
+    legend_Kmu->AddEntry(misrejected_D0_m,  "Mis-rejected",       "f");
+    legend_Kmu->AddEntry(mistagged_D0_m,    "Mis-tagged",         "f");
+
+    TText* purity_txt = new TText();
+    purity_txt->SetTextSize(0.03);
+    TText* efficiency_txt = new TText();
+    efficiency_txt->SetTextSize(0.03);
+
+    TCanvas* c1 = new TCanvas("c1", "", 1000, 800);
+    gPad->SetLogy();
+    all_D0->Draw();
+    all_D0->GetXaxis()->SetTitle("M_{K#mu} (GeV)");
+    legend_Kmu->Draw();
+    purity_txt->DrawTextNDC(0.60,     0.65, Form("Purity: %g",     purity));
+    efficiency_txt->DrawTextNDC(0.60, 0.60, Form("Efficiency: %g", efficiency));
+
+    THStack* stack = new THStack("stack", "Dimuons invariant mass");
+
+    stack->Add(dimu_m_sig_h);
+    stack->Add(dimu_m_sig_comb_h);
+    stack->Add(dimu_m_mix_comb_h);
+    stack->Add(dimu_m_bkg_comb_h);
+
+    vector<TH1*> bkg_histos;
+    bkg_histos.push_back(dimu_m_sig_comb_h);
+    bkg_histos.push_back(dimu_m_mix_comb_h);
+    bkg_histos.push_back(dimu_m_bkg_comb_h);
+
+    Double_t sig = computeSigBkgRatio(dimu_m_sig_h, bkg_histos);
+
+    TCanvas* c2 = new TCanvas("c2", "", 1000, 800);
+    dimu_m_h->Draw();
+
+    TCanvas* c3 = new TCanvas("c3", "", 1000, 800);
+    stack->Draw();
+
+    TLegend* legend_dimu = new TLegend(0.2, 0.2);
+    // legend->SetHeader("The Legend Title","C"); // option "C" allows to center the header
+    legend_dimu->AddEntry(dimu_m_sig_h, "Signal", "f");
+    legend_dimu->AddEntry(dimu_m_sig_comb_h, "#gamma_{1} + #gamma_{2}", "f");
+    legend_dimu->AddEntry(dimu_m_mix_comb_h, "#gamma + D^{0}", "f");
+    legend_dimu->AddEntry(dimu_m_bkg_comb_h, "D^{0} + #bar{D^{0}}", "f");
+    legend_dimu->SetEntrySeparation(0.4);
+    legend_dimu->Draw();
+
+    cout << sig << endl;
+
+    c3->Update();
 }
