@@ -28,7 +28,7 @@ const Double_t kMD0  = 1.86484;
 const Double_t kMinDimuMass = 1.;
 const Double_t kMaxDimuMass = 5.;
 
-const Double_t kMinMuP = 3.;
+const Double_t kMinP = 3.;
 
 Double_t computeSigBkgRatio(TH1* signal_h, vector<TH1*> bkg_vec){
 
@@ -164,6 +164,19 @@ void singleMuonBkgAna(TString input_file_name) {
 
 void muonPairBkgAna(TString input_file_name) {
 
+    Int_t T2KstyleIndex = 2;
+    // Official T2K style as described in http://www.t2k.org/comm/pubboard/style/index_html
+    TString localStyleName = "T2K";
+    // -- WhichStyle --
+    // 1 = presentation large fonts
+    // 2 = presentation small fonts
+    // 3 = publication/paper
+    Int_t localWhichStyle = T2KstyleIndex;
+
+    TStyle* t2kstyle = T2K().SetT2KStyle(localWhichStyle, localStyleName);
+    gROOT->SetStyle(t2kstyle->GetName());
+    gROOT->ForceStyle();
+
     TFile* input_file = new TFile(input_file_name, "READ");
     TTree* track_tree = (TTree*)input_file->Get("trackTree");
 
@@ -260,7 +273,7 @@ void muonPairBkgAna(TString input_file_name) {
         // different vectors.
         if (event_number == current_event) {
             if (probNNmu > 0.8) {
-                if (p < kMinMuP) { continue; } // Cut on mu P for PID.
+                if (p < kMinP) { continue; } // Cut on mu P for PID.
                 else if (part_name->Contains("mup")) {
                     mup_IDs.push_back(track_id);
                     continue;
@@ -386,7 +399,7 @@ void muonPairBkgAna(TString input_file_name) {
     TCanvas* c2 = new TCanvas("c2", "", 1000, 800);
     stack->Draw();
 
-    TLegend* legend = new TLegend(0.2, 0.2);
+    TLegend* legend = new TLegend(0.55, 0.7, 0.84, 0.85);
     // legend->SetHeader("The Legend Title","C"); // option "C" allows to center the header
     legend->AddEntry(dimu_m_sig_h, "Signal", "f");
     legend->AddEntry(dimu_m_sig_comb_h, "#gamma_{1} + #gamma_{2}", "f");
@@ -394,6 +407,11 @@ void muonPairBkgAna(TString input_file_name) {
     legend->AddEntry(dimu_m_bkg_comb_h, "D^{0} + #bar{D^{0}}", "f");
     legend->SetEntrySeparation(0.4);
     legend->Draw();
+
+    TLatex* cut_txt = new TLatex();
+    cut_txt->SetTextSize(0.03);
+
+    cut_txt->DrawLatex(0.60, 0.65, TString::Format("p_{#mu} < %g GeV", kMinP));
 
     cout << sig << endl;
 
@@ -531,6 +549,7 @@ void vtxTagAna(TString input_file_name) {
         // Add all mu+, mu-, K+ and K- track IDs of the same event to four
         // different vectors.
         if (event_number == current_event) {
+            if (p < kMinP) {continue;} // Cut on momentum for PID.
             if (probNNmu > 0.8) {
                 if (part_name->Contains("mup")) {
                     mup_IDs.push_back(track_id);
@@ -559,6 +578,7 @@ void vtxTagAna(TString input_file_name) {
         else {
             // Form every mu+K- pair.
             for (auto mup_ID: mup_IDs) {
+                Bool_t is_kept = false;
                 // Get entry corresponding to mu+ track.
                 track_tree->GetEntryWithIndex(current_event, mup_ID);
 
@@ -596,7 +616,6 @@ void vtxTagAna(TString input_file_name) {
 
                     if (mup_Km_m > kMD0) {
                         rejected_D0_m->Fill(mup_Km_m);
-                        kept_mup_IDs.push_back(mup_ID);
 
                         if (Km_mother_name == mup_mother_name) { // Same mother = true D0.
                             misrejected_D0_m->Fill(mup_Km_m); // Fill with mother mass.
@@ -607,6 +626,7 @@ void vtxTagAna(TString input_file_name) {
                         }
                     } else {
                         tagged_D0_m->Fill(mup_Km_m);
+                        is_kept = false;
 
                         if (Km_mother_name == mup_mother_name) { // Same mother = true D0.
                             true_D0_m->Fill(mup_Km_m); // Fill with mother mass.
@@ -617,9 +637,13 @@ void vtxTagAna(TString input_file_name) {
                         }
                     }
                 }
+                if (is_kept) {
+                    kept_mup_IDs.push_back(mup_ID);
+                }
             }
             // Form every mu-K+ pair.
             for (auto mum_ID: mum_IDs) {
+                Bool_t is_kept = false;
                 // Get entry corresponding to mu- track.
                 track_tree->GetEntryWithIndex(current_event, mum_ID);
 
@@ -657,7 +681,6 @@ void vtxTagAna(TString input_file_name) {
 
                     if (mum_Kp_m > kMD0) {
                         rejected_D0_m->Fill(mum_Kp_m);
-                        kept_mum_IDs.push_back(mum_ID);
 
                         if (Kp_mother_name == mum_mother_name) { // Same mother = true D0.
                             misrejected_D0_m->Fill(mum_Kp_m); // Fill with mother mass.
@@ -668,6 +691,7 @@ void vtxTagAna(TString input_file_name) {
                         }
                     } else {
                         tagged_D0_m->Fill(mum_Kp_m);
+                        is_kept = false;
 
                         if (Kp_mother_name == mum_mother_name) { // Same mother = true D0.
                             true_D0_m->Fill(mum_Kp_m);
@@ -677,6 +701,9 @@ void vtxTagAna(TString input_file_name) {
                             continue;
                         }
                     }
+                }
+                if (is_kept) {
+                    kept_mum_IDs.push_back(mum_ID);
                 }
             }
 
