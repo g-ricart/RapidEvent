@@ -386,6 +386,8 @@ void muonPairBkgAna(TString input_file_name) {
     stack->Add(dimu_m_mix_comb_h);
     stack->Add(dimu_m_bkg_comb_h);
 
+    stack->SetMinimum(0.5);
+
     vector<TH1*> bkg_histos;
     bkg_histos.push_back(dimu_m_sig_comb_h);
     bkg_histos.push_back(dimu_m_mix_comb_h);
@@ -393,13 +395,13 @@ void muonPairBkgAna(TString input_file_name) {
 
     Double_t sig = computeSigBkgRatio(dimu_m_sig_h, bkg_histos);
 
-    TCanvas* c1 = new TCanvas("c1", "", 1000, 800);
-    dimu_m_h->Draw();
-
     TCanvas* c2 = new TCanvas("c2", "", 1000, 800);
+    gPad->SetLogy();
     stack->Draw();
 
-    TLegend* legend = new TLegend(0.55, 0.7, 0.84, 0.85);
+    stack->GetXaxis()->SetTitle("M_{#mu^{+} #mu^{-}}");
+
+    TLegend* legend = new TLegend(0.65, 0.65, 0.84, 0.84);
     // legend->SetHeader("The Legend Title","C"); // option "C" allows to center the header
     legend->AddEntry(dimu_m_sig_h, "Signal", "f");
     legend->AddEntry(dimu_m_sig_comb_h, "#gamma_{1} + #gamma_{2}", "f");
@@ -410,8 +412,7 @@ void muonPairBkgAna(TString input_file_name) {
 
     TLatex* cut_txt = new TLatex();
     cut_txt->SetTextSize(0.03);
-
-    cut_txt->DrawLatex(0.60, 0.65, TString::Format("p_{#mu} < %g GeV", kMinP));
+    cut_txt->DrawLatex(0.66, 0.55, TString::Format("p_{#mu} < %g GeV", kMinP));
 
     cout << sig << endl;
 
@@ -823,6 +824,8 @@ void vtxTagAna(TString input_file_name) {
     all_D0->Add(cor_rejected_D0_m);
     all_D0->Add(mistagged_D0_m);
 
+    all_D0->SetMinimum(0.5);
+
     TLegend* legend_Kmu = new TLegend(0.55, 0.7, 0.84, 0.85);
     legend_Kmu->AddEntry(true_D0_m,         "Correctly tagged",   "f");
     legend_Kmu->AddEntry(cor_rejected_D0_m, "Correctly rejected", "f");
@@ -839,8 +842,18 @@ void vtxTagAna(TString input_file_name) {
     all_D0->Draw();
     all_D0->GetXaxis()->SetTitle("M_{K#mu} (GeV)");
     legend_Kmu->Draw();
-    purity_txt->DrawTextNDC(0.60,     0.65, Form("Purity: %g",     purity));
-    efficiency_txt->DrawTextNDC(0.60, 0.60, Form("Efficiency: %g", efficiency));
+    purity_txt->DrawTextNDC(0.60,     0.50, Form("Purity: %g",     purity));
+    efficiency_txt->DrawTextNDC(0.60, 0.45, Form("Efficiency: %g", efficiency));
+
+    TLatex* cutmu_txt = new TLatex();
+    cutmu_txt->SetTextSize(0.03);
+    cutmu_txt->SetNDC();
+    cutmu_txt->DrawLatex(0.60, 0.40, TString::Format("p_{#mu} < %g GeV", kMinP));
+
+    TLatex* cutK_txt = new TLatex();
+    cutK_txt->SetTextSize(0.03);
+    cutK_txt->SetNDC();
+    cutK_txt->DrawLatex(0.60, 0.35, TString::Format("p_{K} < %g GeV", kMinP));
 
     THStack* stack = new THStack("stack", "Dimuons invariant mass");
 
