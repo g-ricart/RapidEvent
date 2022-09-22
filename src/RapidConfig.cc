@@ -302,3 +302,14 @@ Bool_t RapidConfig::IsPIDPerfect()
 {
     return perfect_pid_;
 }
+
+//______________________________________________________________________________
+Int_t RapidConfig::PrintParams()
+{
+    if (params_.size() == 0) {
+        cout << "WARNING in RapidConfig::PrintParams : "
+             << "Parameters list is empty." << endl;
+        return 1;
+    }
+    return 0;
+}
