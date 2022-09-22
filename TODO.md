@@ -4,4 +4,4 @@
     - [ ] Print parameters.
     - [ ] Print prompts.
     - [ ] Print decays.
-    - [ ] Prit options.
+    - [ ] Print options.
