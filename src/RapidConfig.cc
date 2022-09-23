@@ -304,12 +304,18 @@ Bool_t RapidConfig::IsPIDPerfect()
 }
 
 //______________________________________________________________________________
-Int_t RapidConfig::PrintParams()
+TString RapidConfig::GetParamsString()
 {
+    TString params_str;
     if (params_.size() == 0) {
         cout << "WARNING in RapidConfig::PrintParams : "
              << "Parameters list is empty." << endl;
-        return 1;
+        params_str = "";
+    } else {
+        for (auto param: params_) {
+            params_str += param;
+            params_str += " ";
+        }
+        params_str = params_str.Strip(TString::kBoth);
     }
-    return 0;
 }

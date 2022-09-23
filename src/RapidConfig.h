@@ -52,8 +52,8 @@ class RapidConfig {
         //! Return if PID is perfect (true) or not (false).
         Bool_t IsPIDPerfect();
 
-        //! Print all parameters.
-        Int_t PrintParams();
+        //! Get the list of parametrers as a TString.
+        TString GetParamsString();
 
     private:
         TString SanitizeName(TString name);
