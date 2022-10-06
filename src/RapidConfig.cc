@@ -302,3 +302,76 @@ Bool_t RapidConfig::IsPIDPerfect()
 {
     return perfect_pid_;
 }
+
+//______________________________________________________________________________
+TString RapidConfig::GetParamsString()
+{
+    TString params_str;
+    if (params_.empty()) {
+        cout << "WARNING in RapidConfig::PrintParams : "
+             << "Parameters list is empty." << endl;
+        params_str = "";
+    } else {
+        for (auto param: params_) {
+            params_str += param;
+            params_str += " ";
+        }
+        params_str = params_str.Strip(TString::kBoth);
+    }
+    return params_str;
+}
+
+//______________________________________________________________________________
+TString RapidConfig::GetPromptsString()
+{
+    TString prompts_str;
+    if (prompts_in_event_.empty()) {
+        prompts_str = "";
+    } else {
+        for (auto prompt: prompts_in_event_) {
+            prompts_str += prompt;
+            prompts_str += " ";
+        }
+        prompts_str = prompts_str.Strip(TString::kBoth);
+    }
+    return prompts_str;
+}
+
+//______________________________________________________________________________
+vector<TString> RapidConfig::GetDecaysStrings()
+{
+    vector<TString> decays_str_vec;
+    if (decays_in_event_.empty()) {
+        decays_str_vec.clear();
+    } else {
+        decays_str_vec.clear();
+        for (auto &it: decays_in_event_) {
+            // Get mother and daughters names.
+            TString mother_str    = it.first;
+            vector<TString> daughters_vec = it.second;
+
+            // Construct daughters TString.
+            TString daughters_str = "";
+            for (auto daughter_name: daughters_vec) {
+                // Strip daughter name.
+                daughter_name = daughter_name.Strip(TString::kBoth);
+                // Add daughter name to daughters TString.
+                daughters_str += daughter_name;
+                daughters_str += " ";
+            }
+            // Strip the names.
+            mother_str    = mother_str.Strip(TString::kBoth);
+            daughters_str = daughters_str.Strip(TString::kBoth);
+
+            // cOnstruct decay TString.
+            TString decay_str = "";
+            decay_str += mother_str;
+            decay_str += " -> ";
+            decay_str += daughters_str;
+
+            // Add decay Tstring to vector.
+            decays_str_vec.push_back(decay_str);
+        }
+    }
+    return decays_str_vec;
+}

@@ -52,6 +52,13 @@ class RapidConfig {
         //! Return if PID is perfect (true) or not (false).
         Bool_t IsPIDPerfect();
 
+        //! Get the list of parametrers as a TString.
+        TString GetParamsString();
+        //! Get the list of prompts as a TString.
+        TString GetPromptsString();
+        //! Get the list of decays as a vector of TString.
+        std::vector<TString> GetDecaysStrings();
+
     private:
         TString SanitizeName(TString name);
         Int_t   ParsePrompts(const TString event_str);

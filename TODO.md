@@ -3,12 +3,12 @@
 ### Release
 - [ ] **#FEATURE** Use MonteCarlo particle numbering scheme.
 - [ ] **#ERROR_HNDLG** _RapidSelect_ Find a way to test the type of every
-    branch of the data ROOT files to avoid hardcoded skip of `nEvent`.
+branch of the data ROOT files to avoid hardcoded skip of `nEvent`.
 - [ ] **#ERROR_HNDLG** _RapidSelect::SelectTrack_ Manage error when a branch
 name is ill-formed.
 - [ ] **#ERROR_HNDLG** _RapidConfig_ Add a warning when user ask for parameters
 which are not present in the TTree.
-- [ ] **#MISC** _RapidConfig_ Print more info.
+- [ ] **#MISC** _RapidConfig_ Print more info. `feature-misc_1`
 
 ### Bugs
 - [ ] **#SEGFAULT** _RapidNorm::ComputeNorm_ When the name of the normalisation
