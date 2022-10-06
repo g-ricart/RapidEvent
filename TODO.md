@@ -3,5 +3,5 @@
 - [ ] **#MISC** _RapidConfig_ Print more info.
     - [x] Print parameters.
     - [x] Print prompts.
-    - [ ] Print decays.
+    - [x] Print decays.
     - [ ] Print options.

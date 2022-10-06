@@ -30,7 +30,7 @@ int rapidEvent(const int kNEvtToGen, const TString kEvtFileName) {
     if (params_str == "") {
         return 1;
     } else {
-        cout << "INFO in main : Parameters to save : " << params_str << endl;
+        cout << "INFO in main : Parameters to save: " << params_str << endl;
     }
 
     // Print prompts tracks.
@@ -39,8 +39,22 @@ int rapidEvent(const int kNEvtToGen, const TString kEvtFileName) {
         cout << "INFO in main : No prompt tracks in the events." << endl;
     } else {
         cout << "INFO in main : The following prompt particles will be added "
-             << "in the events : " << prompts_str << endl;
+             << "to the events: " << prompts_str << endl;
     }
+
+    // Print decays.
+    vector<Tstring> decays_vec = conf->GetDecaysStrings();
+    if (decays_vec.empty()) {
+        cout << "INFO in main : No decay in the events." << endl;
+    } else {
+        cout << "INFO in main : The following decays will be added to "
+             << "the events:" endl;
+
+        for (auto decay_str: decays_vec) {
+            cout << "       " << decay_str << endl;
+        }
+    }
+
 
     // Writer
     RapidWriter* writer = new RapidWriter(kEvtFileName + "_tree.root", conf);

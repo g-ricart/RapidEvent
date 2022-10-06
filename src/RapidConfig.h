@@ -54,8 +54,10 @@ class RapidConfig {
 
         //! Get the list of parametrers as a TString.
         TString GetParamsString();
-        //! Get the list of prompts as a TSTring.
+        //! Get the list of prompts as a TString.
         TString GetPromptsString();
+        //! Get the list of decays as a vector of TString.
+        std::vector<TString> GetDecaysStrings();
 
     private:
         TString SanitizeName(TString name);
