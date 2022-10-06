@@ -318,4 +318,6 @@ TString RapidConfig::GetParamsString()
         }
         params_str = params_str.Strip(TString::kBoth);
     }
+
+    return params_str;
 }

@@ -25,6 +25,14 @@ int rapidEvent(const int kNEvtToGen, const TString kEvtFileName) {
         cout << "INFO in main : Successfully loaded configuration !" << endl;
     }
 
+    // Print parameters to save.
+    TString params_str = conf->GetParamsString();
+    if (params_str == "") {
+        return 1;
+    } else {
+        cout << "INFO in main : Parameters to save : " << params_str << endl;
+    }
+
     // Writer
     RapidWriter* writer = new RapidWriter(kEvtFileName + "_tree.root", conf);
 

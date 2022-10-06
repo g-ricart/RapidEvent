@@ -1,7 +1,7 @@
 # TODO for feature-misc_1 branch
 
 - [ ] **#MISC** _RapidConfig_ Print more info.
-    - [ ] Print parameters.
+    - [x] Print parameters.
     - [ ] Print prompts.
     - [ ] Print decays.
     - [ ] Print options.
