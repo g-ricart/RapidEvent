@@ -43,12 +43,12 @@ int rapidEvent(const int kNEvtToGen, const TString kEvtFileName) {
     }
 
     // Print decays.
-    vector<Tstring> decays_vec = conf->GetDecaysStrings();
+    vector<TString> decays_vec = conf->GetDecaysStrings();
     if (decays_vec.empty()) {
         cout << "INFO in main : No decay in the events." << endl;
     } else {
         cout << "INFO in main : The following decays will be added to "
-             << "the events:" endl;
+             << "the events:" << endl;
 
         for (auto decay_str: decays_vec) {
             cout << "       " << decay_str << endl;
