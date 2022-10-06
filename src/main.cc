@@ -55,7 +55,6 @@ int rapidEvent(const int kNEvtToGen, const TString kEvtFileName) {
         }
     }
 
-
     // Writer
     RapidWriter* writer = new RapidWriter(kEvtFileName + "_tree.root", conf);
 
