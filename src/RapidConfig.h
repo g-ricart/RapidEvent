@@ -54,6 +54,8 @@ class RapidConfig {
 
         //! Get the list of parametrers as a TString.
         TString GetParamsString();
+        //! Get the list of prompts as a TSTring.
+        TString GetPromptsString();
 
     private:
         TString SanitizeName(TString name);

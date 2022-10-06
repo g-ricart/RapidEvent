@@ -33,6 +33,15 @@ int rapidEvent(const int kNEvtToGen, const TString kEvtFileName) {
         cout << "INFO in main : Parameters to save : " << params_str << endl;
     }
 
+    // Print prompts tracks.
+    TString prompts_str = conf->GetPromptsString();
+    if (params_str == "") {
+        cout << "INFO in main : No prompt tracks in the events." << endl;
+    } else {
+        cout << "INFO in main : The following prompt particles will be added "
+             << "in the events : " << prompts_str << endl;
+    }
+
     // Writer
     RapidWriter* writer = new RapidWriter(kEvtFileName + "_tree.root", conf);
 

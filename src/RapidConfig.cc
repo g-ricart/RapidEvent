@@ -318,6 +318,21 @@ TString RapidConfig::GetParamsString()
         }
         params_str = params_str.Strip(TString::kBoth);
     }
-
     return params_str;
+}
+
+//______________________________________________________________________________
+TString RapidConfig::GetPromptsString()
+{
+    TString prompts_str;
+    if (prompts_in_event_.size() == 0) {
+        prompts_str = "";
+    } else {
+        for (auto prompt: prompts_in_event_) {
+            prompts_str += prompt;
+            prompts_str += " ";
+        }
+        prompts_str = prompts_str.Strip(TString::kBoth);
+    }
+    return prompts_str;
 }
