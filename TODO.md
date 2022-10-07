@@ -8,7 +8,7 @@ branch of the data ROOT files to avoid hardcoded skip of `nEvent`.
 name is ill-formed.
 - [ ] **#ERROR_HNDLG** _RapidConfig_ Add a warning when user ask for parameters
 which are not present in the TTree.
-- [ ] **#MISC** _RapidConfig_ Print more info. `feature-misc_1`
+- [ ] **#MISC** _RapidConfig_ Print options info.
 
 ### Bugs
 - [ ] **#SEGFAULT** _RapidNorm::ComputeNorm_ When the name of the normalisation
